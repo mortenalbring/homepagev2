@@ -4,22 +4,20 @@ import './App.css';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          HELLO 4
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <div className="container">
+        <img src="/profile.jpg" alt="Morten Albring" className="profile-img"/>
+        <h1>Morten Albring</h1>
+        <p>Software Engineer | Open Source Contributor</p>
+        <div className="links">
+          <a href="https://github.com/mortenalbring" className="link" target="_blank" rel="noopener noreferrer">
+            GitHub
+          </a>
+          <a href="https://www.linkedin.com/in/mortenalbring/" className="link" target="_blank"
+             rel="noopener noreferrer">
+            LinkedIn
+          </a>
+        </div>
+      </div>
   );
 }
 
