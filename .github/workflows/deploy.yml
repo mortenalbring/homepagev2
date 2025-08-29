@@ -1,44 +1,48 @@
-name: Deploy React App to GitHub Pages
+name: Build and Deploy React App
 
 on:
   push:
     branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
   workflow_dispatch:
-
-permissions:
-  contents: write
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
+      # Step 1: Checkout repo
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-          cache: npm
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Build
-        run: npm run build
-
-      - name: Verify build folder
+      # Step 2: Verify working directory and build folder
+      - name: Debug working directory
         run: |
           echo "Current directory:"
           pwd
-          echo "Contents:"
+          echo "Repo contents:"
           ls -la
-          echo "Build folder:"
-          ls -la build
+          echo "Build folder contents (if exists):"
+          if [ -d build ]; then ls -la build; else echo "No build folder yet"; fi
 
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Step 4: Build the React app
+      - name: Build project
+        run: npm run build
+
+      # Step 5: List build contents after build (debug)
+      - name: Verify build folder after build
+        run: ls -R build
+
+      # Step 6: Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
-          publish_dir: ./build
-          force_orphan: true   # optional: creates a clean branch every deploy
+          publish_dir: build
+          force_orphan: true   # optional: ensures a clean branch every deploy
