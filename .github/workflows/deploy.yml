@@ -11,7 +11,6 @@ permissions:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
 
@@ -26,7 +25,15 @@ jobs:
 
       - name: Build
         run: npm run build
-        working-directory: ./  #ensures we’re in repo root        
+
+      - name: Verify build folder
+        run: |
+          echo "Current directory:"
+          pwd
+          echo "Contents:"
+          ls -la
+          echo "Build folder:"
+          ls -la build
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
