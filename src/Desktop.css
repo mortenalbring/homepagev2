@@ -3,7 +3,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #111; /* outside monitor */
+    background: #111; /* background outside the monitor */
     height: 100vh;
     width: 100vw;
 }
@@ -24,35 +24,54 @@
     box-shadow: 0 0 40px #000;
 }
 
-/* Icons */
-.icons {
+/* Icons wrapper */
+.icon-wrapper {
     display: flex;
-    flex-wrap: wrap;
-    align-content: flex-start;
-    padding: 20px;
+    flex-direction: column;
+    align-items: center;
+    cursor: grab;
+    padding: 0;
+    user-select: none;
 }
 
+.icon-wrapper:active {
+    cursor: grabbing;
+}
+
+/* Selected icon highlight (snug) */
+.icon-wrapper.selected {
+    background-color: #0000aa; /* classic Win95 blue */
+    color: white;
+    border: 1px solid #fff;
+    border-radius: 0;
+    padding: 2px;
+}
+
+/* Icon container inside wrapper */
 .icon {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 20px;
-    color: white;
-    text-decoration: none;
-    width: 70px;
+    margin: 0;
 }
 
+/* Icon emoji / image */
 .icon-image {
     font-size: 40px;
+    line-height: 1;
+    image-rendering: pixelated;   /* blocky retro style */
+    -webkit-font-smoothing: none;
+    -moz-osx-font-smoothing: grayscale;
 }
 
+/* Icon label */
 .icon-label {
-    margin-top: 5px;
+    margin-top: 2px;          /* small gap between icon and text */
     font-size: 12px;
-    background: rgba(0, 0, 0, 0.5);
-    padding: 2px 4px;
-    border-radius: 3px;
     text-align: center;
+    color: inherit;           /* inherits black or white from wrapper */
+    background: transparent;
+    padding: 0;
 }
 
 /* Taskbar */
@@ -96,6 +115,7 @@
     border-bottom: 2px solid #fff;
 }
 
+/* Taskbar clock/time */
 .taskbar-time {
     margin-left: auto;
     padding: 2px 6px;
@@ -105,33 +125,3 @@
     border-right: 2px solid #7b7b7b;
     border-bottom: 2px solid #7b7b7b;
 }
-
-/* Wrapper to show selection */
-.icon-wrapper {
-    border: 2px solid transparent;
-    border-radius: 3px;
-    padding: 2px;
-    cursor: grab;
-}
-
-.icon-wrapper:active {
-    cursor: grabbing;
-}
-.icon-wrapper.selected {
-    background-color: #0000aa; /* classic Win95 blue */
-    border: 2px solid #ffffff; /* optional white border for extra pop */
-}
-
-/* Prevent text selection and blinking cursor */
-.monitor,
-.icon-wrapper,
-.icon,
-.icon-label {
-    user-select: none;        /* prevents text selection */
-    outline: none;            /* remove focus outline */
-}
-.icon-wrapper.selected .icon-label {
-    color: white;
-    font-weight: bold;
-}
-
