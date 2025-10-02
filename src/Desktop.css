@@ -105,3 +105,26 @@
     border-right: 2px solid #7b7b7b;
     border-bottom: 2px solid #7b7b7b;
 }
+
+/* Wrapper to show selection */
+.icon-wrapper {
+    border: 2px solid transparent;
+    border-radius: 3px;
+    padding: 2px;
+    cursor: grab;
+}
+
+.icon-wrapper:active {
+    cursor: grabbing;
+}
+.icon-wrapper.selected {
+    background-color: #0000aa; /* classic Win95 blue */
+    border: 2px solid #ffffff; /* optional white border for extra pop */
+}
+
+
+.icon-wrapper.selected .icon-label {
+    color: white;
+    font-weight: bold;
+}
+
