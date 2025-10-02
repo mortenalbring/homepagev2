@@ -1,5 +1,8 @@
-﻿import React, { useState } from "react";
+﻿import React, { useState, useRef, useEffect } from "react";
 import "./Desktop.css";
+
+const GRID_SIZE = 80; // pixels
+const ICON_SIZE = 48; // icon height/width (emoji)
 
 const initialIcons = [
     { name: "My Portfolio", link: "/portfolio", icon: "💼", x: 20, y: 20 },
@@ -9,10 +12,24 @@ const initialIcons = [
 ];
 
 export default function Desktop() {
+    const desktopRef = useRef(null);
     const [icons, setIcons] = useState(initialIcons);
     const [draggingIndex, setDraggingIndex] = useState(null);
     const [offset, setOffset] = useState({ x: 0, y: 0 });
     const [selectedIndex, setSelectedIndex] = useState(null);
+    const [desktopBounds, setDesktopBounds] = useState({ width: 0, height: 0 });
+
+    // Get desktop size after mounting
+    useEffect(() => {
+        if (desktopRef.current) {
+            const rect = desktopRef.current.getBoundingClientRect();
+            setDesktopBounds({ width: rect.width, height: rect.height });
+        }
+    }, []);
+
+    const snapToGrid = (value) => Math.round(value / GRID_SIZE) * GRID_SIZE;
+
+    const clamp = (value, min, max) => Math.max(min, Math.min(value, max));
 
     const handleMouseDown = (e, index) => {
         e.stopPropagation();
@@ -26,12 +43,20 @@ export default function Desktop() {
 
     const handleMouseMove = (e) => {
         if (draggingIndex === null) return;
+
+        let newX = e.clientX - offset.x;
+        let newY = e.clientY - offset.y;
+
+        // Snap to grid
+        newX = snapToGrid(newX);
+        newY = snapToGrid(newY);
+
+        // Clamp inside desktop boundaries
+        newX = clamp(newX, 0, desktopBounds.width - ICON_SIZE);
+        newY = clamp(newY, 0, desktopBounds.height - ICON_SIZE);
+
         const newIcons = [...icons];
-        newIcons[draggingIndex] = {
-            ...newIcons[draggingIndex],
-            x: e.clientX - offset.x,
-            y: e.clientY - offset.y,
-        };
+        newIcons[draggingIndex] = { ...newIcons[draggingIndex], x: newX, y: newY };
         setIcons(newIcons);
     };
 
@@ -44,16 +69,17 @@ export default function Desktop() {
     };
 
     const handleDoubleClick = (link) => {
-        window.open(link, "_self"); // opens link in same tab
+        window.open(link, "_self");
     };
 
     return (
         <div className="monitor">
             <div
                 className="desktop"
+                ref={desktopRef}
                 onMouseMove={handleMouseMove}
                 onMouseUp={handleMouseUp}
-                onClick={() => setSelectedIndex(null)} // deselect on desktop click
+                onClick={() => setSelectedIndex(null)}
             >
                 {icons.map((item, i) => (
                     <div
