@@ -122,7 +122,14 @@
     border: 2px solid #ffffff; /* optional white border for extra pop */
 }
 
-
+/* Prevent text selection and blinking cursor */
+.monitor,
+.icon-wrapper,
+.icon,
+.icon-label {
+    user-select: none;        /* prevents text selection */
+    outline: none;            /* remove focus outline */
+}
 .icon-wrapper.selected .icon-label {
     color: white;
     font-weight: bold;
