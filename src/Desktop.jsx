@@ -5,76 +5,72 @@ const GRID_SIZE = 80;
 const ICON_SIZE = 64;
 
 const initialIcons = [
-    { name: "Portfolio", link: "/portfolio", icon: "💼", x: 20, y: 20 },
-    { name: "Blog", link: "/blog", icon: "📓", x: 120, y: 20 },
-    { name: "Contact", link: "/contact", icon: "📧", x: 220, y: 20 },
-    { name: "GitHub", link: "https://github.com/mortenalbring", icon: "💻", x: 320, y: 20 },
+    { name: "Portfolio", link: "/portfolio", icon: "💼", x: 20, y: 20, zIndex: 1 },
+    { name: "Blog", link: "/blog", icon: "📓", x: 120, y: 20, zIndex: 1 },
+    { name: "Contact", link: "/contact", icon: "📧", x: 220, y: 20, zIndex: 1 },
+    { name: "GitHub", link: "https://github.com/mortenalbring", icon: "💻", x: 320, y: 20, zIndex: 1 },
 ];
 
 export default function Desktop() {
     const desktopRef = useRef(null);
     const [icons, setIcons] = useState(initialIcons);
-    const [draggingIndex, setDraggingIndex] = useState(null);
-    const [offset, setOffset] = useState({ x: 0, y: 0 });
+    const [dragging, setDragging] = useState(null); // { index, offsetX, offsetY }
     const [selectedIndex, setSelectedIndex] = useState(null);
-    const [desktopBounds, setDesktopBounds] = useState({ width: 0, height: 0 });
+    const [topZ, setTopZ] = useState(1); // track top z-index
 
-    useEffect(() => {
-        if (desktopRef.current) {
-            const rect = desktopRef.current.getBoundingClientRect();
-            setDesktopBounds({ width: rect.width, height: rect.height });
-        }
-    }, []);
-
-    // Attach global mouse events during dragging
+    // Dragging logic
     useEffect(() => {
         const handleMouseMove = (e) => {
-            if (draggingIndex === null) return;
+            if (!dragging) return;
 
-            let newX = e.clientX - offset.x;
-            let newY = e.clientY - offset.y;
+            const desktopRect = desktopRef.current.getBoundingClientRect();
+            let newX = e.clientX - desktopRect.left - dragging.offsetX;
+            let newY = e.clientY - desktopRect.top - dragging.offsetY;
 
             // Snap to grid
             newX = Math.round(newX / GRID_SIZE) * GRID_SIZE;
             newY = Math.round(newY / GRID_SIZE) * GRID_SIZE;
 
             // Clamp inside desktop
-            newX = Math.max(0, Math.min(newX, desktopBounds.width - ICON_SIZE));
-            newY = Math.max(0, Math.min(newY, desktopBounds.height - ICON_SIZE));
+            newX = Math.max(0, Math.min(newX, desktopRect.width - ICON_SIZE));
+            newY = Math.max(0, Math.min(newY, desktopRect.height - ICON_SIZE));
 
             setIcons((prev) =>
                 prev.map((icon, i) =>
-                    i === draggingIndex ? { ...icon, x: newX, y: newY } : icon
+                    i === dragging.index ? { ...icon, x: newX, y: newY } : icon
                 )
             );
         };
 
-        const handleMouseUp = () => {
-            setDraggingIndex(null);
-        };
+        const handleMouseUp = () => setDragging(null);
 
-        if (draggingIndex !== null) {
-            window.addEventListener("mousemove", handleMouseMove);
-            window.addEventListener("mouseup", handleMouseUp);
-        } else {
-            window.removeEventListener("mousemove", handleMouseMove);
-            window.removeEventListener("mouseup", handleMouseUp);
-        }
-
+        window.addEventListener("mousemove", handleMouseMove);
+        window.addEventListener("mouseup", handleMouseUp);
         return () => {
             window.removeEventListener("mousemove", handleMouseMove);
             window.removeEventListener("mouseup", handleMouseUp);
         };
-    }, [draggingIndex, offset, desktopBounds]);
+    }, [dragging]);
 
     const handleMouseDown = (e, index) => {
         e.stopPropagation();
-        const icon = icons[index];
-        setDraggingIndex(index);
-        setOffset({ x: e.clientX - icon.x, y: e.clientY - icon.y });
-    };
 
-    const handleClick = (index) => {
+        // Bring icon to front
+        const newTopZ = topZ + 1;
+        setTopZ(newTopZ);
+        setIcons((prev) =>
+            prev.map((icon, i) =>
+                i === index ? { ...icon, zIndex: newTopZ } : icon
+            )
+        );
+
+        const icon = icons[index];
+        const desktopRect = desktopRef.current.getBoundingClientRect();
+        setDragging({
+            index,
+            offsetX: e.clientX - desktopRect.left - icon.x,
+            offsetY: e.clientY - desktopRect.top - icon.y,
+        });
         setSelectedIndex(index);
     };
 
@@ -84,21 +80,23 @@ export default function Desktop() {
 
     return (
         <div className="monitor">
-            <div className="desktop" ref={desktopRef} onClick={() => setSelectedIndex(null)}>
+            <div
+                className="desktop"
+                ref={desktopRef}
+                onClick={() => setSelectedIndex(null)}
+            >
                 {icons.map((item, i) => (
                     <div
                         key={i}
                         className={`icon-wrapper ${selectedIndex === i ? "selected" : ""}`}
-                        style={{ left: item.x, top: item.y, position: "absolute" }}
+                        style={{
+                            left: item.x,
+                            top: item.y,
+                            position: "absolute",
+                            zIndex: item.zIndex,
+                        }}
                         onMouseDown={(e) => handleMouseDown(e, i)}
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            handleClick(i);
-                        }}
-                        onDoubleClick={(e) => {
-                            e.stopPropagation();
-                            handleDoubleClick(item.link);
-                        }}
+                        onDoubleClick={() => handleDoubleClick(item.link)}
                     >
                         <div className="icon">
                             <div className="icon-image">{item.icon}</div>
@@ -116,3 +114,4 @@ export default function Desktop() {
         </div>
     );
 }
+    
