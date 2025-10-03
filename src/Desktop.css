@@ -41,6 +41,9 @@
     box-shadow:
             inset -6px -6px 12px rgba(255, 255, 255, 0.4), /* curved glass highlight */
             inset 6px 6px 12px rgba(0, 0, 0, 0.4);         /* curved shadow */
+
+    /* subtle flicker */
+    animation: crt-flicker 1.5s infinite;
 }
 
 /* CRT scanline overlay */
@@ -48,15 +51,35 @@
     content: "";
     position: absolute;
     inset: 0;
-    background: repeating-linear-gradient(
-            to bottom,
-            rgba(0, 0, 0, 0.08) 0px,
-            rgba(0, 0, 0, 0.08) 1px,
-            transparent 2px,
-            transparent 4px
-    );
-    pointer-events: none; /* don't block clicks */
+    background:
+            repeating-linear-gradient(
+                    to bottom,
+                    rgba(0, 0, 0, 0.08) 0px,
+                    rgba(0, 0, 0, 0.08) 1px,
+                    transparent 2px,
+                    transparent 4px
+            ),
+            radial-gradient(
+                    circle at center,
+                    rgba(255, 255, 255, 0.05) 0%,
+                    rgba(0, 0, 0, 0.2) 100%
+            ); /* vignette glow */
+    pointer-events: none;
 }
+
+/* Flicker animation */
+@keyframes crt-flicker {
+    0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+        opacity: 1;
+    }
+    20%, 24%, 55% {
+        opacity: 0.97;
+    }
+    22% {
+        opacity: 0.94;
+    }
+}
+
 /* Icons wrapper */
 .icon-wrapper {
     display: flex;
