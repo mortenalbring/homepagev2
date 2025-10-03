@@ -1,52 +1,67 @@
-﻿.monitor {
-    background: #bfbfbf; /* classic plastic gray */
-    padding: 20px;
-    border: 6px solid #dcdcdc;
+﻿/* Monitor frame */
+.monitor {
+    width: 900px;
+    height: 700px;
+    background: #c0c0c0; /* Windows 95 grey */
+    border: 12px solid #999;
     border-radius: 12px;
+    padding: 20px;
     box-shadow:
-            inset -4px -4px 6px #999,  /* inner shading for depth */
-            inset 4px 4px 6px #fff,    /* highlight for 3D look */
-            0 8px 20px rgba(0, 0, 0, 0.5); /* drop shadow for desk effect */
-    display: inline-block;
-    position: relative;
+            inset -8px -8px 16px rgba(255, 255, 255, 0.6),
+            inset 8px 8px 16px rgba(0, 0, 0, 0.4),
+            0 12px 20px rgba(0, 0, 0, 0.5);
+    margin: 50px auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative; /* for stand */
 }
 
-/* Fake monitor stand */
+/* Monitor stand */
 .monitor::after {
     content: "";
     position: absolute;
-    bottom: -25px;
+    bottom: -30px;
     left: 50%;
     transform: translateX(-50%);
-    width: 120px;
+    width: 140px;
     height: 20px;
-    background: #bfbfbf;
-    border: 4px solid #dcdcdc;
+    background: #c0c0c0;
+    border: 4px solid #999;
     border-radius: 4px;
     box-shadow:
-            inset -2px -2px 4px #999,
-            inset 2px 2px 4px #fff,
+            inset -2px -2px 4px rgba(0, 0, 0, 0.4),
+            inset 2px 2px 4px rgba(255, 255, 255, 0.6),
             0 4px 8px rgba(0, 0, 0, 0.3);
+    z-index: 1;
 }
 
-/* The actual desktop area inside */
+/* The desktop screen */
 .desktop {
     width: 800px;
     height: 600px;
-    background: #008080; /* Win95 teal */
+    background: #008080; /* Windows 95 teal */
     position: relative;
     overflow: hidden;
-    border: 3px solid #000; /* screen frame */
+    border: 3px solid #000;
     border-radius: 6px;
     box-shadow:
-            inset -6px -6px 12px rgba(255, 255, 255, 0.4), /* curved glass highlight */
-            inset 6px 6px 12px rgba(0, 0, 0, 0.4);         /* curved shadow */
-
-    /* subtle flicker */
+            inset -6px -6px 12px rgba(255, 255, 255, 0.4),
+            inset 6px 6px 12px rgba(0, 0, 0, 0.4);
     animation: crt-flicker 1.5s infinite;
 }
 
-/* CRT scanline overlay */
+/* Black overlay for boot-up */
+.desktop::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: black;
+    z-index: 5;
+    animation: crt-fade-black 2s ease-out forwards;
+}
+
+/* Scanlines + vignette */
 .desktop::after {
     content: "";
     position: absolute;
@@ -63,69 +78,57 @@
                     circle at center,
                     rgba(255, 255, 255, 0.05) 0%,
                     rgba(0, 0, 0, 0.2) 100%
-            ); /* vignette glow */
+            );
+    pointer-events: none;
+    opacity: 0;
+    animation: crt-overlay-fade 2.5s ease-out forwards;
+}
+
+.desktop::before,
+.desktop::after {
     pointer-events: none;
 }
 
-/* Flicker animation */
-@keyframes crt-flicker {
-    0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
-        opacity: 1;
-    }
-    20%, 24%, 55% {
-        opacity: 0.97;
-    }
-    22% {
-        opacity: 0.94;
-    }
-}
-
-/* Icons wrapper */
+/* Desktop icons */
 .icon-wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
     cursor: grab;
-    padding: 0;
     user-select: none;
+    position: absolute;
 }
 
 .icon-wrapper:active {
     cursor: grabbing;
 }
 
-/* Selected icon highlight (snug) */
 .icon-wrapper.selected {
-    background-color: #0000aa; /* classic Win95 blue */
+    background-color: #0000aa;
     color: white;
     border: 1px solid #fff;
-    border-radius: 0;
     padding: 2px;
 }
 
-/* Icon container inside wrapper */
 .icon {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 0;
 }
 
-/* Icon emoji / image */
 .icon-image {
     font-size: 40px;
     line-height: 1;
-    image-rendering: pixelated;   /* blocky retro style */
+    image-rendering: pixelated;
     -webkit-font-smoothing: none;
     -moz-osx-font-smoothing: grayscale;
 }
 
-/* Icon label */
 .icon-label {
-    margin-top: 2px;          /* small gap between icon and text */
+    margin-top: 2px;
     font-size: 12px;
     text-align: center;
-    color: inherit;           /* inherits black or white from wrapper */
+    color: inherit;
     background: transparent;
     padding: 0;
 }
@@ -180,4 +183,23 @@
     border-left: 2px solid #fff;
     border-right: 2px solid #7b7b7b;
     border-bottom: 2px solid #7b7b7b;
+}
+
+/* --- Animations --- */
+@keyframes crt-flicker {
+    0%, 100% { opacity: 1; }
+    95% { opacity: 0.98; }
+    97% { opacity: 0.94; }
+}
+
+@keyframes crt-fade-black {
+    0% { opacity: 1; }
+    70% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+@keyframes crt-overlay-fade {
+    0% { opacity: 0; }
+    60% { opacity: 0; }
+    100% { opacity: 1; }
 }
