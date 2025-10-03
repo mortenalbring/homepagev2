@@ -46,7 +46,7 @@ const PopupWindow = ({ title, children, onClose }) => {
     return (
         <div
             className="popup-window"
-            style={{ top: position.y, left: position.x, width: size.width, height: size.height }}
+            style={{top: position.y, left: position.x, width: size.width, height: size.height}}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
         >
@@ -60,7 +60,8 @@ const PopupWindow = ({ title, children, onClose }) => {
             <div className="popup-content">{children}</div>
 
             {/* Resize handle */}
-            <div className="resize-handle" onMouseDown={handleResizeMouseDown} />
+            <div className="resize-handle" onMouseDown={handleResizeMouseDown}>
+            </div>
         </div>
     );
 };
