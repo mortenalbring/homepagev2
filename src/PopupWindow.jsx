@@ -1,17 +1,27 @@
 ﻿import React, { useState } from "react";
 import "./PopupWindow.css";
 
+const MIN_WIDTH = 200;
+const MIN_HEIGHT = 120;
+
 const PopupWindow = ({ title, children, onClose }) => {
     const [position, setPosition] = useState({ x: 100, y: 100 });
+    const [size, setSize] = useState({ width: 300, height: 200 });
     const [dragging, setDragging] = useState(false);
+    const [resizing, setResizing] = useState(false);
     const [offset, setOffset] = useState({ x: 0, y: 0 });
 
+    // Drag window
     const handleMouseDown = (e) => {
         setDragging(true);
-        setOffset({
-            x: e.clientX - position.x,
-            y: e.clientY - position.y,
-        });
+        setOffset({ x: e.clientX - position.x, y: e.clientY - position.y });
+    };
+
+    // Resize window
+    const handleResizeMouseDown = (e) => {
+        e.stopPropagation();
+        setResizing(true);
+        setOffset({ x: e.clientX, y: e.clientY });
     };
 
     const handleMouseMove = (e) => {
@@ -20,59 +30,37 @@ const PopupWindow = ({ title, children, onClose }) => {
                 x: e.clientX - offset.x,
                 y: e.clientY - offset.y,
             });
+        } else if (resizing) {
+            const newWidth = Math.max(MIN_WIDTH, size.width + (e.clientX - offset.x));
+            const newHeight = Math.max(MIN_HEIGHT, size.height + (e.clientY - offset.y));
+            setSize({ width: newWidth, height: newHeight });
+            setOffset({ x: e.clientX, y: e.clientY });
         }
     };
 
     const handleMouseUp = () => {
         setDragging(false);
+        setResizing(false);
     };
 
     return (
         <div
             className="popup-window"
-            style={{
-                top: position.y,
-                left: position.x,
-                position: "absolute",
-                zIndex: 1000,
-            }}
+            style={{ top: position.y, left: position.x, width: size.width, height: size.height }}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
         >
-            {/* Title bar (draggable area) */}
-            <div
-                className="popup-titlebar"
-                onMouseDown={handleMouseDown}
-                style={{
-                    cursor: "move",
-                    background: "navy",
-                    color: "white",
-                    padding: "4px",
-                    fontWeight: "bold",
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    userSelect: "none", // prevent accidental text highlighting
-                }}
-            >
-                {title}
-                <button
-                    onClick={onClose}
-                    style={{
-                        marginLeft: "8px",
-                        background: "silver",
-                        border: "1px solid black",
-                        cursor: "pointer",
-                    }}
-                >
-                    X
-                </button>
+            {/* Title bar */}
+            <div className="popup-titlebar" onMouseDown={handleMouseDown}>
+                <span className="popup-title">{title}</span>
+                <button className="popup-close" onClick={onClose}>X</button>
             </div>
 
-            {/* Window content (not draggable) */}
-            <div className="popup-content" style={{ padding: "8px", background: "white", border: "2px solid gray" }}>
-                {children}
-            </div>
+            {/* Content */}
+            <div className="popup-content">{children}</div>
+
+            {/* Resize handle */}
+            <div className="resize-handle" onMouseDown={handleResizeMouseDown} />
         </div>
     );
 };
