@@ -1,102 +1,30 @@
-﻿/* Page background */
-body {
-    background-color: #2b2b2b; /* dark grey */
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    min-height: 100vh;
-    font-family: sans-serif;
-}
-
-/* Monitor frame */
+﻿/* Monitor container */
 .monitor {
-    width: 90vw;
-    max-width: 900px;
-    aspect-ratio: 900 / 700;
-    padding: 2%;
-    border-radius: 1.5%;
-    margin: 50px auto;
     display: flex;
-    justify-content: center;
     align-items: center;
-    position: relative;
-    box-shadow:
-            inset -6px -6px 8px rgba(255, 255, 255, 0.6),
-            inset 6px 6px 8px rgba(0, 0, 0, 0.4),
-            0 12px 20px rgba(0, 0, 0, 0.4);
-    background: linear-gradient(145deg, #d0d0d0, #a8a8a8);
+    justify-content: center;
+    background: #111; /* outside monitor */
+    height: 100vh;
+    width: 100vw;
 }
 
-/* Monitor stand */
-.monitor::after {
-    content: "";
-    position: absolute;
-    bottom: -4%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 15%;
-    height: 3%;
-    background: #c0c0c0;
-    border: 0.4% solid #999;
-    border-radius: 0.5%;
-    box-shadow:
-            inset -0.5% -0.5% 1% rgba(0,0,0,0.4),
-            inset 0.5% 0.5% 1% rgba(255,255,255,0.6),
-            0 2% 3% rgba(0,0,0,0.3);
-    z-index: 1;
-}
-
-/* Desktop screen */
+/* Desktop inside monitor */
 .desktop {
-    width: 100%;
-    height: 100%;
+    height: 80vh;
+    width: 90vw;
+    max-width: 1200px;
+    max-height: 800px;
     background: #008080; /* Windows 95 teal */
     position: relative;
     overflow: hidden;
-    border: 0.3em solid #000;
-    border-radius: 0.6%;
-    box-shadow:
-            inset -0.7em -0.7em 1.2em rgba(255,255,255,0.4),
-            inset 0.7em 0.7em 1.2em rgba(0,0,0,0.4);
-    animation: crt-flicker 1.5s infinite;
+    font-family: "Tahoma", "Verdana", sans-serif;
+
+    border: 20px solid #333;     /* monitor frame */
+    border-radius: 12px;
+    box-shadow: 0 0 40px #000;
 }
 
-/* Black overlay for boot */
-.desktop::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: black;
-    z-index: 5;
-    animation: crt-fade-black 2s ease-out forwards;
-}
-
-/* Scanlines + subtle vignette */
-.desktop::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background:
-            repeating-linear-gradient(
-                    to bottom,
-                    rgba(0,0,0,0.04) 0px,
-                    rgba(0,0,0,0.04) 1px,
-                    transparent 2px,
-                    transparent 4px
-            ),
-            radial-gradient(
-                    circle at center,
-                    rgba(255,255,255,0.03) 0%,
-                    rgba(0,0,0,0.15) 100%
-            );
-    pointer-events: none;
-    opacity: 0;
-    animation: crt-overlay-fade 2.5s ease-out forwards;
-}
-
-/* Desktop icons */
+/* Icon wrapper (absolute positioned by JS) */
 .icon-wrapper {
     display: flex;
     flex-direction: column;
@@ -104,6 +32,7 @@ body {
     cursor: grab;
     user-select: none;
     position: absolute;
+    /* small padding/margins kept minimal so selection box is snug */
 }
 
 .icon-wrapper:active {
@@ -113,32 +42,36 @@ body {
 .icon-wrapper.selected {
     background-color: #0000aa;
     color: white;
-    border: 0.2vw solid #fff;
-    padding: 0.2vw;
-    border-radius: 0.2vw;
+    border: 1px solid #fff;
+    padding: 2px;
+    border-radius: 0;
 }
 
+/* Inner icon layout */
 .icon {
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin: 0;
 }
 
 .icon-image {
-    font-size: 2vw; /* scales with viewport */
+    font-size: 40px;
     line-height: 1;
     image-rendering: pixelated;
     -webkit-font-smoothing: none;
     -moz-osx-font-smoothing: grayscale;
+    pointer-events: none; /* ensure wrapper receives mouse events */
 }
 
 .icon-label {
-    margin-top: 0.3vw;
-    font-size: 0.8vw;
+    margin-top: 5px;
+    font-size: 12px;
     text-align: center;
-    color: inherit;
+    color: black;
     background: transparent;
     padding: 0;
+    pointer-events: none; /* ensure wrapper receives mouse events */
 }
 
 /* Taskbar */
@@ -146,68 +79,48 @@ body {
     position: absolute;
     bottom: 0;
     left: 0;
-    height: 5%;
+    height: 32px;
     width: 100%;
     background: #c0c0c0;
     color: black;
     display: flex;
     align-items: center;
-    padding: 0.5%;
+    padding: 0 6px;
     box-sizing: border-box;
-    border-top: 0.3% solid #fff;
-    border-left: 0.3% solid #fff;
-    border-right: 0.3% solid #7b7b7b;
-    border-bottom: 0.3% solid #7b7b7b;
-    font-size: 0.8vw;
+    border-top: 2px solid #fff;
+    border-left: 2px solid #fff;
+    border-right: 2px solid #7b7b7b;
+    border-bottom: 2px solid #7b7b7b;
+    font-size: 12px;
 }
 
 /* Start button */
 .start-button {
     background: #c0c0c0;
-    border-top: 0.3% solid #fff;
-    border-left: 0.3% solid #fff;
-    border-right: 0.3% solid #7b7b7b;
-    border-bottom: 0.3% solid #7b7b7b;
-    padding: 0.3% 1%;
-    margin-right: 1%;
+    border-top: 2px solid #fff;
+    border-left: 2px solid #fff;
+    border-right: 2px solid #7b7b7b;
+    border-bottom: 2px solid #7b7b7b;
+    padding: 2px 10px;
+    margin-right: 10px;
     cursor: pointer;
-    font-size: 0.8vw;
+    font-size: 12px;
     font-family: "Tahoma", "Verdana", sans-serif;
 }
 
 .start-button:active {
-    border-top: 0.3% solid #7b7b7b;
-    border-left: 0.3% solid #7b7b7b;
-    border-right: 0.3% solid #fff;
-    border-bottom: 0.3% solid #fff;
+    border-top: 2px solid #7b7b7b;
+    border-left: 2px solid #7b7b7b;
+    border-right: 2px solid #fff;
+    border-bottom: 2px solid #fff;
 }
 
-/* Taskbar clock */
 .taskbar-time {
     margin-left: auto;
-    padding: 0.2% 0.5%;
+    padding: 2px 6px;
     background: #c0c0c0;
-    border-top: 0.3% solid #fff;
-    border-left: 0.3% solid #fff;
-    border-right: 0.3% solid #7b7b7b;
-    border-bottom: 0.3% solid #7b7b7b;
-}
-
-/* --- Animations --- */
-@keyframes crt-flicker {
-    0%, 100% { opacity: 1; }
-    95% { opacity: 0.98; }
-    97% { opacity: 0.94; }
-}
-
-@keyframes crt-fade-black {
-    0% { opacity: 1; }
-    70% { opacity: 1; }
-    100% { opacity: 0; }
-}
-
-@keyframes crt-overlay-fade {
-    0% { opacity: 0; }
-    60% { opacity: 0; }
-    100% { opacity: 1; }
+    border-top: 2px solid #fff;
+    border-left: 2px solid #fff;
+    border-right: 2px solid #7b7b7b;
+    border-bottom: 2px solid #7b7b7b;
 }

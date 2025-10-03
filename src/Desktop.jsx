@@ -16,14 +16,14 @@ export default function Desktop() {
     const [icons, setIcons] = useState(initialIcons);
     const [dragging, setDragging] = useState(null); // { index, offsetX, offsetY }
     const [selectedIndex, setSelectedIndex] = useState(null);
-    const [topZ, setTopZ] = useState(1); // track top z-index
+    const [topZ, setTopZ] = useState(1);
 
-    // Dragging logic
+    // Global mouse handlers for dragging
     useEffect(() => {
         const handleMouseMove = (e) => {
             if (!dragging) return;
-
             const desktopRect = desktopRef.current.getBoundingClientRect();
+
             let newX = e.clientX - desktopRect.left - dragging.offsetX;
             let newY = e.clientY - desktopRect.top - dragging.offsetY;
 
@@ -55,14 +55,10 @@ export default function Desktop() {
     const handleMouseDown = (e, index) => {
         e.stopPropagation();
 
-        // Bring icon to front
+        // raise z-index for this icon (bring to front)
         const newTopZ = topZ + 1;
         setTopZ(newTopZ);
-        setIcons((prev) =>
-            prev.map((icon, i) =>
-                i === index ? { ...icon, zIndex: newTopZ } : icon
-            )
-        );
+        setIcons((prev) => prev.map((icon, i) => (i === index ? { ...icon, zIndex: newTopZ } : icon)));
 
         const icon = icons[index];
         const desktopRect = desktopRef.current.getBoundingClientRect();
@@ -71,6 +67,7 @@ export default function Desktop() {
             offsetX: e.clientX - desktopRect.left - icon.x,
             offsetY: e.clientY - desktopRect.top - icon.y,
         });
+
         setSelectedIndex(index);
     };
 
@@ -93,7 +90,7 @@ export default function Desktop() {
                             left: item.x,
                             top: item.y,
                             position: "absolute",
-                            zIndex: item.zIndex,
+                            zIndex: item.zIndex || 1,
                         }}
                         onMouseDown={(e) => handleMouseDown(e, i)}
                         onDoubleClick={() => handleDoubleClick(item.link)}
@@ -114,4 +111,3 @@ export default function Desktop() {
         </div>
     );
 }
-    
