@@ -4,24 +4,26 @@ import PopupWindow from "./PopupWindow";
 import "./Desktop.css";
 
 const GRID_SIZE = 80;
-const ICON_SIZE = 64; // used for clamping; matches your CSS/icon size roughly
+const ICON_SIZE = 64;
 
 const initialIcons = [
-    { name: "Portfolio", link: "/portfolio", icon: "💼", x: 20, y: 20, zIndex: 1, opensPopup: true },
+    { name: "Portfolio", link: null, icon: "💼", x: 20, y: 20, zIndex: 1, opensPopup: "portfolio" },
     { name: "Blog", link: "/blog", icon: "📓", x: 120, y: 20, zIndex: 1 },
-    { name: "Contact", link: "/contact", icon: "📧", x: 220, y: 20, zIndex: 1 },
+    { name: "Contact", link: null, icon: "📧", x: 220, y: 20, zIndex: 1, opensPopup: "contact" },
     { name: "GitHub", link: "https://github.com/mortenalbring", icon: "💻", x: 320, y: 20, zIndex: 1 },
 ];
 
 export default function Desktop() {
     const desktopRef = useRef(null);
     const [icons, setIcons] = useState(initialIcons);
-    const [dragging, setDragging] = useState(null); // { index, offsetX, offsetY }
+    const [dragging, setDragging] = useState(null);
     const [selectedIndex, setSelectedIndex] = useState(null);
     const [topZ, setTopZ] = useState(1);
-    const [showPortfolio, setShowPortfolio] = useState(false);
 
-    // Global mouse handlers for dragging (attach once, check 'dragging')
+    // Track which popups are open
+    const [popups, setPopups] = useState([]); // [{id, zIndex}]
+
+    // Handle dragging icons
     useEffect(() => {
         const handleMouseMove = (e) => {
             if (!dragging) return;
@@ -30,11 +32,9 @@ export default function Desktop() {
             let newX = e.clientX - desktopRect.left - dragging.offsetX;
             let newY = e.clientY - desktopRect.top - dragging.offsetY;
 
-            // Snap to grid
             newX = Math.round(newX / GRID_SIZE) * GRID_SIZE;
             newY = Math.round(newY / GRID_SIZE) * GRID_SIZE;
 
-            // Clamp inside desktop area
             newX = Math.max(0, Math.min(newX, desktopRect.width - ICON_SIZE));
             newY = Math.max(0, Math.min(newY, desktopRect.height - ICON_SIZE));
 
@@ -57,10 +57,11 @@ export default function Desktop() {
 
     const handleMouseDown = (e, index) => {
         e.stopPropagation();
-        // bring to front
         const newTopZ = topZ + 1;
         setTopZ(newTopZ);
-        setIcons((prev) => prev.map((ic, i) => (i === index ? { ...ic, zIndex: newTopZ } : ic)));
+        setIcons((prev) =>
+            prev.map((ic, i) => (i === index ? { ...ic, zIndex: newTopZ } : ic))
+        );
 
         const icon = icons[index];
         const desktopRect = desktopRef.current.getBoundingClientRect();
@@ -77,11 +78,34 @@ export default function Desktop() {
     const handleDoubleClick = (item, e) => {
         e.stopPropagation();
         if (item.opensPopup) {
-            setShowPortfolio(true);
+            const popupId = item.opensPopup;
+            const newTopZ = topZ + 1;
+            setTopZ(newTopZ);
+            setPopups((prev) => {
+                // If popup already open, just bring it to front
+                if (prev.find((p) => p.id === popupId)) {
+                    return prev.map((p) =>
+                        p.id === popupId ? { ...p, zIndex: newTopZ } : p
+                    );
+                }
+                // Otherwise, open a new one
+                return [...prev, { id: popupId, zIndex: newTopZ }];
+            });
             return;
         }
-        // otherwise open link (same tab)
         if (item.link) window.open(item.link, "_self");
+    };
+
+    const closePopup = (id) => {
+        setPopups((prev) => prev.filter((p) => p.id !== id));
+    };
+
+    const bringPopupToFront = (id) => {
+        const newTopZ = topZ + 1;
+        setTopZ(newTopZ);
+        setPopups((prev) =>
+            prev.map((p) => (p.id === id ? { ...p, zIndex: newTopZ } : p))
+        );
     };
 
     return (
@@ -117,20 +141,29 @@ export default function Desktop() {
                     <div className="taskbar-time">12:00</div>
                 </div>
 
-                {/* Portfolio popup */}
-                {showPortfolio && (
+                {/* Render all open popups */}
+                {popups.map((popup) => (
                     <PopupWindow
-                        title="Portfolio"
-                        onClose={() => setShowPortfolio(false)}
+                        key={popup.id}
+                        title={popup.id === "portfolio" ? "Portfolio" : "Contact"}
+                        onClose={() => closePopup(popup.id)}
+                        zIndex={popup.zIndex}
+                        onFocus={() => bringPopupToFront(popup.id)}
                     >
-                        <div style={{ padding: 8 }}>
-                            <h3 style={{ margin: "0 0 8px 0" }}>Welcome!</h3>
-                            <p style={{ margin: 0 }}>
-                                This is a retro Portfolio popup. Put projects, links or images here.
-                            </p>
-                        </div>
+                        {popup.id === "portfolio" && (
+                            <div style={{ padding: 8 }}>
+                                <h3>Welcome!</h3>
+                                <p>This is my retro Portfolio window.</p>
+                            </div>
+                        )}
+                        {popup.id === "contact" && (
+                            <div style={{ padding: 8 }}>
+                                <h3>Contact Me</h3>
+                                <p>Email: <a href="mailto:test@example.com">test@example.com</a></p>
+                            </div>
+                        )}
                     </PopupWindow>
-                )}
+                ))}
             </div>
         </div>
     );
