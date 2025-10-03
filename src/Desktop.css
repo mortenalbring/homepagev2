@@ -70,8 +70,6 @@
     z-index: 5;
     animation: crt-fade-black 2s ease-out forwards;
 }
-
-/* Scanlines + vignette */
 .desktop::after {
     content: "";
     position: absolute;
@@ -79,20 +77,21 @@
     background:
             repeating-linear-gradient(
                     to bottom,
-                    rgba(0, 0, 0, 0.08) 0px,
-                    rgba(0, 0, 0, 0.08) 1px,
+                    rgba(0, 0, 0, 0.04) 0px, /* reduced opacity */
+                    rgba(0, 0, 0, 0.04) 1px,
                     transparent 2px,
                     transparent 4px
             ),
             radial-gradient(
                     circle at center,
-                    rgba(255, 255, 255, 0.05) 0%,
-                    rgba(0, 0, 0, 0.2) 100%
+                    rgba(255, 255, 255, 0.03) 0%, /* softer vignette */
+                    rgba(0, 0, 0, 0.15) 100%
             );
     pointer-events: none;
     opacity: 0;
     animation: crt-overlay-fade 2.5s ease-out forwards;
 }
+
 
 .desktop::before,
 .desktop::after {
