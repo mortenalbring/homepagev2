@@ -1,20 +1,30 @@
-﻿/* Monitor frame */
+﻿body {
+    background-color: #2b2b2b; /* dark grey / almost black */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* monitor starts a bit down from top */
+    min-height: 100vh;
+    font-family: sans-serif;
+}
 .monitor {
     width: 900px;
     height: 700px;
-    background: #c0c0c0; /* Windows 95 grey */
-    border: 12px solid #999;
+    background: linear-gradient(145deg, #d0d0d0, #a8a8a8); /* subtle metallic gradient */
     border-radius: 12px;
     padding: 20px;
-    box-shadow:
-            inset -8px -8px 16px rgba(255, 255, 255, 0.6),
-            inset 8px 8px 16px rgba(0, 0, 0, 0.4),
-            0 12px 20px rgba(0, 0, 0, 0.5);
     margin: 50px auto;
     display: flex;
     justify-content: center;
     align-items: center;
-    position: relative; /* for stand */
+    position: relative;
+
+    /* 3D bevel effect */
+    box-shadow:
+            inset -6px -6px 8px rgba(255, 255, 255, 0.6), /* highlight top-left */
+            inset 6px 6px 8px rgba(0, 0, 0, 0.4),          /* shadow bottom-right */
+            0 12px 20px rgba(0, 0, 0, 0.4);               /* outer shadow */
 }
 
 /* Monitor stand */
