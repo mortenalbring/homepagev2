@@ -1,11 +1,13 @@
-﻿import React, { useState, useRef, useEffect } from "react";
+﻿// src/components/Desktop.jsx
+import React, { useState, useRef, useEffect } from "react";
+import PopupWindow from "./PopupWindow";
 import "./Desktop.css";
 
 const GRID_SIZE = 80;
-const ICON_SIZE = 64;
+const ICON_SIZE = 64; // used for clamping; matches your CSS/icon size roughly
 
 const initialIcons = [
-    { name: "Portfolio", link: "/portfolio", icon: "💼", x: 20, y: 20, zIndex: 1 },
+    { name: "Portfolio", link: "/portfolio", icon: "💼", x: 20, y: 20, zIndex: 1, opensPopup: true },
     { name: "Blog", link: "/blog", icon: "📓", x: 120, y: 20, zIndex: 1 },
     { name: "Contact", link: "/contact", icon: "📧", x: 220, y: 20, zIndex: 1 },
     { name: "GitHub", link: "https://github.com/mortenalbring", icon: "💻", x: 320, y: 20, zIndex: 1 },
@@ -17,8 +19,9 @@ export default function Desktop() {
     const [dragging, setDragging] = useState(null); // { index, offsetX, offsetY }
     const [selectedIndex, setSelectedIndex] = useState(null);
     const [topZ, setTopZ] = useState(1);
+    const [showPortfolio, setShowPortfolio] = useState(false);
 
-    // Global mouse handlers for dragging
+    // Global mouse handlers for dragging (attach once, check 'dragging')
     useEffect(() => {
         const handleMouseMove = (e) => {
             if (!dragging) return;
@@ -31,7 +34,7 @@ export default function Desktop() {
             newX = Math.round(newX / GRID_SIZE) * GRID_SIZE;
             newY = Math.round(newY / GRID_SIZE) * GRID_SIZE;
 
-            // Clamp inside desktop
+            // Clamp inside desktop area
             newX = Math.max(0, Math.min(newX, desktopRect.width - ICON_SIZE));
             newY = Math.max(0, Math.min(newY, desktopRect.height - ICON_SIZE));
 
@@ -54,14 +57,14 @@ export default function Desktop() {
 
     const handleMouseDown = (e, index) => {
         e.stopPropagation();
-
-        // raise z-index for this icon (bring to front)
+        // bring to front
         const newTopZ = topZ + 1;
         setTopZ(newTopZ);
-        setIcons((prev) => prev.map((icon, i) => (i === index ? { ...icon, zIndex: newTopZ } : icon)));
+        setIcons((prev) => prev.map((ic, i) => (i === index ? { ...ic, zIndex: newTopZ } : ic)));
 
         const icon = icons[index];
         const desktopRect = desktopRef.current.getBoundingClientRect();
+
         setDragging({
             index,
             offsetX: e.clientX - desktopRect.left - icon.x,
@@ -71,8 +74,14 @@ export default function Desktop() {
         setSelectedIndex(index);
     };
 
-    const handleDoubleClick = (link) => {
-        window.open(link, "_self");
+    const handleDoubleClick = (item, e) => {
+        e.stopPropagation();
+        if (item.opensPopup) {
+            setShowPortfolio(true);
+            return;
+        }
+        // otherwise open link (same tab)
+        if (item.link) window.open(item.link, "_self");
     };
 
     return (
@@ -93,7 +102,7 @@ export default function Desktop() {
                             zIndex: item.zIndex || 1,
                         }}
                         onMouseDown={(e) => handleMouseDown(e, i)}
-                        onDoubleClick={() => handleDoubleClick(item.link)}
+                        onDoubleClick={(e) => handleDoubleClick(item, e)}
                     >
                         <div className="icon">
                             <div className="icon-image">{item.icon}</div>
@@ -107,6 +116,21 @@ export default function Desktop() {
                     <button className="start-button">Start</button>
                     <div className="taskbar-time">12:00</div>
                 </div>
+
+                {/* Portfolio popup */}
+                {showPortfolio && (
+                    <PopupWindow
+                        title="Portfolio"
+                        onClose={() => setShowPortfolio(false)}
+                    >
+                        <div style={{ padding: 8 }}>
+                            <h3 style={{ margin: "0 0 8px 0" }}>Welcome!</h3>
+                            <p style={{ margin: 0 }}>
+                                This is a retro Portfolio popup. Put projects, links or images here.
+                            </p>
+                        </div>
+                    </PopupWindow>
+                )}
             </div>
         </div>
     );
