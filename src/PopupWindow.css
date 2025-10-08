@@ -78,3 +78,22 @@
     border-bottom: 2px outset #808080;
 }
 
+.popup-controls {
+    display: flex;
+    gap: 2px;
+}
+
+.popup-maximize {
+    width: 20px;
+    height: 20px;
+    background: silver;
+    border: 2px outset #fff;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0;
+    line-height: 16px;
+}
+
+.popup-maximize:active {
+    border: 2px inset #fff;
+}

@@ -148,6 +148,7 @@ export default function Desktop() {
                         title={popup.id === "portfolio" ? "Portfolio" : "Contact"}
                         onClose={() => closePopup(popup.id)}
                         zIndex={popup.zIndex}
+                        desktopRef={desktopRef}
                         onFocus={() => bringPopupToFront(popup.id)}
                     >
                         {popup.id === "portfolio" && (
