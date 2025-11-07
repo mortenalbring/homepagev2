@@ -1,4 +1,4 @@
-﻿// src/components/Desktop.jsx
+// src/components/Desktop.jsx
 import React, { useState, useRef, useEffect } from "react";
 import PopupWindow from "./PopupWindow";
 import "./Desktop.css";

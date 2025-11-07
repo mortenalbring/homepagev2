@@ -1,4 +1,4 @@
-﻿import React, { useState } from "react";
+import React, { useState } from "react";
 import "./PopupWindow.css";
 
 const MIN_WIDTH = 200;
