@@ -3,13 +3,15 @@ import React, {useEffect, useRef, useState} from "react";
 import PopupWindow from "./PopupWindow";
 import "./Desktop.css"; 
 import {ContactComponent} from "./ContactComponent";
+import {BlogComponent} from "./BlogComponent";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const GRID_SIZE = 80;
 const ICON_SIZE = 64;
 
 const initialIcons = [
     {name: "Portfolio", link: null, icon: "💼", x: 20, y: 20, zIndex: 1, opensPopup: "portfolio"},
-    {name: "Blog", link: "/blog", icon: "📓", x: 120, y: 20, zIndex: 1},
+    {name: "Blog", link: "/blog", icon: "📓", x: 120, y: 20, zIndex: 1, opensPopup: "blog"},
     {name: "Contact", link: null, icon: "📧", x: 220, y: 20, zIndex: 1, opensPopup: "contact"},
     {name: "GitHub", link: "https://github.com/mortenalbring", icon: "💻", x: 320, y: 20, zIndex: 1},
 ];
@@ -21,9 +23,29 @@ export default function Desktop() {
     const [selectedIndex, setSelectedIndex] = useState(null);
     const [topZ, setTopZ] = useState(1);
 
+//tracking the routing stuff 
+    const location = useLocation();
+    const navigate = useNavigate();
+    
     // Track which popups are open
     const [popups, setPopups] = useState([]); // [{id, zIndex}]
 
+
+// Sync popup state with route
+    useEffect(() => {
+        if (location.pathname === "/blog") {
+            setPopups(prev => {
+                if (prev.find(p => p.id === "blog")) return prev; // already open
+                const newTopZ = topZ + 1;
+                setTopZ(newTopZ);
+                return [...prev, { id: "blog", zIndex: newTopZ }];
+            });
+        } else {
+            setPopups(prev => prev.filter(p => p.id !== "blog"));
+        }
+    }, [location.pathname, topZ]);    
+    
+    
     // Handle dragging icons
     useEffect(() => {
         const handleMouseMove = (e) => {
@@ -78,6 +100,10 @@ export default function Desktop() {
 
     const handleDoubleClick = (item, e) => {
         e.stopPropagation();
+        if (item.opensPopup === "blog") {
+            navigate("/blog");
+        }
+        
         if (item.opensPopup) {
             const popupId = item.opensPopup;
             const newTopZ = topZ + 1;
@@ -98,6 +124,10 @@ export default function Desktop() {
     };
 
     const closePopup = (id) => {
+
+        if (id === "blog") navigate("/");
+        setPopups((prev) => prev.filter((p) => p.id !== id));
+        
         setPopups((prev) => prev.filter((p) => p.id !== id));
     };
 
@@ -161,6 +191,10 @@ export default function Desktop() {
                         {popup.id === "contact" && (
                             <ContactComponent/>
                         )}
+                        {popup.id === "blog" && (
+                            <BlogComponent/>
+                        )}
+                        
                     </PopupWindow>
                 ))}
             </div>
