@@ -12,16 +12,14 @@ const PopupWindow = ({ title, children, onClose, desktopRef }) => {
     const [offset, setOffset] = useState({ x: 0, y: 0 });
     const [isMaximized, setIsMaximized] = useState(false);
     const [prevState, setPrevState] = useState(null);
-
-    // Drag window
+    
     const handleMouseDown = (e) => {
         if (!isMaximized) {
             setDragging(true);
             setOffset({ x: e.clientX - position.x, y: e.clientY - position.y });
         }
     };
-
-    // Resize window
+    
     const handleResizeMouseDown = (e) => {
         e.stopPropagation();
         if (!isMaximized) {
@@ -53,7 +51,7 @@ const PopupWindow = ({ title, children, onClose, desktopRef }) => {
         if (!isMaximized) {
             setPrevState({ position: { ...position }, size: { ...size } });
             // Adjust for monitor borders
-            const borderOffset = 40; // same as your monitor border
+            const borderOffset = 40; // todo make this a const variable?
             setPosition({ x: borderOffset, y: borderOffset });
             setSize({
                 width: desktopRect.width - borderOffset * 3,
@@ -82,7 +80,7 @@ const PopupWindow = ({ title, children, onClose, desktopRef }) => {
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
         >
-            {/* Title bar */}
+            
             <div className="popup-titlebar" onMouseDown={handleMouseDown}>
                 <span className="popup-title">{title}</span>
                 <div className="popup-controls">
@@ -91,10 +89,10 @@ const PopupWindow = ({ title, children, onClose, desktopRef }) => {
                 </div>
             </div>
 
-            {/* Content */}
+            
             <div className="popup-content">{children}</div>
 
-            {/* Resize handle */}
+            
             {!isMaximized && <div className="resize-handle" onMouseDown={handleResizeMouseDown} />}
         </div>
     );

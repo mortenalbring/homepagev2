@@ -7,10 +7,9 @@
     z-index: 1000;
     display: flex;
     flex-direction: column;
-    user-select: none; /* Prevent accidental text selection */
+    user-select: none; 
 }
 
-/* Title bar */
 .popup-titlebar {
     background: linear-gradient(to bottom, navy 0%, #000080 100%);
     color: white;
@@ -45,7 +44,6 @@
     border: 2px inset #fff;
 }
 
-/* Window content */
 .popup-content {
     flex: 1;
     background: #c0c0c0;
@@ -56,9 +54,9 @@
     padding: 8px;
     font-size: 13px;
     overflow: auto;
-    user-select: none; /* Prevent text selection during drag */
+    user-select: none; 
 }
-/* Resize handle container */
+
 .resize-handle {
     width: 16px;
     height: 16px;
