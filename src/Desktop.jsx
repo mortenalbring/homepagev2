@@ -1,7 +1,8 @@
 // src/components/Desktop.jsx
 import React, {useEffect, useRef, useState} from "react";
 import PopupWindow from "./PopupWindow";
-import "./Desktop.css";
+import "./Desktop.css"; 
+import {ContactComponent} from "./ContactComponent";
 
 const GRID_SIZE = 80;
 const ICON_SIZE = 64;
@@ -158,10 +159,7 @@ export default function Desktop() {
                             </div>
                         )}
                         {popup.id === "contact" && (
-                            <div style={{padding: 8}}>
-                                <h3>Contact Me</h3>
-                                <p>Email: <a href="mailto:test@example.com">test@example.com</a></p>
-                            </div>
+                            <ContactComponent/>
                         )}
                     </PopupWindow>
                 ))}
