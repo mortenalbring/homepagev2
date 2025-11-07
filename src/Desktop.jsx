@@ -26,6 +26,18 @@ export default function Desktop() {
 //tracking the routing stuff 
     const location = useLocation();
     const navigate = useNavigate();
+
+    const getOpenPopupsFromURL = () => {
+        const params = new URLSearchParams(location.search);
+        const open = params.get("open");
+        return open ? open.split(",") : [];
+    };
+
+    const updateURL = (popups) => {
+        const params = new URLSearchParams();
+        if (popups.length > 0) params.set("open", popups.join(","));
+        navigate({ search: params.toString() }, { replace: true });
+    };    
     
     // Track which popups are open
     const [popups, setPopups] = useState([]); // [{id, zIndex}]
@@ -33,18 +45,19 @@ export default function Desktop() {
 
 // Sync popup state with route
     useEffect(() => {
-        if (location.pathname === "/blog") {
-            setPopups(prev => {
-                if (prev.find(p => p.id === "blog")) return prev; // already open
-                const newTopZ = topZ + 1;
-                setTopZ(newTopZ);
-                return [...prev, { id: "blog", zIndex: newTopZ }];
-            });
-        } else {
-            setPopups(prev => prev.filter(p => p.id !== "blog"));
-        }
-    }, [location.pathname, topZ]);    
-    
+        const openIds = getOpenPopupsFromURL();
+        setPopups((prev) => {
+            const existing = prev.map(p => p.id);
+            const missing = openIds.filter(id => !existing.includes(id));
+            const newTopZ = topZ + (missing.length*100);
+            console.log(newTopZ);
+            setTopZ(newTopZ);
+            return [
+                ...prev,
+                ...missing.map((id, i) => ({ id, zIndex: newTopZ + i }))
+            ];
+        });
+    }, [location.search]);
     
     // Handle dragging icons
     useEffect(() => {
@@ -100,8 +113,10 @@ export default function Desktop() {
 
     const handleDoubleClick = (item, e) => {
         e.stopPropagation();
-        if (item.opensPopup === "blog") {
-            navigate("/blog");
+        if (item.opensPopup) {
+            const openIds = getOpenPopupsFromURL();
+            const newOpen = [...new Set([...openIds, item.opensPopup])];
+            updateURL(newOpen);
         }
         
         if (item.opensPopup) {
@@ -125,10 +140,11 @@ export default function Desktop() {
 
     const closePopup = (id) => {
 
-        if (id === "blog") navigate("/");
-        setPopups((prev) => prev.filter((p) => p.id !== id));
         
-        setPopups((prev) => prev.filter((p) => p.id !== id));
+            const openIds = getOpenPopupsFromURL();
+            updateURL(openIds.filter(p => p !== id));
+            setPopups((prev) => prev.filter((p) => p.id !== id));
+        
     };
 
     const bringPopupToFront = (id) => {
@@ -179,6 +195,7 @@ export default function Desktop() {
                         title={popup.id === "portfolio" ? "Portfolio" : "Contact"}
                         onClose={() => closePopup(popup.id)}
                         zIndex={popup.zIndex}
+                        initialPosition={{ x: popup.x, y: popup.y }} 
                         desktopRef={desktopRef}
                         onFocus={() => bringPopupToFront(popup.id)}
                     >
