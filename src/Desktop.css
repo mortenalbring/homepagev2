@@ -19,7 +19,7 @@
     overflow: hidden;
     font-family: "Tahoma", "Verdana", sans-serif;
 
-    border: 20px solid #333;     /* monitor frame */
+    border: 20px solid #333; /* monitor frame */
     border-radius: 12px;
     box-shadow: 0 0 40px #000;
 }

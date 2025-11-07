@@ -1,5 +1,5 @@
 // src/components/Desktop.jsx
-import React, { useState, useRef, useEffect } from "react";
+import React, {useEffect, useRef, useState} from "react";
 import PopupWindow from "./PopupWindow";
 import "./Desktop.css";
 
@@ -7,10 +7,10 @@ const GRID_SIZE = 80;
 const ICON_SIZE = 64;
 
 const initialIcons = [
-    { name: "Portfolio", link: null, icon: "💼", x: 20, y: 20, zIndex: 1, opensPopup: "portfolio" },
-    { name: "Blog", link: "/blog", icon: "📓", x: 120, y: 20, zIndex: 1 },
-    { name: "Contact", link: null, icon: "📧", x: 220, y: 20, zIndex: 1, opensPopup: "contact" },
-    { name: "GitHub", link: "https://github.com/mortenalbring", icon: "💻", x: 320, y: 20, zIndex: 1 },
+    {name: "Portfolio", link: null, icon: "💼", x: 20, y: 20, zIndex: 1, opensPopup: "portfolio"},
+    {name: "Blog", link: "/blog", icon: "📓", x: 120, y: 20, zIndex: 1},
+    {name: "Contact", link: null, icon: "📧", x: 220, y: 20, zIndex: 1, opensPopup: "contact"},
+    {name: "GitHub", link: "https://github.com/mortenalbring", icon: "💻", x: 320, y: 20, zIndex: 1},
 ];
 
 export default function Desktop() {
@@ -40,7 +40,7 @@ export default function Desktop() {
 
             setIcons((prev) =>
                 prev.map((icon, i) =>
-                    i === dragging.index ? { ...icon, x: newX, y: newY } : icon
+                    i === dragging.index ? {...icon, x: newX, y: newY} : icon
                 )
             );
         };
@@ -60,7 +60,7 @@ export default function Desktop() {
         const newTopZ = topZ + 1;
         setTopZ(newTopZ);
         setIcons((prev) =>
-            prev.map((ic, i) => (i === index ? { ...ic, zIndex: newTopZ } : ic))
+            prev.map((ic, i) => (i === index ? {...ic, zIndex: newTopZ} : ic))
         );
 
         const icon = icons[index];
@@ -85,11 +85,11 @@ export default function Desktop() {
                 // If popup already open, just bring it to front
                 if (prev.find((p) => p.id === popupId)) {
                     return prev.map((p) =>
-                        p.id === popupId ? { ...p, zIndex: newTopZ } : p
+                        p.id === popupId ? {...p, zIndex: newTopZ} : p
                     );
                 }
                 // Otherwise, open a new one
-                return [...prev, { id: popupId, zIndex: newTopZ }];
+                return [...prev, {id: popupId, zIndex: newTopZ}];
             });
             return;
         }
@@ -104,7 +104,7 @@ export default function Desktop() {
         const newTopZ = topZ + 1;
         setTopZ(newTopZ);
         setPopups((prev) =>
-            prev.map((p) => (p.id === id ? { ...p, zIndex: newTopZ } : p))
+            prev.map((p) => (p.id === id ? {...p, zIndex: newTopZ} : p))
         );
     };
 
@@ -152,13 +152,13 @@ export default function Desktop() {
                         onFocus={() => bringPopupToFront(popup.id)}
                     >
                         {popup.id === "portfolio" && (
-                            <div style={{ padding: 8 }}>
+                            <div style={{padding: 8}}>
                                 <h3>Welcome!</h3>
                                 <p>This is my retro Portfolio window.</p>
                             </div>
                         )}
                         {popup.id === "contact" && (
-                            <div style={{ padding: 8 }}>
+                            <div style={{padding: 8}}>
                                 <h3>Contact Me</h3>
                                 <p>Email: <a href="mailto:test@example.com">test@example.com</a></p>
                             </div>
