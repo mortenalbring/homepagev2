@@ -73,7 +73,7 @@
     align-items: flex-end;
     padding: 2px;
     box-sizing: border-box;
-    background: linear-gradient(45deg, blue,red);
+    background: linear-gradient(45deg, grey,grey);
     border-right: 2px outset #808080;
     border-bottom: 2px outset #808080;
 }
