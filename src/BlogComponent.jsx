@@ -2,6 +2,6 @@
 
 export function BlogComponent() {
     return <div style={{padding: 8}}>
-        
+
     </div>
 }

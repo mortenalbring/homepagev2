@@ -93,7 +93,7 @@ const PopupWindow = ({title, children, onClose, desktopRef}) => {
 
             <div className="popup-content">{children}</div>
 
-            
+
             {!isMaximized && <div className="resize-handle" onMouseDown={handleResizeMouseDown}/>}
         </div>
     );
