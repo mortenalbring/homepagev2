@@ -23,6 +23,8 @@
     font-family: "Tahoma", "Verdana", sans-serif;
 
     border: 20px solid #333; /* monitor frame */
+    border-top: 0;
+    border-right: 0;
     border-radius: 12px;
     box-shadow: 0 0 40px #000;
     overflow: visible;
@@ -31,16 +33,46 @@
 .desktop:before {
     content: '';
     position: absolute;
-    
     width: 100%;
     height: 100px;
     background: #c52329;
     border: 2px solid #fff;
     transform: skew(-40deg);
     left: 3%; /* if you want centered 90% width */
-    top: -17%;
+    top: -10%;
     z-index: 1; /* optional: behind content */
 }
+
+.desktop:before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100px;
+    background: #c52329;
+    border: 2px solid #fff;
+    transform: skew(-45deg);
+    left: 4%; /* if you want centered 90% width */
+    top: -14%;
+    z-index: 1; /* optional: behind content */
+}
+
+.desktop:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: -100px;
+    width: 100px;
+    height: 100%;
+
+    background: #a61c20;
+    border: 2px solid white;
+
+    transform-origin: top left;
+    transform: skewY(-45deg);
+    z-index: 1;
+}
+
+
 
 .icon-wrapper {
     display: flex;
