@@ -1,4 +1,4 @@
-﻿/* Monitor container */
+﻿
 .monitor {
     display: flex;
     align-items: center;
@@ -6,7 +6,10 @@
     background: #111; /* outside monitor */
     height: 100vh;
     width: 100vw;
+    position: relative;
 }
+
+
 
 /* Desktop inside monitor */
 .desktop {
@@ -16,15 +19,29 @@
     max-height: 800px;
     background: #008080; /* Windows 95 teal */
     position: relative;
-    overflow: hidden;
+    
     font-family: "Tahoma", "Verdana", sans-serif;
 
     border: 20px solid #333; /* monitor frame */
     border-radius: 12px;
     box-shadow: 0 0 40px #000;
+    overflow: visible;
 }
 
-/* Icon wrapper (absolute positioned by JS) */
+.desktop:before {
+    content: '';
+    position: absolute;
+    
+    width: 100%;
+    height: 100px;
+    background: #c52329;
+    border: 2px solid #fff;
+    transform: skew(-40deg);
+    left: 3%; /* if you want centered 90% width */
+    top: -17%;
+    z-index: 1; /* optional: behind content */
+}
+
 .icon-wrapper {
     display: flex;
     flex-direction: column;
