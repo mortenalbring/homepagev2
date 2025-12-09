@@ -234,6 +234,13 @@
     background: #c8c8c8;
 }
 
+.taskbar-btn-text {
+    margin-left: 4px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 /* Windows 95 Flag Logo */
 .win-flag {
     display: inline-grid;

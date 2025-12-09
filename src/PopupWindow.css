@@ -5,7 +5,7 @@
     position: absolute;
     background: var(--win95-bg, #c0c0c0);
     font-family: "MS Sans Serif", "Tahoma", sans-serif;
-    z-index: 1000;
+    /* z-index set via inline style */
     display: flex;
     flex-direction: column;
     user-select: none;

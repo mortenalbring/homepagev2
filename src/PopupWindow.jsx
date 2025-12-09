@@ -13,7 +13,8 @@ const PopupWindow = ({
     desktopRef,
     menuItems,
     statusText,
-    initialSize = {width: 400, height: 300}
+    initialSize = {width: 400, height: 300},
+    zIndex = 100
 }) => {
     const [position, setPosition] = useState({x: 100, y: 50});
     const [size, setSize] = useState(initialSize);
@@ -90,6 +91,7 @@ const PopupWindow = ({
                 left: position.x,
                 width: size.width,
                 height: size.height,
+                zIndex
             }}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
