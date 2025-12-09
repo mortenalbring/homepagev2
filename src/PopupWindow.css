@@ -32,11 +32,11 @@
     pointer-events: none;
 }
 
-/* Title bar - Windows 95 style with gradient */
+/* Title bar - Windows 95 style solid navy */
 .popup-titlebar {
-    background: linear-gradient(90deg, #000080 0%, #1084d0 100%);
+    background: #000080;
     color: #ffffff;
-    padding: 3px 4px;
+    padding: 2px 3px;
     font-weight: bold;
     display: flex;
     justify-content: space-between;
@@ -49,7 +49,7 @@
 
 /* Inactive window title bar */
 .popup-window.inactive .popup-titlebar {
-    background: linear-gradient(90deg, #808080 0%, #a0a0a0 100%);
+    background: #808080;
 }
 
 /* Window title text */

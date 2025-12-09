@@ -18,11 +18,12 @@ const formatTime = (date) => {
 const GRID_SIZE = 80;
 const ICON_SIZE = 64;
 
+// Icons arranged vertically on left side like real Win95
 const initialIcons = [
-    {name: "Portfolio", link: null, icon: "💼", x: 20, y: 20, zIndex: 1, opensPopup: "portfolio"},
-    {name: "Blog", link: "/blog", icon: "📓", x: 120, y: 20, zIndex: 1, opensPopup: "blog"},
-    {name: "Contact", link: null, icon: "📧", x: 220, y: 20, zIndex: 1, opensPopup: "contact"},
-    {name: "GitHub", link: "https://github.com/mortenalbring", icon: "💻", x: 320, y: 20, zIndex: 1},
+    {name: "Portfolio", link: null, icon: "💼", x: 10, y: 10, zIndex: 1, opensPopup: "portfolio"},
+    {name: "Blog", link: "/blog", icon: "📓", x: 10, y: 85, zIndex: 1, opensPopup: "blog"},
+    {name: "Contact", link: null, icon: "📧", x: 10, y: 160, zIndex: 1, opensPopup: "contact"},
+    {name: "GitHub", link: "https://github.com/mortenalbring", icon: "💻", x: 10, y: 235, zIndex: 1},
 ];
 
 export default function Desktop() {
@@ -203,7 +204,12 @@ export default function Desktop() {
                 {/* Taskbar */}
                 <div className="taskbar">
                     <button className="start-button">
-                        <span style={{fontSize: '14px'}}>🪟</span>
+                        <span className="win-flag">
+                            <span className="flag-red"></span>
+                            <span className="flag-green"></span>
+                            <span className="flag-blue"></span>
+                            <span className="flag-yellow"></span>
+                        </span>
                         <span>Start</span>
                     </button>
                     <div className="taskbar-divider"></div>

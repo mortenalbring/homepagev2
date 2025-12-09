@@ -5,7 +5,6 @@ const MIN_WIDTH = 200;
 const MIN_HEIGHT = 120;
 
 const PopupWindow = ({title, children, onClose, desktopRef}) => {
-    console.log("desktopRef", desktopRef);
     const [position, setPosition] = useState({x: 100, y: 100});
     const [size, setSize] = useState({width: 300, height: 200});
     const [dragging, setDragging] = useState(false);
