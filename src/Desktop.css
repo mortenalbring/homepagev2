@@ -7,14 +7,16 @@
     height: 100vh;
     width: 100vw;
     position: relative;
+    user-select: none;
+
 }
 
 
 
 /* Desktop inside monitor */
 .desktop {
-    height: 80vh;
-    width: 90vw;
+    height: 100vh;
+    width: 100vw;
     max-width: 1200px;
     max-height: 800px;
     background: #008080; /* Windows 95 teal */
@@ -22,55 +24,15 @@
     
     font-family: "Tahoma", "Verdana", sans-serif;
 
-    border: 20px solid #333; /* monitor frame */
-    border-top: 0;
-    border-right: 0;
-    border-radius: 12px;
+    user-select: none;
+    
+    
+    border: 5px solid #545454;
     box-shadow: 0 0 40px #000;
     overflow: visible;
 }
 
-.desktop:before {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 100px;
-    background: #c52329;
-    border: 2px solid #fff;
-    transform: skew(-40deg);
-    left: 3%; /* if you want centered 90% width */
-    top: -10%;
-    z-index: 1; /* optional: behind content */
-}
 
-.desktop:before {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 100px;
-    background: #c52329;
-    border: 2px solid #fff;
-    transform: skew(-45deg);
-    left: 4%; /* if you want centered 90% width */
-    top: -14%;
-    z-index: 1; /* optional: behind content */
-}
-
-.desktop:after {
-    content: "";
-    position: absolute;
-    top: 0;
-    right: -100px;
-    width: 100px;
-    height: 100%;
-
-    background: #a61c20;
-    border: 2px solid white;
-
-    transform-origin: top left;
-    transform: skewY(-45deg);
-    z-index: 1;
-}
 
 
 
