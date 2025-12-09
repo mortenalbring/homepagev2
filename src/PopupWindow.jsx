@@ -85,8 +85,16 @@ const PopupWindow = ({title, children, onClose, desktopRef}) => {
             <div className="popup-titlebar" onMouseDown={handleMouseDown}>
                 <span className="popup-title">{title}</span>
                 <div className="popup-controls">
-                    <button className="popup-maximize" onClick={toggleMaximize}>▢</button>
-                    <button className="popup-close" onClick={onClose}>✕</button>
+                    <button
+                        className={`popup-maximize ${isMaximized ? 'restore' : ''}`}
+                        onClick={toggleMaximize}
+                        title={isMaximized ? "Restore" : "Maximize"}
+                    ></button>
+                    <button
+                        className="popup-close"
+                        onClick={onClose}
+                        title="Close"
+                    ></button>
                 </div>
             </div>
 

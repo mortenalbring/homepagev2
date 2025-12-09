@@ -6,6 +6,15 @@ import {ContactComponent} from "./ContactComponent";
 import {BlogComponent} from "./BlogComponent";
 import {useLocation, useNavigate} from "react-router-dom";
 
+// Format time like Windows 95 clock
+const formatTime = (date) => {
+    return date.toLocaleTimeString('en-US', {
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true
+    });
+};
+
 const GRID_SIZE = 80;
 const ICON_SIZE = 64;
 
@@ -22,8 +31,17 @@ export default function Desktop() {
     const [dragging, setDragging] = useState(null);
     const [selectedIndex, setSelectedIndex] = useState(null);
     const [topZ, setTopZ] = useState(1);
+    const [currentTime, setCurrentTime] = useState(new Date());
 
-//tracking the routing stuff 
+    // Update clock every minute
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setCurrentTime(new Date());
+        }, 1000);
+        return () => clearInterval(timer);
+    }, []);
+
+    // Tracking the routing stuff
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -184,8 +202,30 @@ export default function Desktop() {
 
                 {/* Taskbar */}
                 <div className="taskbar">
-                    <button className="start-button">Start</button>
-                    <div className="taskbar-time">12:00</div>
+                    <button className="start-button">
+                        <span style={{fontSize: '14px'}}>🪟</span>
+                        <span>Start</span>
+                    </button>
+                    <div className="taskbar-divider"></div>
+                    <div className="taskbar-windows">
+                        {popups.map((popup) => (
+                            <button
+                                key={popup.id}
+                                className={`taskbar-window-btn ${popup.zIndex === topZ ? 'active' : ''}`}
+                                onClick={() => bringPopupToFront(popup.id)}
+                            >
+                                {popup.id === "portfolio" && "💼"}
+                                {popup.id === "contact" && "📧"}
+                                {popup.id === "blog" && "📓"}
+                                <span style={{marginLeft: '4px'}}>
+                                    {popup.id.charAt(0).toUpperCase() + popup.id.slice(1)}
+                                </span>
+                            </button>
+                        ))}
+                    </div>
+                    <div className="taskbar-tray">
+                        <span className="taskbar-time">{formatTime(currentTime)}</span>
+                    </div>
                 </div>
 
                 {/* Render all open popups */}

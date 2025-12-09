@@ -1,0 +1,61 @@
+/* Windows 95 Contact Component Styles */
+
+.contact-content {
+    font-family: "MS Sans Serif", "Tahoma", sans-serif;
+    font-size: 11px;
+    color: #000000;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 0;
+    margin: 4px 0;
+}
+
+.contact-icon {
+    font-size: 16px;
+    width: 20px;
+    text-align: center;
+}
+
+.contact-label {
+    font-weight: bold;
+    min-width: 60px;
+}
+
+/* Windows 95 style links */
+.win95-link {
+    color: #0000ff;
+    text-decoration: underline;
+}
+
+.win95-link:hover {
+    color: #ff0000;
+}
+
+.win95-link:visited {
+    color: #800080;
+}
+
+.win95-link:active {
+    color: #ff0000;
+}
+
+/* Groupbox styling (inherited from PopupWindow.css but can override) */
+.contact-content .win95-groupbox {
+    border: 2px solid;
+    border-color: #808080 #ffffff #ffffff #808080;
+    padding: 16px 12px 12px 12px;
+    margin: 0;
+    position: relative;
+}
+
+.contact-content .win95-groupbox legend {
+    background: var(--win95-bg, #c0c0c0);
+    padding: 0 6px;
+    font-size: 11px;
+    font-weight: normal;
+    margin-left: 8px;
+}

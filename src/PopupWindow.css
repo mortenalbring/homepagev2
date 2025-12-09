@@ -1,62 +1,235 @@
-﻿.popup-window {
+/* Windows 95 Popup Window Styles */
+
+/* Main window frame */
+.popup-window {
     position: absolute;
-    background: silver;
-    border: 2px solid black;
-    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
-    font-family: "MS Sans Serif", sans-serif;
+    background: var(--win95-bg, #c0c0c0);
+    font-family: "MS Sans Serif", "Tahoma", sans-serif;
     z-index: 1000;
     display: flex;
     flex-direction: column;
     user-select: none;
+
+    /* Authentic Win95 3D raised border */
+    border: 2px solid;
+    border-color: #dfdfdf #404040 #404040 #dfdfdf;
+    box-shadow:
+        inset 1px 1px 0 #ffffff,
+        inset -1px -1px 0 #808080,
+        2px 2px 8px rgba(0, 0, 0, 0.3);
 }
 
+/* Window outer frame highlight */
+.popup-window::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 1px solid;
+    border-color: #ffffff #808080 #808080 #ffffff;
+    pointer-events: none;
+}
+
+/* Title bar - Windows 95 style with gradient */
 .popup-titlebar {
-    background: linear-gradient(to bottom, navy 0%, #000080 100%);
-    color: white;
-    padding: 4px 6px;
+    background: linear-gradient(90deg, #000080 0%, #1084d0 100%);
+    color: #ffffff;
+    padding: 3px 4px;
     font-weight: bold;
     display: flex;
     justify-content: space-between;
     align-items: center;
     cursor: move;
-    border-bottom: 2px solid #808080;
     user-select: none;
+    min-height: 18px;
+    font-size: 11px;
 }
 
+/* Inactive window title bar */
+.popup-window.inactive .popup-titlebar {
+    background: linear-gradient(90deg, #808080 0%, #a0a0a0 100%);
+}
+
+/* Window title text */
 .popup-title {
-    font-size: 14px;
+    font-size: 11px;
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-left: 2px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
 }
 
-/* Close button */
+/* Title icon */
+.popup-title-icon {
+    font-size: 14px;
+    line-height: 1;
+}
+
+/* Window control buttons container */
+.popup-controls {
+    display: flex;
+    gap: 2px;
+}
+
+/* Base button style for all window controls */
+.popup-minimize,
+.popup-maximize,
 .popup-close {
-    width: 20px;
-    height: 20px;
-    background: silver;
-    border: 2px outset #fff;
-    color: black;
+    width: 16px;
+    height: 14px;
+    background: var(--win95-button-face, #c0c0c0);
+    border: 1px solid;
+    border-color: #ffffff #404040 #404040 #ffffff;
+    box-shadow: inset -1px -1px 0 #808080;
+    color: #000000;
+    font-size: 9px;
     font-weight: bold;
     cursor: pointer;
     padding: 0;
-    line-height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
 }
 
+.popup-minimize:active,
+.popup-maximize:active,
 .popup-close:active {
-    border: 2px inset #fff;
+    border-color: #404040 #ffffff #ffffff #404040;
+    box-shadow: inset 1px 1px 0 #808080;
+    padding: 1px 0 0 1px;
 }
 
+/* Minimize button icon */
+.popup-minimize::after {
+    content: '';
+    width: 8px;
+    height: 2px;
+    background: #000000;
+    margin-top: 6px;
+}
+
+/* Maximize button icon */
+.popup-maximize::after {
+    content: '';
+    width: 9px;
+    height: 9px;
+    border: 1px solid #000000;
+    border-top-width: 2px;
+    box-sizing: border-box;
+}
+
+/* Restore button (when maximized) */
+.popup-maximize.restore::after {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border: 1px solid #000000;
+    border-top-width: 2px;
+    position: relative;
+    box-shadow: 2px -2px 0 var(--win95-button-face, #c0c0c0), 3px -3px 0 #000000, 3px -1px 0 #000000;
+}
+
+/* Close button X */
+.popup-close::after {
+    content: '×';
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 1;
+    margin-top: -1px;
+}
+
+/* Menu bar (optional) */
+.popup-menubar {
+    background: var(--win95-bg, #c0c0c0);
+    padding: 2px 4px;
+    display: flex;
+    gap: 0;
+    font-size: 11px;
+    border-bottom: 1px solid #808080;
+}
+
+.popup-menu-item {
+    padding: 2px 8px;
+    cursor: pointer;
+}
+
+.popup-menu-item:hover {
+    background: var(--win95-selection, #000080);
+    color: var(--win95-selection-text, #ffffff);
+}
+
+/* Content area */
 .popup-content {
     flex: 1;
-    background: #c0c0c0;
-    border-top: 2px inset #fff;
-    border-left: 2px inset #fff;
-    border-right: 2px outset #808080;
-    border-bottom: 2px outset #808080;
+    background: var(--win95-bg, #c0c0c0);
     padding: 8px;
-    font-size: 13px;
+    font-size: 11px;
     overflow: auto;
-    user-select: none;
+    user-select: text;
+    /* Sunken content area border */
+    margin: 2px;
+    border: 2px solid;
+    border-color: #808080 #ffffff #ffffff #808080;
+    box-shadow: inset 1px 1px 0 #404040;
 }
 
+/* Scrollbar styling for content */
+.popup-content::-webkit-scrollbar {
+    width: 16px;
+    height: 16px;
+}
+
+.popup-content::-webkit-scrollbar-track {
+    background: #c0c0c0;
+    background-image:
+        linear-gradient(45deg, #a0a0a0 25%, transparent 25%),
+        linear-gradient(-45deg, #a0a0a0 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #a0a0a0 75%),
+        linear-gradient(-45deg, transparent 75%, #a0a0a0 75%);
+    background-size: 2px 2px;
+}
+
+.popup-content::-webkit-scrollbar-thumb {
+    background: var(--win95-button-face, #c0c0c0);
+    border: 2px solid;
+    border-color: #ffffff #404040 #404040 #ffffff;
+    box-shadow: inset -1px -1px 0 #808080, inset 1px 1px 0 #dfdfdf;
+}
+
+.popup-content::-webkit-scrollbar-button {
+    background: var(--win95-button-face, #c0c0c0);
+    border: 2px solid;
+    border-color: #ffffff #404040 #404040 #ffffff;
+    box-shadow: inset -1px -1px 0 #808080;
+    display: block;
+    height: 16px;
+    width: 16px;
+}
+
+/* Status bar at bottom of window */
+.popup-statusbar {
+    background: var(--win95-bg, #c0c0c0);
+    padding: 2px 4px;
+    font-size: 11px;
+    display: flex;
+    border-top: 1px solid #ffffff;
+}
+
+.popup-status-section {
+    padding: 1px 8px;
+    border: 1px solid;
+    border-color: #808080 #ffffff #ffffff #808080;
+    flex: 1;
+}
+
+/* Resize handle - Win95 grip pattern */
 .resize-handle {
     width: 16px;
     height: 16px;
@@ -65,33 +238,276 @@
     bottom: 0;
     cursor: se-resize;
     user-select: none;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    align-items: flex-end;
-    padding: 2px;
-    box-sizing: border-box;
-    background: linear-gradient(45deg, grey, grey);
-    border-right: 2px outset #808080;
-    border-bottom: 2px outset #808080;
+    background: var(--win95-bg, #c0c0c0);
+    /* Diagonal grip lines pattern */
+    background-image:
+        linear-gradient(135deg,
+            transparent 0%, transparent 30%,
+            #ffffff 30%, #ffffff 35%,
+            transparent 35%, transparent 45%,
+            #ffffff 45%, #ffffff 50%,
+            transparent 50%, transparent 60%,
+            #ffffff 60%, #ffffff 65%,
+            transparent 65%, transparent 75%,
+            #ffffff 75%, #ffffff 80%,
+            transparent 80%, transparent 100%
+        ),
+        linear-gradient(135deg,
+            transparent 0%, transparent 35%,
+            #808080 35%, #808080 40%,
+            transparent 40%, transparent 50%,
+            #808080 50%, #808080 55%,
+            transparent 55%, transparent 65%,
+            #808080 65%, #808080 70%,
+            transparent 70%, transparent 80%,
+            #808080 80%, #808080 85%,
+            transparent 85%, transparent 100%
+        );
 }
 
-.popup-controls {
-    display: flex;
-    gap: 2px;
+/* Alternative resize handle with dots */
+.resize-handle-dots {
+    width: 12px;
+    height: 12px;
+    position: absolute;
+    right: 2px;
+    bottom: 2px;
+    cursor: se-resize;
+    user-select: none;
+    background: var(--win95-bg, #c0c0c0);
+    background-image: radial-gradient(circle, #808080 1px, transparent 1px);
+    background-size: 4px 4px;
+    background-position: 0 0;
 }
 
-.popup-maximize {
-    width: 20px;
-    height: 20px;
-    background: silver;
-    border: 2px outset #fff;
-    font-weight: bold;
+/* Maximized window state */
+.popup-window.maximized {
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: calc(100% - 28px) !important;
+    border-radius: 0;
+}
+
+.popup-window.maximized .resize-handle {
+    display: none;
+}
+
+/* Win95 Button styles for use within windows */
+.win95-button {
+    background: var(--win95-button-face, #c0c0c0);
+    border: 2px solid;
+    border-color: #ffffff #404040 #404040 #ffffff;
+    box-shadow: inset -1px -1px 0 #808080, inset 1px 1px 0 #dfdfdf;
+    padding: 4px 16px;
+    font-size: 11px;
+    font-family: "MS Sans Serif", "Tahoma", sans-serif;
     cursor: pointer;
-    padding: 0;
-    line-height: 16px;
+    min-width: 75px;
 }
 
-.popup-maximize:active {
-    border: 2px inset #fff;
+.win95-button:active {
+    border-color: #404040 #ffffff #ffffff #404040;
+    box-shadow: inset 1px 1px 0 #808080;
+    padding: 5px 15px 3px 17px;
+}
+
+.win95-button:focus {
+    outline: 1px dotted #000000;
+    outline-offset: -4px;
+}
+
+/* Default/primary button */
+.win95-button.default {
+    border: 3px solid #000000;
+    padding: 3px 15px;
+}
+
+/* Input field styling */
+.win95-input {
+    background: #ffffff;
+    border: 2px solid;
+    border-color: #808080 #ffffff #ffffff #808080;
+    box-shadow: inset 1px 1px 0 #404040;
+    padding: 3px 4px;
+    font-size: 11px;
+    font-family: "MS Sans Serif", "Tahoma", sans-serif;
+}
+
+.win95-input:focus {
+    outline: none;
+}
+
+/* Groupbox/fieldset styling */
+.win95-groupbox {
+    border: 2px solid;
+    border-color: #808080 #ffffff #ffffff #808080;
+    padding: 12px 8px 8px 8px;
+    margin: 8px 0;
+    position: relative;
+}
+
+.win95-groupbox legend {
+    background: var(--win95-bg, #c0c0c0);
+    padding: 0 4px;
+    font-size: 11px;
+}
+
+/* Checkbox styling */
+.win95-checkbox {
+    appearance: none;
+    width: 13px;
+    height: 13px;
+    background: #ffffff;
+    border: 2px solid;
+    border-color: #808080 #ffffff #ffffff #808080;
+    box-shadow: inset 1px 1px 0 #404040;
+    cursor: pointer;
+    vertical-align: middle;
+    margin-right: 4px;
+}
+
+.win95-checkbox:checked::after {
+    content: '✓';
+    font-size: 10px;
+    font-weight: bold;
+    position: relative;
+    left: 1px;
+    top: -2px;
+}
+
+/* Radio button styling */
+.win95-radio {
+    appearance: none;
+    width: 12px;
+    height: 12px;
+    background: #ffffff;
+    border: 2px solid;
+    border-color: #808080 #ffffff #ffffff #808080;
+    border-radius: 50%;
+    box-shadow: inset 1px 1px 0 #404040;
+    cursor: pointer;
+    vertical-align: middle;
+    margin-right: 4px;
+}
+
+.win95-radio:checked::after {
+    content: '';
+    display: block;
+    width: 4px;
+    height: 4px;
+    background: #000000;
+    border-radius: 50%;
+    margin: 2px;
+}
+
+/* Dropdown/select styling */
+.win95-select {
+    background: #ffffff;
+    border: 2px solid;
+    border-color: #808080 #ffffff #ffffff #808080;
+    box-shadow: inset 1px 1px 0 #404040;
+    padding: 2px 20px 2px 4px;
+    font-size: 11px;
+    font-family: "MS Sans Serif", "Tahoma", sans-serif;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12'%3E%3Cpath d='M2 4 L6 8 L10 4' fill='none' stroke='black' stroke-width='2'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 4px center;
+}
+
+/* Tab control */
+.win95-tabs {
+    display: flex;
+    border-bottom: none;
+    padding-left: 4px;
+}
+
+.win95-tab {
+    background: var(--win95-bg, #c0c0c0);
+    border: 2px solid;
+    border-color: #ffffff #404040 #c0c0c0 #ffffff;
+    padding: 4px 12px;
+    font-size: 11px;
+    cursor: pointer;
+    margin-right: 2px;
+    position: relative;
+    top: 2px;
+}
+
+.win95-tab.active {
+    border-bottom-color: var(--win95-bg, #c0c0c0);
+    top: 0;
+    padding-bottom: 6px;
+    z-index: 1;
+}
+
+.win95-tab-content {
+    background: var(--win95-bg, #c0c0c0);
+    border: 2px solid;
+    border-color: #ffffff #404040 #404040 #ffffff;
+    padding: 12px;
+}
+
+/* Progress bar */
+.win95-progress {
+    height: 16px;
+    background: var(--win95-bg, #c0c0c0);
+    border: 2px solid;
+    border-color: #808080 #ffffff #ffffff #808080;
+    box-shadow: inset 1px 1px 0 #404040;
+}
+
+.win95-progress-bar {
+    height: 100%;
+    background: var(--win95-selection, #000080);
+}
+
+/* List view styling */
+.win95-listview {
+    background: #ffffff;
+    border: 2px solid;
+    border-color: #808080 #ffffff #ffffff #808080;
+    box-shadow: inset 1px 1px 0 #404040;
+    padding: 2px;
+    font-size: 11px;
+}
+
+.win95-listview-item {
+    padding: 2px 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.win95-listview-item:hover {
+    background: var(--win95-selection, #000080);
+    color: var(--win95-selection-text, #ffffff);
+}
+
+.win95-listview-item.selected {
+    background: var(--win95-selection, #000080);
+    color: var(--win95-selection-text, #ffffff);
+}
+
+/* Tree view styling */
+.win95-treeview {
+    background: #ffffff;
+    border: 2px solid;
+    border-color: #808080 #ffffff #ffffff #808080;
+    box-shadow: inset 1px 1px 0 #404040;
+    padding: 4px;
+    font-size: 11px;
+}
+
+/* Tooltip styling */
+.win95-tooltip {
+    background: #ffffcc;
+    border: 1px solid #000000;
+    padding: 2px 4px;
+    font-size: 11px;
+    font-family: "MS Sans Serif", "Tahoma", sans-serif;
+    box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
 }
