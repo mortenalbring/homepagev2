@@ -235,31 +235,55 @@ export default function Desktop() {
                 </div>
 
                 {/* Render all open popups */}
-                {popups.map((popup) => (
-                    <PopupWindow
-                        key={popup.id}
-                        title={popup.id === "portfolio" ? "Portfolio" : "Contact"}
-                        onClose={() => closePopup(popup.id)}
-                        zIndex={popup.zIndex}
-                        initialPosition={{x: popup.x, y: popup.y}}
-                        desktopRef={desktopRef}
-                        onFocus={() => bringPopupToFront(popup.id)}
-                    >
-                        {popup.id === "portfolio" && (
-                            <div style={{padding: 8}}>
-                                <h3>Welcome!</h3>
-                                <p>This is my retro Portfolio window.</p>
-                            </div>
-                        )}
-                        {popup.id === "contact" && (
-                            <ContactComponent/>
-                        )}
-                        {popup.id === "blog" && (
-                            <BlogComponent/>
-                        )}
+                {popups.map((popup) => {
+                    // Window configuration based on popup type
+                    const windowConfig = {
+                        portfolio: {
+                            title: "Portfolio",
+                            icon: "💼",
+                            menuItems: ["File", "Edit", "View", "Help"],
+                            statusText: "Welcome to my portfolio"
+                        },
+                        contact: {
+                            title: "Contact",
+                            icon: "📧",
+                            menuItems: ["File", "Edit", "Help"],
+                            statusText: "Contact information"
+                        },
+                        blog: {
+                            title: "Untitled - Notepad",
+                            icon: "📓",
+                            menuItems: ["File", "Edit", "Search", "Help"],
+                            statusText: ""
+                        }
+                    };
+                    const config = windowConfig[popup.id] || {title: popup.id, icon: "📁"};
 
-                    </PopupWindow>
-                ))}
+                    return (
+                        <PopupWindow
+                            key={popup.id}
+                            title={config.title}
+                            icon={config.icon}
+                            menuItems={config.menuItems}
+                            statusText={config.statusText}
+                            onClose={() => closePopup(popup.id)}
+                            desktopRef={desktopRef}
+                        >
+                            {popup.id === "portfolio" && (
+                                <div style={{padding: 8}}>
+                                    <h3 style={{margin: '0 0 8px 0', fontSize: '13px'}}>Welcome!</h3>
+                                    <p style={{margin: 0, lineHeight: 1.5}}>This is my retro Portfolio window.</p>
+                                </div>
+                            )}
+                            {popup.id === "contact" && (
+                                <ContactComponent/>
+                            )}
+                            {popup.id === "blog" && (
+                                <BlogComponent/>
+                            )}
+                        </PopupWindow>
+                    );
+                })}
             </div>
         </div>
     );

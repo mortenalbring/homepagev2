@@ -4,9 +4,19 @@ import "./PopupWindow.css";
 const MIN_WIDTH = 200;
 const MIN_HEIGHT = 120;
 
-const PopupWindow = ({title, children, onClose, desktopRef}) => {
-    const [position, setPosition] = useState({x: 100, y: 100});
-    const [size, setSize] = useState({width: 300, height: 200});
+const PopupWindow = ({
+    title,
+    icon,
+    children,
+    onClose,
+    onMinimize,
+    desktopRef,
+    menuItems,
+    statusText,
+    initialSize = {width: 400, height: 300}
+}) => {
+    const [position, setPosition] = useState({x: 100, y: 50});
+    const [size, setSize] = useState(initialSize);
     const [dragging, setDragging] = useState(false);
     const [resizing, setResizing] = useState(false);
     const [offset, setOffset] = useState({x: 0, y: 0});
@@ -50,8 +60,7 @@ const PopupWindow = ({title, children, onClose, desktopRef}) => {
 
         if (!isMaximized) {
             setPrevState({position: {...position}, size: {...size}});
-            // Adjust for monitor borders
-            const borderOffset = 40; // todo make this a const variable?
+            const borderOffset = 40;
             setPosition({x: borderOffset, y: borderOffset});
             setSize({
                 width: desktopRect.width - borderOffset * 3,
@@ -67,6 +76,11 @@ const PopupWindow = ({title, children, onClose, desktopRef}) => {
         }
     };
 
+    const handleMinimize = () => {
+        if (onMinimize) {
+            onMinimize();
+        }
+    };
 
     return (
         <div
@@ -80,10 +94,18 @@ const PopupWindow = ({title, children, onClose, desktopRef}) => {
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
         >
-
+            {/* Title Bar */}
             <div className="popup-titlebar" onMouseDown={handleMouseDown}>
-                <span className="popup-title">{title}</span>
+                <span className="popup-title">
+                    {icon && <span className="popup-title-icon">{icon}</span>}
+                    {title}
+                </span>
                 <div className="popup-controls">
+                    <button
+                        className="popup-minimize"
+                        onClick={handleMinimize}
+                        title="Minimize"
+                    ></button>
                     <button
                         className={`popup-maximize ${isMaximized ? 'restore' : ''}`}
                         onClick={toggleMaximize}
@@ -97,10 +119,29 @@ const PopupWindow = ({title, children, onClose, desktopRef}) => {
                 </div>
             </div>
 
+            {/* Menu Bar (optional) */}
+            {menuItems && menuItems.length > 0 && (
+                <div className="popup-menubar">
+                    {menuItems.map((item, index) => (
+                        <span key={index} className="popup-menu-item">
+                            <span className="menu-underline">{item.charAt(0)}</span>
+                            {item.slice(1)}
+                        </span>
+                    ))}
+                </div>
+            )}
 
+            {/* Content Area */}
             <div className="popup-content">{children}</div>
 
+            {/* Status Bar (optional) */}
+            {statusText !== undefined && (
+                <div className="popup-statusbar">
+                    <div className="popup-status-section">{statusText}</div>
+                </div>
+            )}
 
+            {/* Resize Handle */}
             {!isMaximized && <div className="resize-handle" onMouseDown={handleResizeMouseDown}/>}
         </div>
     );

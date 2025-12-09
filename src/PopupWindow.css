@@ -106,13 +106,20 @@
     padding: 1px 0 0 1px;
 }
 
-/* Minimize button icon */
+/* Minimize button icon - line at bottom */
 .popup-minimize::after {
     content: '';
-    width: 8px;
+    width: 6px;
     height: 2px;
     background: #000000;
-    margin-top: 6px;
+    position: absolute;
+    bottom: 3px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.popup-minimize {
+    position: relative;
 }
 
 /* Maximize button icon */
@@ -148,21 +155,33 @@
 /* Menu bar (optional) */
 .popup-menubar {
     background: var(--win95-bg, #c0c0c0);
-    padding: 2px 4px;
+    padding: 1px 0;
     display: flex;
     gap: 0;
     font-size: 11px;
+    font-family: "MS Sans Serif", "Tahoma", sans-serif;
     border-bottom: 1px solid #808080;
+    box-shadow: 0 1px 0 #ffffff;
 }
 
 .popup-menu-item {
-    padding: 2px 8px;
+    padding: 2px 6px;
     cursor: pointer;
+    position: relative;
 }
 
 .popup-menu-item:hover {
     background: var(--win95-selection, #000080);
     color: var(--win95-selection-text, #ffffff);
+}
+
+.popup-menu-item:hover .menu-underline {
+    color: var(--win95-selection-text, #ffffff);
+}
+
+/* Underlined first letter in menu items */
+.menu-underline {
+    text-decoration: underline;
 }
 
 /* Content area */
