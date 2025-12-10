@@ -6,7 +6,7 @@ import { WindowState } from '../types';
 Handles query param things, to vaguely 'sync' the state of windows from the URL ('?open=blog,contact') with the
 actual 'stuff' open on the page. Doesn't do folders (yet?).
  */
-export interface UseURLSyncReturn {
+export interface URLPopupSync {
     /*
     Reads query params and gives string array 
      */
@@ -32,7 +32,7 @@ export function useURLSync(
   openPopups: WindowState[],
   addPopupFromURL: (popupId: string, zIndex: number) => void,
   topZ: number
-): UseURLSyncReturn {
+): URLPopupSync {
   const location = useLocation();
   const navigate = useNavigate();
 

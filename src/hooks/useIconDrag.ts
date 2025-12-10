@@ -11,7 +11,7 @@ interface DragState {
   offsetY: number;
 }
 
-export interface UseIconDragReturn {
+export interface IconDragControls {
   iconPositions: IconPositions;
   handleDragStart: (e: React.MouseEvent, item: FolderItem) => void;
 }
@@ -19,7 +19,7 @@ export interface UseIconDragReturn {
 export function useIconDrag(
   desktopRef: RefObject<HTMLDivElement>,
   initialPositions: IconPositions
-): UseIconDragReturn {
+): IconDragControls {
   const [iconPositions, setIconPositions] = useState<IconPositions>(initialPositions);
   const [dragging, setDragging] = useState<DragState | null>(null);
 
@@ -71,12 +71,4 @@ export function useIconDrag(
     iconPositions,
     handleDragStart
   };
-}
-
-export function buildInitialPositions(desktopItems: FolderItem[]): IconPositions {
-  const positions: IconPositions = {};
-  desktopItems.forEach(item => {
-    positions[item.id] = item.position || { x: 10, y: 10 };
-  });
-  return positions;
 }

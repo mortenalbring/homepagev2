@@ -1,13 +1,13 @@
 // Hooks
 export { useWindowManager } from './useWindowManager';
 export { useURLSync } from './useURLSync';
-export { useIconDrag, buildInitialPositions } from './useIconDrag';
-export { useClock, formatTime } from './useClock';
+export { useIconDrag } from './useIconDrag';
+export { useClock } from './useClock';
 
 // Hook return types
-export type { UseWindowManagerReturn } from './useWindowManager';
-export type { UseURLSyncReturn } from './useURLSync';
-export type { UseIconDragReturn } from './useIconDrag';
+export type { WindowManagerControls } from './useWindowManager';
+export type { URLPopupSync } from './useURLSync';
+export type { IconDragControls } from './useIconDrag';
 
 // Re-export common types for convenience
 export type {

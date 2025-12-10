@@ -8,7 +8,7 @@ import {
 } from '../types';
 
 // Controls all the fakey 'windows' on the desktop 
-export interface UseWindowManagerReturn {
+export interface WindowManagerControls {
     /*
     List of all the windows that are open
      */
@@ -46,7 +46,7 @@ export interface UseWindowManagerReturn {
   addPopupFromURL: (popupId: string, zIndex: number) => void;
 }
 
-export function useWindowManager(): UseWindowManagerReturn {
+export function useWindowManager(): WindowManagerControls {
   const [openPopups, setOpenPopups] = useState<WindowState[]>([]);
   const [openFolders, setOpenFolders] = useState<FolderWindowState[]>([]);
   const [topZ, setTopZ] = useState(100);

@@ -8,10 +8,9 @@ import {
   useWindowManager,
   useURLSync,
   useIconDrag,
-  buildInitialPositions,
-  useClock,
-  formatTime
+  useClock
 } from './hooks';
+import { buildInitialPositions, formatTime } from './utils';
 import './Desktop.css';
 
 const { desktopItems, popupConfig } = fileSystem;
