@@ -1,18 +1,9 @@
 import { useState, useEffect, useCallback, RefObject } from 'react';
-import { FolderItem } from './useWindowManager';
+import { FolderItem, IconPositions } from '../types';
 
 const GRID_SIZE = 80;
 const ICON_SIZE = 64;
 const TASKBAR_HEIGHT = 28;
-
-export interface Position {
-  x: number;
-  y: number;
-}
-
-export interface IconPositions {
-  [id: string]: Position;
-}
 
 interface DragState {
   id: string;

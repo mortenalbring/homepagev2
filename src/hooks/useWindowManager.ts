@@ -1,30 +1,11 @@
 import { useState, useCallback } from 'react';
-
-export interface WindowState {
-  id: string;
-  zIndex: number;
-  minimized: boolean;
-}
-
-export interface FolderItem {
-  id: string;
-  name: string;
-  icon: string;
-  popup?: string;
-  link?: string;
-  children?: FolderItem[];
-  position?: { x: number; y: number };
-}
-
-export interface FolderWindowState extends WindowState {
-  name: string;
-  icon: string;
-  children?: FolderItem[];
-}
-
-export type OpenAction =
-  | { type: 'folder'; item: FolderItem }
-  | { type: 'popup'; id: string };
+import {
+  FolderItem,
+  WindowState,
+  FolderWindowState,
+  OpenAction,
+  WindowType
+} from '../types';
 
 export interface UseWindowManagerReturn {
   openPopups: WindowState[];
@@ -36,8 +17,8 @@ export interface UseWindowManagerReturn {
   openFolder: (folder: FolderItem) => void;
   closeFolder: (folderId: string) => void;
   minimizeFolder: (folderId: string) => void;
-  bringToFront: (type: 'popup' | 'folder', id: string) => void;
-  handleTaskbarClick: (type: 'popup' | 'folder', id: string) => void;
+  bringToFront: (type: WindowType, id: string) => void;
+  handleTaskbarClick: (type: WindowType, id: string) => void;
   handleItemOpen: (action: OpenAction) => void;
   addPopupFromURL: (popupId: string, zIndex: number) => void;
   getMaxPopupZ: () => number;
@@ -100,7 +81,7 @@ export function useWindowManager(): UseWindowManagerReturn {
     ));
   }, []);
 
-  const bringToFront = useCallback((type: 'popup' | 'folder', id: string) => {
+  const bringToFront = useCallback((type: WindowType, id: string) => {
     setTopZ(prev => {
       const newZ = prev + 1;
       if (type === 'popup') {
@@ -116,29 +97,8 @@ export function useWindowManager(): UseWindowManagerReturn {
     });
   }, []);
 
-  const handleTaskbarClick = useCallback((type: 'popup' | 'folder', id: string) => {
+  const handleTaskbarClick = useCallback((type: WindowType, id: string) => {
     if (type === 'popup') {
-      setOpenPopups(popups => {
-        const window = popups.find(p => p.id === id);
-        if (!window) return popups;
-
-        setOpenFolders(folders => {
-          const maxZ = Math.max(
-            ...popups.map(p => p.zIndex),
-            ...folders.map(f => f.zIndex),
-            0
-          );
-
-          if (window.minimized || window.zIndex !== maxZ) {
-            setTopZ(prev => prev + 1);
-          }
-          return folders;
-        });
-
-        return popups;
-      });
-
-      // Re-run with access to both states
       setOpenPopups(popups => {
         setOpenFolders(folders => {
           const window = popups.find(p => p.id === id);

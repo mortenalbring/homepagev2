@@ -17,10 +17,12 @@ import './Desktop.css';
 const { desktopItems, popupConfig } = fileSystem;
 
 export default function Desktop() {
+    
+    //Reference to desktop DOM, used for dragging the icons and maximise windows  
   const desktopRef = useRef(null);
+  //Tracks which icons are single clicked 
   const [selectedId, setSelectedId] = useState(null);
-
-  // Custom hooks
+  
   const currentTime = useClock();
 
   const {
@@ -49,8 +51,7 @@ export default function Desktop() {
     desktopRef,
     buildInitialPositions(desktopItems)
   );
-
-  // Wrapped handlers for URL sync
+  
   const handleOpenPopup = (popupId) => openPopupWithURL(popupId, openPopup);
   const handleClosePopup = (popupId) => closePopupWithURL(popupId, closePopup);
 

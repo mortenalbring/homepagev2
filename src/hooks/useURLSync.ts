@@ -1,6 +1,6 @@
 import { useEffect, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { WindowState } from './useWindowManager';
+import { WindowState } from '../types';
 
 export interface UseURLSyncReturn {
   getPopupsFromURL: () => string[];
