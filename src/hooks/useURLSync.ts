@@ -2,10 +2,29 @@ import { useEffect, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { WindowState } from '../types';
 
+/*
+Handles query param things, to vaguely 'sync' the state of windows from the URL ('?open=blog,contact') with the
+actual 'stuff' open on the page. Doesn't do folders (yet?).
+ */
 export interface UseURLSyncReturn {
+    /*
+    Reads query params and gives string array 
+     */
   getPopupsFromURL: () => string[];
+  
+  /*
+  Updates query params from a string array
+   */
   updateURL: (popupIds: string[]) => void;
+  
+  /*
+  Open window and update url
+   */
   openPopupWithURL: (popupId: string, openPopupFn: (id: string) => void) => void;
+  
+  /*
+  Close window and update url
+   */
   closePopupWithURL: (popupId: string, closePopupFn: (id: string) => void) => void;
 }
 
@@ -30,8 +49,7 @@ export function useURLSync(
     }
     navigate({ search: params.toString() }, { replace: true });
   }, [navigate]);
-
-  // Sync URL -> state
+  
   useEffect(() => {
     const urlPopups = getPopupsFromURL();
     const currentIds = new Set(openPopups.map(p => p.id));
