@@ -1,17 +1,43 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, RefObject } from 'react';
+import { FolderItem } from './useWindowManager';
 
 const GRID_SIZE = 80;
 const ICON_SIZE = 64;
 const TASKBAR_HEIGHT = 28;
 
-export function useIconDrag(desktopRef, initialPositions) {
-  const [iconPositions, setIconPositions] = useState(initialPositions);
-  const [dragging, setDragging] = useState(null);
+export interface Position {
+  x: number;
+  y: number;
+}
+
+export interface IconPositions {
+  [id: string]: Position;
+}
+
+interface DragState {
+  id: string;
+  offsetX: number;
+  offsetY: number;
+}
+
+export interface UseIconDragReturn {
+  iconPositions: IconPositions;
+  handleDragStart: (e: React.MouseEvent, item: FolderItem) => void;
+}
+
+export function useIconDrag(
+  desktopRef: RefObject<HTMLDivElement>,
+  initialPositions: IconPositions
+): UseIconDragReturn {
+  const [iconPositions, setIconPositions] = useState<IconPositions>(initialPositions);
+  const [dragging, setDragging] = useState<DragState | null>(null);
 
   useEffect(() => {
     if (!dragging) return;
 
-    const handleMove = (e) => {
+    const handleMove = (e: MouseEvent) => {
+      if (!desktopRef.current) return;
+
       const rect = desktopRef.current.getBoundingClientRect();
       let x = e.clientX - rect.left - dragging.offsetX;
       let y = e.clientY - rect.top - dragging.offsetY;
@@ -38,7 +64,9 @@ export function useIconDrag(desktopRef, initialPositions) {
     };
   }, [dragging, desktopRef]);
 
-  const handleDragStart = useCallback((e, item) => {
+  const handleDragStart = useCallback((e: React.MouseEvent, item: FolderItem) => {
+    if (!desktopRef.current) return;
+
     const rect = desktopRef.current.getBoundingClientRect();
     const pos = iconPositions[item.id];
     setDragging({
@@ -54,9 +82,8 @@ export function useIconDrag(desktopRef, initialPositions) {
   };
 }
 
-// Helper to build initial positions from desktop items
-export function buildInitialPositions(desktopItems) {
-  const positions = {};
+export function buildInitialPositions(desktopItems: FolderItem[]): IconPositions {
+  const positions: IconPositions = {};
   desktopItems.forEach(item => {
     positions[item.id] = item.position || { x: 10, y: 10 };
   });

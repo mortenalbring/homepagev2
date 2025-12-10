@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
-export function useClock() {
-  const [currentTime, setCurrentTime] = useState(new Date());
+export function useClock(): Date {
+  const [currentTime, setCurrentTime] = useState<Date>(new Date());
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
@@ -11,7 +11,7 @@ export function useClock() {
   return currentTime;
 }
 
-export function formatTime(date) {
+export function formatTime(date: Date): string {
   return date.toLocaleTimeString('en-US', {
     hour: 'numeric',
     minute: '2-digit',

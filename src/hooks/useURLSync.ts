@@ -1,17 +1,29 @@
 import { useEffect, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { WindowState } from './useWindowManager';
 
-export function useURLSync(openPopups, addPopupFromURL, getMaxPopupZ) {
+export interface UseURLSyncReturn {
+  getPopupsFromURL: () => string[];
+  updateURL: (popupIds: string[]) => void;
+  openPopupWithURL: (popupId: string, openPopupFn: (id: string) => void) => void;
+  closePopupWithURL: (popupId: string, closePopupFn: (id: string) => void) => void;
+}
+
+export function useURLSync(
+  openPopups: WindowState[],
+  addPopupFromURL: (popupId: string, zIndex: number) => void,
+  getMaxPopupZ: () => number
+): UseURLSyncReturn {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const getPopupsFromURL = useCallback(() => {
+  const getPopupsFromURL = useCallback((): string[] => {
     const params = new URLSearchParams(location.search);
     const open = params.get('open');
     return open ? open.split(',') : [];
   }, [location.search]);
 
-  const updateURL = useCallback((popupIds) => {
+  const updateURL = useCallback((popupIds: string[]) => {
     const params = new URLSearchParams();
     if (popupIds.length) {
       params.set('open', popupIds.join(','));
@@ -33,8 +45,10 @@ export function useURLSync(openPopups, addPopupFromURL, getMaxPopupZ) {
     }
   }, [location.search, openPopups, getPopupsFromURL, addPopupFromURL, getMaxPopupZ]);
 
-  // Helpers for opening/closing with URL update
-  const openPopupWithURL = useCallback((popupId, openPopupFn) => {
+  const openPopupWithURL = useCallback((
+    popupId: string,
+    openPopupFn: (id: string) => void
+  ) => {
     openPopupFn(popupId);
     const urlPopups = getPopupsFromURL();
     if (!urlPopups.includes(popupId)) {
@@ -42,7 +56,10 @@ export function useURLSync(openPopups, addPopupFromURL, getMaxPopupZ) {
     }
   }, [getPopupsFromURL, updateURL]);
 
-  const closePopupWithURL = useCallback((popupId, closePopupFn) => {
+  const closePopupWithURL = useCallback((
+    popupId: string,
+    closePopupFn: (id: string) => void
+  ) => {
     closePopupFn(popupId);
     updateURL(getPopupsFromURL().filter(id => id !== popupId));
   }, [getPopupsFromURL, updateURL]);
