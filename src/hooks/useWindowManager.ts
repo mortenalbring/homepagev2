@@ -9,11 +9,30 @@ import {
 
 // Controls all the fakey 'windows' on the desktop 
 export interface UseWindowManagerReturn {
-  openPopups: WindowState[]; //Open 'windows'
-  openFolders: FolderWindowState[]; //Open 'folders'
-  topZ: number; //The biggest z-index, so new 'windows' appear on top. Might need to check if there's a max z-index? 
+    /*
+    List of all the windows that are open
+     */
+  openPopups: WindowState[]; 
+  /*
+  List of all the open 'folders' (consolidate with above?)
+   */
+  openFolders: FolderWindowState[]; 
+  /*
+  The biggest z-index, so new 'windows' appear on top. Might need to check if there's a max z-index?
+   */
+  topZ: number; 
+  
+  /* 
+  Opens a window (or pops an existing one to the front)  
+   */
   openPopup: (popupId: string) => void;
+  /*
+  Closes
+   */
   closePopup: (popupId: string) => void;
+  /*
+  Minimimizes
+   */
   minimizePopup: (popupId: string) => void;
   openFolder: (folder: FolderItem) => void;
   closeFolder: (folderId: string) => void;
@@ -21,6 +40,9 @@ export interface UseWindowManagerReturn {
   bringToFront: (type: WindowType, id: string) => void;
   handleTaskbarClick: (type: WindowType, id: string) => void;
   handleItemOpen: (action: OpenAction) => void;
+  /*
+  Handles pre-opening stuff from the queryparam when refreshing page
+   */
   addPopupFromURL: (popupId: string, zIndex: number) => void;
 }
 
@@ -35,10 +57,12 @@ export function useWindowManager(): UseWindowManagerReturn {
       setOpenPopups(popups => {
         const existing = popups.find(p => p.id === popupId);
         if (existing) {
+            //If the thing is already open, still need to update z-index to bring to front, and unminimizme it 
           return popups.map(p =>
             p.id === popupId ? { ...p, zIndex: newZ, minimized: false } : p
           );
         }
+        //Otherwise pop it in 
         return [...popups, { id: popupId, zIndex: newZ, minimized: false }];
       });
       return newZ;
@@ -102,7 +126,9 @@ export function useWindowManager(): UseWindowManagerReturn {
       setOpenPopups(popups => {
         setOpenFolders(folders => {
           const window = popups.find(p => p.id === id);
-          if (!window) return folders;
+          if (!window) {
+              return folders;
+          }
 
           const maxZ = Math.max(
             ...popups.map(p => p.zIndex),
@@ -171,6 +197,7 @@ export function useWindowManager(): UseWindowManagerReturn {
     }
   }, [openFolder, openPopup]);
 
+  
   const addPopupFromURL = useCallback((popupId: string, zIndex: number) => {
     setOpenPopups(prev => {
       if (prev.find(p => p.id === popupId)) return prev;
