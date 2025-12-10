@@ -60,8 +60,7 @@ export default function Desktop() {
       handleItemOpen(action);
     }
   };
-
-  // Memoized taskbar windows list
+  
   const allWindows = useMemo(() => [
     ...openPopups.map(p => ({
       type: 'popup',
@@ -84,8 +83,7 @@ export default function Desktop() {
   return (
     <div className="monitor">
       <div className="desktop" ref={desktopRef} onClick={clearSelection}>
-
-        {/* Desktop Icons */}
+          
         {desktopItems.map(item => (
           <DesktopIcon
             key={item.id}
@@ -102,8 +100,7 @@ export default function Desktop() {
             onDragStart={handleDragStart}
           />
         ))}
-
-        {/* Taskbar */}
+          
         <div className="taskbar">
           <button className="start-button">
             <span className="win-flag">

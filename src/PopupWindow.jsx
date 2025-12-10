@@ -102,7 +102,6 @@ const PopupWindow = ({
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
         >
-            {/* Title Bar */}
             <div className="popup-titlebar" onMouseDown={handleMouseDown}>
                 <span className="popup-title">
                     {icon && <span className="popup-title-icon">{icon}</span>}
@@ -127,7 +126,7 @@ const PopupWindow = ({
                 </div>
             </div>
 
-            {/* Menu Bar (optional) */}
+            {/* menu stuff (File, Edit). doesn't do anything (yet) */}
             {menuItems && menuItems.length > 0 && (
                 <div className="popup-menubar">
                     {menuItems.map((item, index) => (
@@ -138,18 +137,16 @@ const PopupWindow = ({
                     ))}
                 </div>
             )}
-
-            {/* Content Area */}
+            
             <div className="popup-content">{children}</div>
-
-            {/* Status Bar (optional) */}
+            
             {statusText !== undefined && (
                 <div className="popup-statusbar">
                     <div className="popup-status-section">{statusText}</div>
                 </div>
             )}
 
-            {/* Resize Handle */}
+            {/* this handle needs some work */}
             {!isMaximized && <div className="resize-handle" onMouseDown={handleResizeMouseDown}/>}
         </div>
     );

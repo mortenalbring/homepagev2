@@ -16,6 +16,9 @@ export interface IconDragControls {
   handleDragStart: (e: React.MouseEvent, item: FolderItem) => void;
 }
 
+/*
+All of this is just for dragging the icons around...
+ */
 export function useIconDrag(
   desktopRef: RefObject<HTMLDivElement>,
   initialPositions: IconPositions
@@ -24,20 +27,30 @@ export function useIconDrag(
   const [dragging, setDragging] = useState<DragState | null>(null);
 
   useEffect(() => {
-    if (!dragging) return;
+      //don't do stuff if I'm not dragging (ie, if I'm trying to open the thing) 
+    if (!dragging) {
+        return;
+    }
 
     const handleMove = (e: MouseEvent) => {
-      if (!desktopRef.current) return;
+      if (!desktopRef.current) {
+          return;
+      }
 
       const rect = desktopRef.current.getBoundingClientRect();
+      
+      //This offset stuff is so it remembers where exactly on the icon I clicked it
+        //Without it, it kinda does a weird 'jump' if you click it wrong.
+        
+        
       let x = e.clientX - rect.left - dragging.offsetX;
       let y = e.clientY - rect.top - dragging.offsetY;
 
-      // Snap to grid
+      // Snaps the thing to the grid (nearest multiple of 80, or whatever I finally set the grid size to be)
       x = Math.round(x / GRID_SIZE) * GRID_SIZE;
       y = Math.round(y / GRID_SIZE) * GRID_SIZE;
 
-      // Constrain to desktop bounds
+      // and then also stop the things going off the screen
       x = Math.max(0, Math.min(x, rect.width - ICON_SIZE));
       y = Math.max(0, Math.min(y, rect.height - ICON_SIZE - TASKBAR_HEIGHT));
 
@@ -45,21 +58,25 @@ export function useIconDrag(
     };
 
     const handleUp = () => setDragging(null);
-
+    
     window.addEventListener('mousemove', handleMove);
     window.addEventListener('mouseup', handleUp);
 
     return () => {
+        //remove event listeners when thing unmounts 
       window.removeEventListener('mousemove', handleMove);
       window.removeEventListener('mouseup', handleUp);
     };
   }, [dragging, desktopRef]);
 
   const handleDragStart = useCallback((e: React.MouseEvent, item: FolderItem) => {
-    if (!desktopRef.current) return;
+    if (!desktopRef.current) {
+        return;
+    }
 
     const rect = desktopRef.current.getBoundingClientRect();
     const pos = iconPositions[item.id];
+    //store the thing being dragged, and ALSO the DOM bounding box of the 'desktop'.
     setDragging({
       id: item.id,
       offsetX: e.clientX - rect.left - pos.x,

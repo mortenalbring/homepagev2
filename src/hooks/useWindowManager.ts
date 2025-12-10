@@ -46,6 +46,9 @@ export interface WindowManagerControls {
   addPopupFromURL: (popupId: string, zIndex: number) => void;
 }
 
+/*
+ Controls all the fakey 'windows' on the desktop
+ */
 export function useWindowManager(): WindowManagerControls {
   const [openPopups, setOpenPopups] = useState<WindowState[]>([]);
   const [openFolders, setOpenFolders] = useState<FolderWindowState[]>([]);
