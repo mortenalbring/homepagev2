@@ -55,7 +55,7 @@
         {
           "id": "web-projects",
           "name": "Web Projects",
-          "icon": "🌐",
+          "icon": "\uD83D\uDCC1",
           "children": [
             { "id": "site-redesign", "name": "Site Redesign", "icon": "📄", "popup": "site-redesign" },
             { "id": "api-work", "name": "API Work", "icon": "📄", "popup": "api-work" }
@@ -64,7 +64,7 @@
         {
           "id": "experiments",
           "name": "Experiments",
-          "icon": "🧪",
+          "icon": "\uD83D\uDCC1",
           "popup": "experiments"
         },
         {
