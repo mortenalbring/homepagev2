@@ -28,6 +28,24 @@
       "link": "https://github.com/mortenalbring",
       "position": { "x": 10, "y": 235 }
     },
+    {"id":  "test",
+      "name": "test",
+      "icon": "b",
+      "position": {"x":200, "y": 235},
+      "children": [
+        {      "id": "test1",
+          "name": "Test1",
+          "icon": "c",
+          "position": { "x": 10, "y": 235 },
+          "children": [{
+            "id": "github",
+            "name": "Test2",
+            "icon": "d",
+            "position": { "x": 10, "y": 235 }
+          }]
+        }        
+      ]
+    },
     {
       "id": "projects",
       "name": "Projects",
