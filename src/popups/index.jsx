@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { PortfolioContent } from './PortfolioContent';
 import { ReadmeContent } from './ReadmeContent';
 import { SiteRedesignContent } from './SiteRedesignContent';
@@ -10,9 +8,12 @@ import { ContactComponent } from '../ContactComponent';
 import { BlogComponent } from '../BlogComponent';
 
 /**
-   Registry mapping IDs to components.
+ * Registry mapping popup IDs to their content components.
+ * To add a new popup:
+ * 1. Create a new component in src/popups/
+ * 2. Add it to this registry with the ID matching fileSystem.json
  */
-export const popupRegistry: Record<string, React.ComponentType> = {
+export const popupRegistry = {
   'portfolio': PortfolioContent,
   'readme': ReadmeContent,
   'contact': ContactComponent,
