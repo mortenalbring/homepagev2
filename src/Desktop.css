@@ -1,50 +1,62 @@
-﻿/* Monitor container */
+/* Monitor Container - CRT style frame */
 .monitor {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #111; /* outside monitor */
+    background: #1a1a1a;
     height: 100vh;
     width: 100vw;
+    position: relative;
+    user-select: none;
 }
 
 /* Desktop inside monitor */
 .desktop {
-    height: 80vh;
-    width: 90vw;
+    height: 100vh;
+    width: 100vw;
     max-width: 1200px;
     max-height: 800px;
-    background: #008080; /* Windows 95 teal */
+    background: var(--win95-desktop, #008080);
     position: relative;
+    font-family: "MS Sans Serif", "Tahoma", "Verdana", sans-serif;
+    user-select: none;
+    /* Authentic CRT monitor bezel */
+    border: 3px solid;
+    border-color: #404040 #808080 #808080 #404040;
+    box-shadow:
+        inset 0 0 0 2px #000,
+        0 0 60px rgba(0, 0, 0, 0.8);
     overflow: hidden;
-    font-family: "Tahoma", "Verdana", sans-serif;
-
-    border: 20px solid #333;     /* monitor frame */
-    border-radius: 12px;
-    box-shadow: 0 0 40px #000;
 }
 
-/* Icon wrapper (absolute positioned by JS) */
+
+
+
+
+/* Desktop Icon Wrapper */
 .icon-wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
-    cursor: grab;
+    cursor: pointer;
     user-select: none;
     position: absolute;
-    /* small padding/margins kept minimal so selection box is snug */
+    padding: 4px;
+    border: 1px solid transparent;
 }
 
 .icon-wrapper:active {
     cursor: grabbing;
 }
 
+/* Selected icon - Win95 dotted selection pattern */
 .icon-wrapper.selected {
-    background-color: #0000aa;
-    color: white;
-    border: 1px solid #fff;
-    padding: 2px;
-    border-radius: 0;
+    border: 1px dotted #ffffff;
+}
+
+.icon-wrapper.selected .icon-label {
+    background-color: var(--win95-selection, #000080);
+    color: var(--win95-selection-text, #ffffff);
 }
 
 /* Inner icon layout */
@@ -55,72 +67,206 @@
     margin: 0;
 }
 
+/* Icon image/emoji */
 .icon-image {
-    font-size: 40px;
+    font-size: 32px;
     line-height: 1;
     image-rendering: pixelated;
     -webkit-font-smoothing: none;
     -moz-osx-font-smoothing: grayscale;
-    pointer-events: none; /* ensure wrapper receives mouse events */
+    pointer-events: none;
+    /* Add slight drop shadow for depth */
+    filter: drop-shadow(1px 1px 0 rgba(0, 0, 0, 0.3));
 }
 
+/* Icon label - white text on teal desktop */
 .icon-label {
-    margin-top: 5px;
-    font-size: 12px;
+    margin-top: 4px;
+    font-size: 11px;
+    font-family: "MS Sans Serif", "Tahoma", sans-serif;
     text-align: center;
-    color: black;
+    color: #ffffff;
     background: transparent;
-    padding: 0;
-    pointer-events: none; /* ensure wrapper receives mouse events */
+    padding: 1px 2px;
+    pointer-events: none;
+    /* Text shadow for readability on teal */
+    text-shadow: 1px 1px 1px #000000;
+    max-width: 70px;
+    word-wrap: break-word;
 }
 
-/* Taskbar */
+/* Taskbar - Windows 95 style */
 .taskbar {
     position: absolute;
     bottom: 0;
     left: 0;
-    height: 32px;
+    height: 28px;
     width: 100%;
-    background: #c0c0c0;
-    color: black;
+    background: var(--win95-bg, #c0c0c0);
+    color: #000000;
     display: flex;
     align-items: center;
-    padding: 0 6px;
+    padding: 2px 2px;
     box-sizing: border-box;
-    border-top: 2px solid #fff;
-    border-left: 2px solid #fff;
-    border-right: 2px solid #7b7b7b;
-    border-bottom: 2px solid #7b7b7b;
-    font-size: 12px;
+    /* Raised 3D effect */
+    border-top: 2px solid #dfdfdf;
+    border-left: 2px solid #dfdfdf;
+    border-right: 2px solid #404040;
+    border-bottom: 2px solid #404040;
+    font-size: 11px;
+    font-family: "MS Sans Serif", "Tahoma", sans-serif;
+    z-index: 9999;
 }
 
-/* Start button */
+/* Start button - Windows 95 style */
 .start-button {
-    background: #c0c0c0;
-    border-top: 2px solid #fff;
-    border-left: 2px solid #fff;
-    border-right: 2px solid #7b7b7b;
-    border-bottom: 2px solid #7b7b7b;
-    padding: 2px 10px;
-    margin-right: 10px;
+    background: var(--win95-button-face, #c0c0c0);
+    /* Raised 3D button effect */
+    border-top: 2px solid #ffffff;
+    border-left: 2px solid #ffffff;
+    border-right: 2px solid #404040;
+    border-bottom: 2px solid #404040;
+    box-shadow: inset -1px -1px 0 #808080, inset 1px 1px 0 #dfdfdf;
+    padding: 2px 6px;
+    margin-right: 4px;
+    margin-left: 2px;
     cursor: pointer;
-    font-size: 12px;
-    font-family: "Tahoma", "Verdana", sans-serif;
+    font-size: 11px;
+    font-family: "MS Sans Serif", "Tahoma", sans-serif;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    height: 22px;
 }
 
 .start-button:active {
-    border-top: 2px solid #7b7b7b;
-    border-left: 2px solid #7b7b7b;
-    border-right: 2px solid #fff;
-    border-bottom: 2px solid #fff;
+    /* Pressed 3D button effect */
+    border-top: 2px solid #404040;
+    border-left: 2px solid #404040;
+    border-right: 2px solid #ffffff;
+    border-bottom: 2px solid #ffffff;
+    box-shadow: inset 1px 1px 0 #808080;
+    padding: 3px 5px 1px 7px;
 }
 
-.taskbar-time {
+/* Taskbar separator/divider */
+.taskbar-divider {
+    width: 2px;
+    height: 20px;
+    margin: 0 4px;
+    border-left: 1px solid #808080;
+    border-right: 1px solid #ffffff;
+}
+
+/* System tray area (right side) - sunken inset like reference */
+.taskbar-tray {
     margin-left: auto;
-    padding: 2px 6px;
-    background: #c0c0c0;
-    border-top: 2px solid #fff;
-    border-left: 2px solid #fff;
-    border-right: 2px solid #7b7b7b;
-    border-bottom: 2px solid #7b7b7b;
+    display: flex;
+    align-items: center;
+    height: 20px;
+    /* Sunken 3D effect - dark on top-left, light on bottom-right */
+    border: 1px solid;
+    border-color: #808080 #ffffff #ffffff #808080;
+    box-shadow: inset 1px 1px 0 #404040;
+    padding: 0 6px;
+    background: var(--win95-bg, #c0c0c0);
+    margin-right: 2px;
+}
+
+/* Clock display */
+.taskbar-time {
+    font-size: 11px;
+    font-family: "MS Sans Serif", "Tahoma", sans-serif;
+    color: #000000;
+    letter-spacing: 0.5px;
+}
+
+/* Quick launch area */
+.taskbar-quicklaunch {
+    display: flex;
+    align-items: center;
+    margin-left: 4px;
+    padding-left: 4px;
+    /* Sunken groove effect */
+    border-left: 1px solid #808080;
+}
+
+/* Taskbar window buttons area */
+.taskbar-windows {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    gap: 2px;
+    padding: 0 4px;
+    overflow: hidden;
+}
+
+/* Individual taskbar window button */
+.taskbar-window-btn {
+    background: var(--win95-button-face, #c0c0c0);
+    border-top: 2px solid #ffffff;
+    border-left: 2px solid #ffffff;
+    border-right: 2px solid #404040;
+    border-bottom: 2px solid #404040;
+    box-shadow: inset -1px -1px 0 #808080, inset 1px 1px 0 #dfdfdf;
+    padding: 2px 8px;
+    font-size: 11px;
+    font-family: "MS Sans Serif", "Tahoma", sans-serif;
+    cursor: pointer;
+    height: 22px;
+    max-width: 160px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.taskbar-window-btn.active {
+    /* Pressed/active state */
+    border-top: 2px solid #404040;
+    border-left: 2px solid #404040;
+    border-right: 2px solid #ffffff;
+    border-bottom: 2px solid #ffffff;
+    box-shadow: inset 1px 1px 0 #808080;
+    background: #c8c8c8;
+}
+
+.taskbar-btn-text {
+    margin-left: 4px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Windows 95 Flag Logo */
+.win-flag {
+    display: inline-grid;
+    grid-template-columns: 7px 7px;
+    grid-template-rows: 7px 7px;
+    gap: 1px;
+    transform: perspective(20px) rotateY(-10deg) skewY(-2deg);
+    margin-right: 2px;
+}
+
+.flag-red {
+    background: #ff0000;
+    border-radius: 0 2px 0 0;
+}
+
+.flag-green {
+    background: #00ff00;
+    border-radius: 2px 0 0 0;
+}
+
+.flag-blue {
+    background: #0000ff;
+    border-radius: 0 0 0 2px;
+}
+
+.flag-yellow {
+    background: #ffff00;
+    border-radius: 0 0 2px 0;
 }

@@ -1,171 +1,335 @@
-// src/components/Desktop.jsx
-import React, { useState, useRef, useEffect } from "react";
-import PopupWindow from "./PopupWindow";
-import "./Desktop.css";
+import React, { useEffect, useRef, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import PopupWindow from './PopupWindow';
+import FolderWindow from './FolderWindow';
+import DesktopIcon from './DesktopIcon';
+import PopupContent from './PopupContent';
+import fileSystem from './fileSystem.json';
+import './Desktop.css';
+
+const { desktopItems, popupConfig } = fileSystem;
 
 const GRID_SIZE = 80;
 const ICON_SIZE = 64;
 
-const initialIcons = [
-    { name: "Portfolio", link: null, icon: "💼", x: 20, y: 20, zIndex: 1, opensPopup: "portfolio" },
-    { name: "Blog", link: "/blog", icon: "📓", x: 120, y: 20, zIndex: 1 },
-    { name: "Contact", link: null, icon: "📧", x: 220, y: 20, zIndex: 1, opensPopup: "contact" },
-    { name: "GitHub", link: "https://github.com/mortenalbring", icon: "💻", x: 320, y: 20, zIndex: 1 },
-];
+function formatTime(date) {
+  return date.toLocaleTimeString('en-US', {
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true
+  });
+}
 
 export default function Desktop() {
-    const desktopRef = useRef(null);
-    const [icons, setIcons] = useState(initialIcons);
-    const [dragging, setDragging] = useState(null);
-    const [selectedIndex, setSelectedIndex] = useState(null);
-    const [topZ, setTopZ] = useState(1);
+  const desktopRef = useRef(null);
+  const location = useLocation();
+  const navigate = useNavigate();
 
-    // Track which popups are open
-    const [popups, setPopups] = useState([]); // [{id, zIndex}]
+  // Icon positions (can be dragged)
+  const [iconPositions, setIconPositions] = useState(() => {
+    const positions = {};
+    desktopItems.forEach(item => {
+      positions[item.id] = item.position || { x: 10, y: 10 };
+    });
+    return positions;
+  });
 
-    // Handle dragging icons
-    useEffect(() => {
-        const handleMouseMove = (e) => {
-            if (!dragging) return;
-            const desktopRect = desktopRef.current.getBoundingClientRect();
+  const [selectedId, setSelectedId] = useState(null);
+  const [dragging, setDragging] = useState(null);
+  const [topZ, setTopZ] = useState(100);
+  const [currentTime, setCurrentTime] = useState(new Date());
 
-            let newX = e.clientX - desktopRect.left - dragging.offsetX;
-            let newY = e.clientY - desktopRect.top - dragging.offsetY;
+  // Open windows
+  const [openPopups, setOpenPopups] = useState([]);
+  const [openFolders, setOpenFolders] = useState([]);
 
-            newX = Math.round(newX / GRID_SIZE) * GRID_SIZE;
-            newY = Math.round(newY / GRID_SIZE) * GRID_SIZE;
+  // Clock tick
+  useEffect(() => {
+    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
 
-            newX = Math.max(0, Math.min(newX, desktopRect.width - ICON_SIZE));
-            newY = Math.max(0, Math.min(newY, desktopRect.height - ICON_SIZE));
+  // URL sync for popups
+  const getPopupsFromURL = () => {
+    const params = new URLSearchParams(location.search);
+    const open = params.get('open');
+    return open ? open.split(',') : [];
+  };
 
-            setIcons((prev) =>
-                prev.map((icon, i) =>
-                    i === dragging.index ? { ...icon, x: newX, y: newY } : icon
-                )
-            );
-        };
+  const updateURL = (popupIds) => {
+    const params = new URLSearchParams();
+    if (popupIds.length) params.set('open', popupIds.join(','));
+    navigate({ search: params.toString() }, { replace: true });
+  };
 
-        const handleMouseUp = () => setDragging(null);
+  useEffect(() => {
+    const urlPopups = getPopupsFromURL();
 
-        window.addEventListener("mousemove", handleMouseMove);
-        window.addEventListener("mouseup", handleMouseUp);
-        return () => {
-            window.removeEventListener("mousemove", handleMouseMove);
-            window.removeEventListener("mouseup", handleMouseUp);
-        };
-    }, [dragging]);
+    setOpenPopups(prev => {
+      const currentIds = new Set(prev.map(p => p.id));
+      const newIds = urlPopups.filter(id => !currentIds.has(id));
 
-    const handleMouseDown = (e, index) => {
-        e.stopPropagation();
-        const newTopZ = topZ + 1;
-        setTopZ(newTopZ);
-        setIcons((prev) =>
-            prev.map((ic, i) => (i === index ? { ...ic, zIndex: newTopZ } : ic))
-        );
+      if (!newIds.length) return prev;
 
-        const icon = icons[index];
-        const desktopRect = desktopRef.current.getBoundingClientRect();
+      const maxZ = prev.length ? Math.max(...prev.map(p => p.zIndex)) : 100;
+      return [
+        ...prev,
+        ...newIds.map((id, i) => ({ id, zIndex: maxZ + i + 1 }))
+      ];
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.search]);
 
-        setDragging({
-            index,
-            offsetX: e.clientX - desktopRect.left - icon.x,
-            offsetY: e.clientY - desktopRect.top - icon.y,
-        });
+  // Dragging logic
+  useEffect(() => {
+    if (!dragging) return;
 
-        setSelectedIndex(index);
+    const handleMove = (e) => {
+      const rect = desktopRef.current.getBoundingClientRect();
+      let x = e.clientX - rect.left - dragging.offsetX;
+      let y = e.clientY - rect.top - dragging.offsetY;
+
+      x = Math.round(x / GRID_SIZE) * GRID_SIZE;
+      y = Math.round(y / GRID_SIZE) * GRID_SIZE;
+      x = Math.max(0, Math.min(x, rect.width - ICON_SIZE));
+      y = Math.max(0, Math.min(y, rect.height - ICON_SIZE - 28)); // account for taskbar
+
+      setIconPositions(prev => ({ ...prev, [dragging.id]: { x, y } }));
     };
 
-    const handleDoubleClick = (item, e) => {
-        e.stopPropagation();
-        if (item.opensPopup) {
-            const popupId = item.opensPopup;
-            const newTopZ = topZ + 1;
-            setTopZ(newTopZ);
-            setPopups((prev) => {
-                // If popup already open, just bring it to front
-                if (prev.find((p) => p.id === popupId)) {
-                    return prev.map((p) =>
-                        p.id === popupId ? { ...p, zIndex: newTopZ } : p
-                    );
-                }
-                // Otherwise, open a new one
-                return [...prev, { id: popupId, zIndex: newTopZ }];
-            });
-            return;
-        }
-        if (item.link) window.open(item.link, "_self");
+    const handleUp = () => setDragging(null);
+
+    window.addEventListener('mousemove', handleMove);
+    window.addEventListener('mouseup', handleUp);
+    return () => {
+      window.removeEventListener('mousemove', handleMove);
+      window.removeEventListener('mouseup', handleUp);
     };
+  }, [dragging]);
 
-    const closePopup = (id) => {
-        setPopups((prev) => prev.filter((p) => p.id !== id));
-    };
+  const handleDragStart = (e, item) => {
+    const rect = desktopRef.current.getBoundingClientRect();
+    const pos = iconPositions[item.id];
+    setDragging({
+      id: item.id,
+      offsetX: e.clientX - rect.left - pos.x,
+      offsetY: e.clientY - rect.top - pos.y
+    });
+  };
 
-    const bringPopupToFront = (id) => {
-        const newTopZ = topZ + 1;
-        setTopZ(newTopZ);
-        setPopups((prev) =>
-            prev.map((p) => (p.id === id ? { ...p, zIndex: newTopZ } : p))
-        );
-    };
+  const openPopup = (popupId) => {
+    const newZ = topZ + 1;
+    setTopZ(newZ);
 
-    return (
-        <div className="monitor">
-            <div
-                className="desktop"
-                ref={desktopRef}
-                onClick={() => setSelectedIndex(null)}
-            >
-                {icons.map((item, i) => (
-                    <div
-                        key={i}
-                        className={`icon-wrapper ${selectedIndex === i ? "selected" : ""}`}
-                        style={{
-                            left: item.x,
-                            top: item.y,
-                            position: "absolute",
-                            zIndex: item.zIndex || 1,
-                        }}
-                        onMouseDown={(e) => handleMouseDown(e, i)}
-                        onDoubleClick={(e) => handleDoubleClick(item, e)}
-                    >
-                        <div className="icon">
-                            <div className="icon-image">{item.icon}</div>
-                            <div className="icon-label">{item.name}</div>
-                        </div>
-                    </div>
-                ))}
+    setOpenPopups(prev => {
+      const existing = prev.find(p => p.id === popupId);
+      if (existing) {
+        return prev.map(p => p.id === popupId ? { ...p, zIndex: newZ, minimized: false } : p);
+      }
+      return [...prev, { id: popupId, zIndex: newZ, minimized: false }];
+    });
 
-                {/* Taskbar */}
-                <div className="taskbar">
-                    <button className="start-button">Start</button>
-                    <div className="taskbar-time">12:00</div>
-                </div>
+    const urlPopups = getPopupsFromURL();
+    if (!urlPopups.includes(popupId)) {
+      updateURL([...urlPopups, popupId]);
+    }
+  };
 
-                {/* Render all open popups */}
-                {popups.map((popup) => (
-                    <PopupWindow
-                        key={popup.id}
-                        title={popup.id === "portfolio" ? "Portfolio" : "Contact"}
-                        onClose={() => closePopup(popup.id)}
-                        zIndex={popup.zIndex}
-                        desktopRef={desktopRef}
-                        onFocus={() => bringPopupToFront(popup.id)}
-                    >
-                        {popup.id === "portfolio" && (
-                            <div style={{ padding: 8 }}>
-                                <h3>Welcome!</h3>
-                                <p>This is my retro Portfolio window.</p>
-                            </div>
-                        )}
-                        {popup.id === "contact" && (
-                            <div style={{ padding: 8 }}>
-                                <h3>Contact Me</h3>
-                                <p>Email: <a href="mailto:test@example.com">test@example.com</a></p>
-                            </div>
-                        )}
-                    </PopupWindow>
-                ))}
-            </div>
+  const closePopup = (popupId) => {
+    setOpenPopups(prev => prev.filter(p => p.id !== popupId));
+    updateURL(getPopupsFromURL().filter(id => id !== popupId));
+  };
+
+  const minimizePopup = (popupId) => {
+    setOpenPopups(prev => prev.map(p =>
+      p.id === popupId ? { ...p, minimized: true } : p
+    ));
+  };
+
+  const openFolder = (folder) => {
+    const newZ = topZ + 1;
+    setTopZ(newZ);
+
+    setOpenFolders(prev => {
+      const existing = prev.find(f => f.id === folder.id);
+      if (existing) {
+        return prev.map(f => f.id === folder.id ? { ...f, zIndex: newZ, minimized: false } : f);
+      }
+      return [...prev, { ...folder, zIndex: newZ, minimized: false }];
+    });
+  };
+
+  const closeFolder = (folderId) => {
+    setOpenFolders(prev => prev.filter(f => f.id !== folderId));
+  };
+
+  const minimizeFolder = (folderId) => {
+    setOpenFolders(prev => prev.map(f =>
+      f.id === folderId ? { ...f, minimized: true } : f
+    ));
+  };
+
+  const handleItemOpen = (action) => {
+    if (action.type === 'folder') {
+      openFolder(action.item);
+    } else if (action.type === 'popup') {
+      openPopup(action.id);
+    }
+  };
+
+  const bringToFront = (type, id) => {
+    const newZ = topZ + 1;
+    setTopZ(newZ);
+
+    if (type === 'popup') {
+      setOpenPopups(prev => prev.map(p =>
+        p.id === id ? { ...p, zIndex: newZ, minimized: false } : p
+      ));
+    } else {
+      setOpenFolders(prev => prev.map(f =>
+        f.id === id ? { ...f, zIndex: newZ, minimized: false } : f
+      ));
+    }
+  };
+
+  const handleTaskbarClick = (type, id) => {
+    const window = type === 'popup'
+      ? openPopups.find(p => p.id === id)
+      : openFolders.find(f => f.id === id);
+
+    if (!window) return;
+
+    // If minimized, restore it
+    if (window.minimized) {
+      bringToFront(type, id);
+    }
+    // If it's the active (top) window, minimize it
+    else if (window.zIndex === topZ) {
+      if (type === 'popup') {
+        minimizePopup(id);
+      } else {
+        minimizeFolder(id);
+      }
+    }
+    // Otherwise bring to front
+    else {
+      bringToFront(type, id);
+    }
+  };
+
+  const clearSelection = () => setSelectedId(null);
+
+  // All open windows for taskbar
+  const allWindows = [
+    ...openPopups.map(p => ({
+      type: 'popup',
+      id: p.id,
+      zIndex: p.zIndex,
+      minimized: p.minimized,
+      title: popupConfig[p.id]?.title || p.id
+    })),
+    ...openFolders.map(f => ({
+      type: 'folder',
+      id: f.id,
+      zIndex: f.zIndex,
+      minimized: f.minimized,
+      title: f.name
+    }))
+  ];
+
+  return (
+    <div className="monitor">
+      <div className="desktop" ref={desktopRef} onClick={clearSelection}>
+
+        {/* Desktop Icons */}
+        {desktopItems.map(item => (
+          <DesktopIcon
+            key={item.id}
+            item={item}
+            selected={selectedId === item.id}
+            style={{
+              position: 'absolute',
+              left: iconPositions[item.id]?.x || 10,
+              top: iconPositions[item.id]?.y || 10,
+              zIndex: 1
+            }}
+            onSelect={setSelectedId}
+            onOpen={handleItemOpen}
+            onDragStart={handleDragStart}
+          />
+        ))}
+
+        {/* Taskbar */}
+        <div className="taskbar">
+          <button className="start-button">
+            <span className="win-flag">
+              <span className="flag-red" />
+              <span className="flag-green" />
+              <span className="flag-blue" />
+              <span className="flag-yellow" />
+            </span>
+            <span>Start</span>
+          </button>
+
+          <div className="taskbar-divider" />
+
+          <div className="taskbar-windows">
+            {allWindows.map(win => (
+              <button
+                key={`${win.type}-${win.id}`}
+                className={`taskbar-window-btn ${win.zIndex === topZ && !win.minimized ? 'active' : ''}`}
+                onClick={() => handleTaskbarClick(win.type, win.id)}
+              >
+                {win.type === 'folder' ? '📁' : (popupConfig[win.id]?.icon || '📄')}
+                <span className="taskbar-btn-text">{win.title}</span>
+              </button>
+            ))}
+          </div>
+
+          <div className="taskbar-tray">
+            <span className="taskbar-time">{formatTime(currentTime)}</span>
+          </div>
         </div>
-    );
+
+        {/* Popup Windows */}
+        {openPopups.map(popup => {
+          if (popup.minimized) return null;
+          const config = popupConfig[popup.id] || { title: popup.id, icon: '📄', menu: [] };
+          return (
+            <PopupWindow
+              key={popup.id}
+              title={config.title}
+              icon={config.icon}
+              menuItems={config.menu}
+              statusText={config.status}
+              zIndex={popup.zIndex}
+              onClose={() => closePopup(popup.id)}
+              onMinimize={() => minimizePopup(popup.id)}
+              onFocus={() => bringToFront('popup', popup.id)}
+              desktopRef={desktopRef}
+            >
+              <PopupContent popupId={popup.id} />
+            </PopupWindow>
+          );
+        })}
+
+        {/* Folder Windows */}
+        {openFolders.map(folder => {
+          if (folder.minimized) return null;
+          return (
+            <FolderWindow
+              key={folder.id}
+              folder={folder}
+              zIndex={folder.zIndex}
+              onClose={() => closeFolder(folder.id)}
+              onMinimize={() => minimizeFolder(folder.id)}
+              onFocus={() => bringToFront('folder', folder.id)}
+              onOpenPopup={openPopup}
+              desktopRef={desktopRef}
+            />
+          );
+        })}
+      </div>
+    </div>
+  );
 }
