@@ -1,46 +1,21 @@
-import React, { useRef, useState, useMemo, useEffect } from 'react';
+import React, { useRef, useState, useMemo } from 'react';
 import PopupWindow from './PopupWindow';
 import FolderWindow from './FolderWindow';
 import DesktopIcon from './DesktopIcon';
 import PopupContent from './PopupContent';
-import StartMenu from './StartMenu';
+import Taskbar from './Taskbar';
 import fileSystem from './fileSystem.json';
-import {
-  useWindowManager,
-  useURLSync,
-  useIconDrag,
-  useClock
-} from './hooks';
-import { buildInitialPositions, formatTime } from './utils';
-import startLogo from './images/winmort_logo_small.png';
+import { useWindowManager, useURLSync, useIconDrag } from './hooks';
+import { buildInitialPositions } from './utils';
 import './Desktop.css';
 
 const { desktopItems, popupConfig } = fileSystem;
 
 export default function Desktop() {
-    
-    //Reference to desktop DOM, used for dragging the icons and maximise windows
+  //Reference to desktop DOM, used for dragging the icons and maximise windows
   const desktopRef = useRef(null);
-  const startMenuRef = useRef(null);
   //Tracks which icons are single clicked
   const [selectedId, setSelectedId] = useState(null);
-  const [startMenuOpen, setStartMenuOpen] = useState(false);
-
-  // Close start menu when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (startMenuOpen &&
-          startMenuRef.current &&
-          !startMenuRef.current.contains(e.target) &&
-          !e.target.closest('.start-button')) {
-        setStartMenuOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [startMenuOpen]);
-  
-  const currentTime = useClock();
 
   const {
     openPopups,
@@ -79,6 +54,8 @@ export default function Desktop() {
     }
   };
   
+  //caching this stuff between re-renders
+    //so it doesn't need to do this when single-clicking or dragging
   const allWindows = useMemo(() => [
     ...openPopups.map(p => ({
       type: 'popup',
@@ -119,37 +96,12 @@ export default function Desktop() {
           />
         ))}
           
-        <div className="taskbar">
-          <div className="start-button-container" ref={startMenuRef}>
-            <button
-              className={`start-button ${startMenuOpen ? 'active' : ''}`}
-              onClick={() => setStartMenuOpen(!startMenuOpen)}
-            >
-              <img src={startLogo} alt="Start" className="start-logo" />
-              <span>Start</span>
-            </button>
-            {startMenuOpen && <StartMenu onClose={() => setStartMenuOpen(false)} />}
-          </div>
-
-          <div className="taskbar-divider" />
-
-          <div className="taskbar-windows">
-            {allWindows.map(win => (
-              <button
-                key={`${win.type}-${win.id}`}
-                className={`taskbar-window-btn ${win.zIndex === topZ && !win.minimized ? 'active' : ''}`}
-                onClick={() => handleTaskbarClick(win.type, win.id)}
-              >
-                {win.type === 'folder' ? '📁' : (popupConfig[win.id]?.icon || '📄')}
-                <span className="taskbar-btn-text">{win.title}</span>
-              </button>
-            ))}
-          </div>
-
-          <div className="taskbar-tray">
-            <span className="taskbar-time">{formatTime(currentTime)}</span>
-          </div>
-        </div>
+        <Taskbar
+          windows={allWindows}
+          topZ={topZ}
+          onWindowClick={handleTaskbarClick}
+          popupConfig={popupConfig}
+        />
 
         {/* Popup Windows */}
         {openPopups.map(popup => {

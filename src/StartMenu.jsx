@@ -22,7 +22,7 @@ export default function StartMenu({ onClose }) {
   return (
     <div className="start-menu">
       <div className="start-menu-sidebar">
-        <span className="sidebar-text">Morten 95</span>
+        <span className="sidebar-text">Mortensoft 95</span>
       </div>
       <div className="start-menu-items">
         {menuItems.map((item) => {

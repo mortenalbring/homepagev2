@@ -4,14 +4,11 @@ import { SiteRedesignContent } from './SiteRedesignContent';
 import { ApiWorkContent } from './ApiWorkContent';
 import { ExperimentsContent } from './ExperimentsContent';
 import { OldStuffContent } from './OldStuffContent';
-import { ContactComponent } from '../ContactComponent';
-import { BlogComponent } from '../BlogComponent';
+import {BlogComponent} from "./blog/BlogComponent";
+import {ContactComponent} from "./contact/ContactComponent";
 
 /**
- * Registry mapping popup IDs to their content components.
- * To add a new popup:
- * 1. Create a new component in src/popups/
- * 2. Add it to this registry with the ID matching fileSystem.json
+  Registry mapping popup IDs to their content components.
  */
 export const popupRegistry = {
   'portfolio': PortfolioContent,
