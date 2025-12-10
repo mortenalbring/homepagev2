@@ -241,32 +241,9 @@
     white-space: nowrap;
 }
 
-/* Windows 95 Flag Logo */
-.win-flag {
-    display: inline-grid;
-    grid-template-columns: 7px 7px;
-    grid-template-rows: 7px 7px;
-    gap: 1px;
-    transform: perspective(20px) rotateY(-10deg) skewY(-2deg);
-    margin-right: 2px;
-}
-
-.flag-red {
-    background: #ff0000;
-    border-radius: 0 2px 0 0;
-}
-
-.flag-green {
-    background: #00ff00;
-    border-radius: 2px 0 0 0;
-}
-
-.flag-blue {
-    background: #0000ff;
-    border-radius: 0 0 0 2px;
-}
-
-.flag-yellow {
-    background: #ffff00;
-    border-radius: 0 0 2px 0;
+/* Start Menu Logo */
+.start-logo {
+    height: 16px;
+    width: auto;
+    margin-right: 4px;
 }

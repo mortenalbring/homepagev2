@@ -11,6 +11,7 @@ import {
   useClock
 } from './hooks';
 import { buildInitialPositions, formatTime } from './utils';
+import startLogo from './images/winmort_logo_small.png';
 import './Desktop.css';
 
 const { desktopItems, popupConfig } = fileSystem;
@@ -103,12 +104,7 @@ export default function Desktop() {
           
         <div className="taskbar">
           <button className="start-button">
-            <span className="win-flag">
-              <span className="flag-red" />
-              <span className="flag-green" />
-              <span className="flag-blue" />
-              <span className="flag-yellow" />
-            </span>
+            <img src={startLogo} alt="Start" className="start-logo" />
             <span>Start</span>
           </button>
 
