@@ -37,14 +37,13 @@ export default function Desktop() {
     bringToFront,
     handleTaskbarClick,
     handleItemOpen,
-    addPopupFromURL,
-    getMaxPopupZ
+    addPopupFromURL
   } = useWindowManager();
 
   const { openPopupWithURL, closePopupWithURL } = useURLSync(
     openPopups,
     addPopupFromURL,
-    getMaxPopupZ
+    topZ
   );
 
   const { iconPositions, handleDragStart } = useIconDrag(

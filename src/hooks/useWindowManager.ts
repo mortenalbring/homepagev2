@@ -7,10 +7,11 @@ import {
   WindowType
 } from '../types';
 
+// Controls all the fakey 'windows' on the desktop 
 export interface UseWindowManagerReturn {
-  openPopups: WindowState[];
-  openFolders: FolderWindowState[];
-  topZ: number;
+  openPopups: WindowState[]; //Open 'windows'
+  openFolders: FolderWindowState[]; //Open 'folders'
+  topZ: number; //The biggest z-index, so new 'windows' appear on top. Might need to check if there's a max z-index? 
   openPopup: (popupId: string) => void;
   closePopup: (popupId: string) => void;
   minimizePopup: (popupId: string) => void;
@@ -21,7 +22,6 @@ export interface UseWindowManagerReturn {
   handleTaskbarClick: (type: WindowType, id: string) => void;
   handleItemOpen: (action: OpenAction) => void;
   addPopupFromURL: (popupId: string, zIndex: number) => void;
-  getMaxPopupZ: () => number;
 }
 
 export function useWindowManager(): UseWindowManagerReturn {
@@ -178,10 +178,6 @@ export function useWindowManager(): UseWindowManagerReturn {
     });
   }, []);
 
-  const getMaxPopupZ = useCallback(() => {
-    return openPopups.length ? Math.max(...openPopups.map(p => p.zIndex)) : 100;
-  }, [openPopups]);
-
   return {
     openPopups,
     openFolders,
@@ -195,7 +191,6 @@ export function useWindowManager(): UseWindowManagerReturn {
     bringToFront,
     handleTaskbarClick,
     handleItemOpen,
-    addPopupFromURL,
-    getMaxPopupZ
+    addPopupFromURL
   };
 }

@@ -12,7 +12,7 @@ export interface UseURLSyncReturn {
 export function useURLSync(
   openPopups: WindowState[],
   addPopupFromURL: (popupId: string, zIndex: number) => void,
-  getMaxPopupZ: () => number
+  topZ: number
 ): UseURLSyncReturn {
   const location = useLocation();
   const navigate = useNavigate();
@@ -38,12 +38,11 @@ export function useURLSync(
     const newIds = urlPopups.filter(id => !currentIds.has(id));
 
     if (newIds.length) {
-      const maxZ = getMaxPopupZ();
       newIds.forEach((id, i) => {
-        addPopupFromURL(id, maxZ + i + 1);
+        addPopupFromURL(id, topZ + i + 1);
       });
     }
-  }, [location.search, openPopups, getPopupsFromURL, addPopupFromURL, getMaxPopupZ]);
+  }, [location.search, openPopups, getPopupsFromURL, addPopupFromURL, topZ]);
 
   const openPopupWithURL = useCallback((
     popupId: string,
