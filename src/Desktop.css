@@ -118,6 +118,10 @@
     z-index: 9999;
 }
 
+.start-button-container {
+    position: relative;
+}
+
 /* Start button - Windows 95 style */
 .start-button {
     background: var(--win95-button-face, #c0c0c0);
@@ -140,7 +144,8 @@
     height: 22px;
 }
 
-.start-button:active {
+.start-button:active,
+.start-button.active {
     /* Pressed 3D button effect */
     border-top: 2px solid #404040;
     border-left: 2px solid #404040;

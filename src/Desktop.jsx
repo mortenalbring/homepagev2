@@ -1,8 +1,9 @@
-import React, { useRef, useState, useMemo } from 'react';
+import React, { useRef, useState, useMemo, useEffect } from 'react';
 import PopupWindow from './PopupWindow';
 import FolderWindow from './FolderWindow';
 import DesktopIcon from './DesktopIcon';
 import PopupContent from './PopupContent';
+import StartMenu from './StartMenu';
 import fileSystem from './fileSystem.json';
 import {
   useWindowManager,
@@ -18,10 +19,26 @@ const { desktopItems, popupConfig } = fileSystem;
 
 export default function Desktop() {
     
-    //Reference to desktop DOM, used for dragging the icons and maximise windows  
+    //Reference to desktop DOM, used for dragging the icons and maximise windows
   const desktopRef = useRef(null);
-  //Tracks which icons are single clicked 
+  const startMenuRef = useRef(null);
+  //Tracks which icons are single clicked
   const [selectedId, setSelectedId] = useState(null);
+  const [startMenuOpen, setStartMenuOpen] = useState(false);
+
+  // Close start menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (startMenuOpen &&
+          startMenuRef.current &&
+          !startMenuRef.current.contains(e.target) &&
+          !e.target.closest('.start-button')) {
+        setStartMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [startMenuOpen]);
   
   const currentTime = useClock();
 
@@ -103,10 +120,16 @@ export default function Desktop() {
         ))}
           
         <div className="taskbar">
-          <button className="start-button">
-            <img src={startLogo} alt="Start" className="start-logo" />
-            <span>Start</span>
-          </button>
+          <div className="start-button-container" ref={startMenuRef}>
+            <button
+              className={`start-button ${startMenuOpen ? 'active' : ''}`}
+              onClick={() => setStartMenuOpen(!startMenuOpen)}
+            >
+              <img src={startLogo} alt="Start" className="start-logo" />
+              <span>Start</span>
+            </button>
+            {startMenuOpen && <StartMenu onClose={() => setStartMenuOpen(false)} />}
+          </div>
 
           <div className="taskbar-divider" />
 
