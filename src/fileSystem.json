@@ -1,0 +1,120 @@
+{
+  "desktopItems": [
+    {
+      "id": "portfolio",
+      "name": "Portfolio",
+      "icon": "💼",
+      "popup": "portfolio",
+      "position": { "x": 10, "y": 10 }
+    },
+    {
+      "id": "blog",
+      "name": "Blog",
+      "icon": "📓",
+      "popup": "blog",
+      "position": { "x": 10, "y": 85 }
+    },
+    {
+      "id": "contact",
+      "name": "Contact",
+      "icon": "📧",
+      "popup": "contact",
+      "position": { "x": 10, "y": 160 }
+    },
+    {
+      "id": "github",
+      "name": "GitHub",
+      "icon": "💻",
+      "link": "https://github.com/mortenalbring",
+      "position": { "x": 10, "y": 235 }
+    },
+    {
+      "id": "projects",
+      "name": "Projects",
+      "icon": "📁",
+      "position": { "x": 10, "y": 310 },
+      "children": [
+        {
+          "id": "web-projects",
+          "name": "Web Projects",
+          "icon": "🌐",
+          "children": [
+            { "id": "site-redesign", "name": "Site Redesign", "icon": "📄", "popup": "site-redesign" },
+            { "id": "api-work", "name": "API Work", "icon": "📄", "popup": "api-work" }
+          ]
+        },
+        {
+          "id": "experiments",
+          "name": "Experiments",
+          "icon": "🧪",
+          "popup": "experiments"
+        },
+        {
+          "id": "archive",
+          "name": "Archive",
+          "icon": "📦",
+          "children": [
+            { "id": "old-stuff", "name": "Old Stuff", "icon": "📄", "popup": "old-stuff" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "readme",
+      "name": "README",
+      "icon": "📝",
+      "popup": "readme",
+      "position": { "x": 10, "y": 385 }
+    }
+  ],
+  "popupConfig": {
+    "portfolio": {
+      "title": "Portfolio",
+      "icon": "💼",
+      "menu": ["File", "Edit", "View", "Help"],
+      "status": "Welcome to my portfolio"
+    },
+    "blog": {
+      "title": "Untitled - Notepad",
+      "icon": "📓",
+      "menu": ["File", "Edit", "Search", "Help"],
+      "status": ""
+    },
+    "contact": {
+      "title": "Contact",
+      "icon": "📧",
+      "menu": ["File", "Edit", "Help"],
+      "status": "Contact information"
+    },
+    "readme": {
+      "title": "README.txt - Notepad",
+      "icon": "📝",
+      "menu": ["File", "Edit", "Search", "Help"],
+      "status": ""
+    },
+    "site-redesign": {
+      "title": "Site Redesign",
+      "icon": "📄",
+      "menu": ["File", "Edit", "Help"],
+      "status": "Project details"
+    },
+    "api-work": {
+      "title": "API Work",
+      "icon": "📄",
+      "menu": ["File", "Edit", "Help"],
+      "status": "Project details"
+    },
+    "experiments": {
+      "title": "Experiments",
+      "icon": "🧪",
+      "menu": ["File", "Edit", "Help"],
+      "status": ""
+    },
+    "old-stuff": {
+      "title": "Old Stuff",
+      "icon": "📄",
+      "menu": ["File", "Help"],
+      "status": "Archived content"
+    }
+  }
+}
