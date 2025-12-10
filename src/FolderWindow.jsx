@@ -3,7 +3,7 @@ import PopupWindow from './PopupWindow';
 import DesktopIcon from './DesktopIcon';
 import './FolderWindow.css';
 
-function FolderWindow({ folder, onClose, onOpenPopup, desktopRef, zIndex }) {
+function FolderWindow({ folder, onClose, onMinimize, onFocus, onOpenPopup, desktopRef, zIndex }) {
   // Navigation stack - lets us go back
   const [history, setHistory] = useState([folder]);
   const [selectedId, setSelectedId] = useState(null);
@@ -46,6 +46,8 @@ function FolderWindow({ folder, onClose, onOpenPopup, desktopRef, zIndex }) {
       title={currentFolder.name}
       icon="📁"
       onClose={onClose}
+      onMinimize={onMinimize}
+      onFocus={onFocus}
       desktopRef={desktopRef}
       menuItems={['File', 'Edit', 'View', 'Help']}
       initialSize={{ width: 450, height: 350 }}

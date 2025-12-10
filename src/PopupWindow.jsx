@@ -10,6 +10,7 @@ const PopupWindow = ({
     children,
     onClose,
     onMinimize,
+    onFocus,
     desktopRef,
     menuItems,
     statusText,
@@ -83,6 +84,10 @@ const PopupWindow = ({
         }
     };
 
+    const handleWindowMouseDown = () => {
+        onFocus?.();
+    };
+
     return (
         <div
             className="popup-window"
@@ -93,6 +98,7 @@ const PopupWindow = ({
                 height: size.height,
                 zIndex
             }}
+            onMouseDown={handleWindowMouseDown}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
         >

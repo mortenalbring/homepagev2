@@ -124,9 +124,9 @@ export default function Desktop() {
     setOpenPopups(prev => {
       const existing = prev.find(p => p.id === popupId);
       if (existing) {
-        return prev.map(p => p.id === popupId ? { ...p, zIndex: newZ } : p);
+        return prev.map(p => p.id === popupId ? { ...p, zIndex: newZ, minimized: false } : p);
       }
-      return [...prev, { id: popupId, zIndex: newZ }];
+      return [...prev, { id: popupId, zIndex: newZ, minimized: false }];
     });
 
     const urlPopups = getPopupsFromURL();
@@ -140,6 +140,12 @@ export default function Desktop() {
     updateURL(getPopupsFromURL().filter(id => id !== popupId));
   };
 
+  const minimizePopup = (popupId) => {
+    setOpenPopups(prev => prev.map(p =>
+      p.id === popupId ? { ...p, minimized: true } : p
+    ));
+  };
+
   const openFolder = (folder) => {
     const newZ = topZ + 1;
     setTopZ(newZ);
@@ -147,14 +153,20 @@ export default function Desktop() {
     setOpenFolders(prev => {
       const existing = prev.find(f => f.id === folder.id);
       if (existing) {
-        return prev.map(f => f.id === folder.id ? { ...f, zIndex: newZ } : f);
+        return prev.map(f => f.id === folder.id ? { ...f, zIndex: newZ, minimized: false } : f);
       }
-      return [...prev, { ...folder, zIndex: newZ }];
+      return [...prev, { ...folder, zIndex: newZ, minimized: false }];
     });
   };
 
   const closeFolder = (folderId) => {
     setOpenFolders(prev => prev.filter(f => f.id !== folderId));
+  };
+
+  const minimizeFolder = (folderId) => {
+    setOpenFolders(prev => prev.map(f =>
+      f.id === folderId ? { ...f, minimized: true } : f
+    ));
   };
 
   const handleItemOpen = (action) => {
@@ -170,9 +182,38 @@ export default function Desktop() {
     setTopZ(newZ);
 
     if (type === 'popup') {
-      setOpenPopups(prev => prev.map(p => p.id === id ? { ...p, zIndex: newZ } : p));
+      setOpenPopups(prev => prev.map(p =>
+        p.id === id ? { ...p, zIndex: newZ, minimized: false } : p
+      ));
     } else {
-      setOpenFolders(prev => prev.map(f => f.id === id ? { ...f, zIndex: newZ } : f));
+      setOpenFolders(prev => prev.map(f =>
+        f.id === id ? { ...f, zIndex: newZ, minimized: false } : f
+      ));
+    }
+  };
+
+  const handleTaskbarClick = (type, id) => {
+    const window = type === 'popup'
+      ? openPopups.find(p => p.id === id)
+      : openFolders.find(f => f.id === id);
+
+    if (!window) return;
+
+    // If minimized, restore it
+    if (window.minimized) {
+      bringToFront(type, id);
+    }
+    // If it's the active (top) window, minimize it
+    else if (window.zIndex === topZ) {
+      if (type === 'popup') {
+        minimizePopup(id);
+      } else {
+        minimizeFolder(id);
+      }
+    }
+    // Otherwise bring to front
+    else {
+      bringToFront(type, id);
     }
   };
 
@@ -180,8 +221,20 @@ export default function Desktop() {
 
   // All open windows for taskbar
   const allWindows = [
-    ...openPopups.map(p => ({ type: 'popup', ...p, title: popupConfig[p.id]?.title || p.id })),
-    ...openFolders.map(f => ({ type: 'folder', ...f, title: f.name }))
+    ...openPopups.map(p => ({
+      type: 'popup',
+      id: p.id,
+      zIndex: p.zIndex,
+      minimized: p.minimized,
+      title: popupConfig[p.id]?.title || p.id
+    })),
+    ...openFolders.map(f => ({
+      type: 'folder',
+      id: f.id,
+      zIndex: f.zIndex,
+      minimized: f.minimized,
+      title: f.name
+    }))
   ];
 
   return (
@@ -224,8 +277,8 @@ export default function Desktop() {
             {allWindows.map(win => (
               <button
                 key={`${win.type}-${win.id}`}
-                className={`taskbar-window-btn ${win.zIndex === topZ ? 'active' : ''}`}
-                onClick={() => bringToFront(win.type, win.id)}
+                className={`taskbar-window-btn ${win.zIndex === topZ && !win.minimized ? 'active' : ''}`}
+                onClick={() => handleTaskbarClick(win.type, win.id)}
               >
                 {win.type === 'folder' ? '📁' : (popupConfig[win.id]?.icon || '📄')}
                 <span className="taskbar-btn-text">{win.title}</span>
@@ -240,6 +293,7 @@ export default function Desktop() {
 
         {/* Popup Windows */}
         {openPopups.map(popup => {
+          if (popup.minimized) return null;
           const config = popupConfig[popup.id] || { title: popup.id, icon: '📄', menu: [] };
           return (
             <PopupWindow
@@ -250,6 +304,8 @@ export default function Desktop() {
               statusText={config.status}
               zIndex={popup.zIndex}
               onClose={() => closePopup(popup.id)}
+              onMinimize={() => minimizePopup(popup.id)}
+              onFocus={() => bringToFront('popup', popup.id)}
               desktopRef={desktopRef}
             >
               <PopupContent popupId={popup.id} />
@@ -258,16 +314,21 @@ export default function Desktop() {
         })}
 
         {/* Folder Windows */}
-        {openFolders.map(folder => (
-          <FolderWindow
-            key={folder.id}
-            folder={folder}
-            zIndex={folder.zIndex}
-            onClose={() => closeFolder(folder.id)}
-            onOpenPopup={openPopup}
-            desktopRef={desktopRef}
-          />
-        ))}
+        {openFolders.map(folder => {
+          if (folder.minimized) return null;
+          return (
+            <FolderWindow
+              key={folder.id}
+              folder={folder}
+              zIndex={folder.zIndex}
+              onClose={() => closeFolder(folder.id)}
+              onMinimize={() => minimizeFolder(folder.id)}
+              onFocus={() => bringToFront('folder', folder.id)}
+              onOpenPopup={openPopup}
+              desktopRef={desktopRef}
+            />
+          );
+        })}
       </div>
     </div>
   );
