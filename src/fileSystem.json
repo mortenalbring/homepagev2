@@ -5,48 +5,104 @@
       "name": "Portfolio",
       "icon": "💼",
       "popup": "portfolio",
-      "position": { "x": 10, "y": 10 }
+      "position": {
+        "x": 10,
+        "y": 10
+      }
     },
     {
       "id": "blog",
       "name": "Blog",
       "icon": "📓",
       "popup": "blog",
-      "position": { "x": 10, "y": 85 }
+      "position": {
+        "x": 10,
+        "y": 85
+      }
     },
     {
       "id": "contact",
       "name": "Contact",
       "icon": "📧",
       "popup": "contact",
-      "position": { "x": 10, "y": 160 }
+      "position": {
+        "x": 10,
+        "y": 160
+      }
     },
     {
       "id": "github",
       "name": "GitHub",
       "icon": "💻",
       "link": "https://github.com/mortenalbring",
-      "position": { "x": 10, "y": 235 }
+      "position": {
+        "x": 10,
+        "y": 235
+      }
+    },
+    {
+      "id": "test",
+      "name": "test",
+      "icon": "b",
+      "position": {
+        "x": 200,
+        "y": 235
+      },
+      "children": [
+        {
+          "id": "test1",
+          "name": "Test1",
+          "icon": "c",
+          "position": {
+            "x": 10,
+            "y": 235
+          },
+          "children": [
+            {
+              "id": "github",
+              "name": "Test2",
+              "icon": "d",
+              "position": {
+                "x": 10,
+                "y": 235
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "projects",
       "name": "Projects",
       "icon": "📁",
-      "position": { "x": 10, "y": 310 },
+      "position": {
+        "x": 10,
+        "y": 310
+      },
       "children": [
         {
           "id": "web-projects",
           "name": "Web Projects",
-          "icon": "🌐",
+          "icon": "\uD83D\uDCC1",
           "children": [
-            { "id": "site-redesign", "name": "Site Redesign", "icon": "📄", "popup": "site-redesign" },
-            { "id": "api-work", "name": "API Work", "icon": "📄", "popup": "api-work" }
+            {
+              "id": "site-redesign",
+              "name": "Site Redesign",
+              "icon": "📄",
+              "popup": "site-redesign"
+            },
+            {
+              "id": "api-work",
+              "name": "API Work",
+              "icon": "📄",
+              "popup": "api-work"
+            }
           ]
         },
         {
           "id": "experiments",
           "name": "Experiments",
-          "icon": "🧪",
+          "icon": "\uD83D\uDCC1",
           "popup": "experiments"
         },
         {
@@ -54,7 +110,12 @@
           "name": "Archive",
           "icon": "📦",
           "children": [
-            { "id": "old-stuff", "name": "Old Stuff", "icon": "📄", "popup": "old-stuff" }
+            {
+              "id": "old-stuff",
+              "name": "Old Stuff",
+              "icon": "📄",
+              "popup": "old-stuff"
+            }
           ]
         }
       ]
@@ -64,56 +125,93 @@
       "name": "README",
       "icon": "📝",
       "popup": "readme",
-      "position": { "x": 10, "y": 385 }
+      "position": {
+        "x": 10,
+        "y": 385
+      }
     }
   ],
   "popupConfig": {
     "portfolio": {
       "title": "Portfolio",
       "icon": "💼",
-      "menu": ["File", "Edit", "View", "Help"],
+      "menu": [
+        "File",
+        "Edit",
+        "View",
+        "Help"
+      ],
       "status": "Welcome to my portfolio"
     },
     "blog": {
       "title": "Untitled - Notepad",
       "icon": "📓",
-      "menu": ["File", "Edit", "Search", "Help"],
+      "menu": [
+        "File",
+        "Edit",
+        "Search",
+        "Help"
+      ],
       "status": ""
     },
     "contact": {
       "title": "Contact",
       "icon": "📧",
-      "menu": ["File", "Edit", "Help"],
+      "menu": [
+        "File",
+        "Edit",
+        "Help"
+      ],
       "status": "Contact information"
     },
     "readme": {
       "title": "README.txt - Notepad",
       "icon": "📝",
-      "menu": ["File", "Edit", "Search", "Help"],
+      "menu": [
+        "File",
+        "Edit",
+        "Search",
+        "Help"
+      ],
       "status": ""
     },
     "site-redesign": {
       "title": "Site Redesign",
       "icon": "📄",
-      "menu": ["File", "Edit", "Help"],
+      "menu": [
+        "File",
+        "Edit",
+        "Help"
+      ],
       "status": "Project details"
     },
     "api-work": {
       "title": "API Work",
       "icon": "📄",
-      "menu": ["File", "Edit", "Help"],
+      "menu": [
+        "File",
+        "Edit",
+        "Help"
+      ],
       "status": "Project details"
     },
     "experiments": {
       "title": "Experiments",
       "icon": "🧪",
-      "menu": ["File", "Edit", "Help"],
+      "menu": [
+        "File",
+        "Edit",
+        "Help"
+      ],
       "status": ""
     },
     "old-stuff": {
       "title": "Old Stuff",
       "icon": "📄",
-      "menu": ["File", "Help"],
+      "menu": [
+        "File",
+        "Help"
+      ],
       "status": "Archived content"
     }
   }
