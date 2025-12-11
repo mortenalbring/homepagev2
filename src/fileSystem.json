@@ -129,6 +129,16 @@
         "x": 10,
         "y": 385
       }
+    },
+    {
+      "id": "mortsweeper",
+      "name": "Mortsweeper",
+      "icon": "💣",
+      "popup": "mortsweeper",
+      "position": {
+        "x": 10,
+        "y": 460
+      }
     }
   ],
   "popupConfig": {
@@ -213,6 +223,15 @@
         "Help"
       ],
       "status": "Archived content"
+    },
+    "mortsweeper": {
+      "title": "Mortsweeper",
+      "icon": "💣",
+      "menu": [
+        "Game",
+        "Help"
+      ],
+      "status": "Mines: 10"
     }
   }
 }

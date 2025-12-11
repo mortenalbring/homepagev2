@@ -1,0 +1,97 @@
+.mortsweeper {
+    padding: 8px;
+    background: #c0c0c0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.mort-header {
+    display: flex;
+    justify-content: center;
+    padding: 4px;
+    background: #c0c0c0;
+    border: 2px solid;
+    border-color: #808080 #ffffff #ffffff #808080;
+}
+
+.mort-face {
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    cursor: pointer;
+    background: #c0c0c0;
+    border: 2px solid;
+    border-color: #ffffff #808080 #808080 #ffffff;
+}
+
+.mort-face:active {
+    border-color: #808080 #ffffff #ffffff #808080;
+}
+
+.mort-grid {
+    border: 3px solid;
+    border-color: #808080 #ffffff #ffffff #808080;
+    background: #c0c0c0;
+    padding: 2px;
+}
+
+.mort-row {
+    display: flex;
+}
+
+.mort-cell {
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    margin: 0;
+    font-size: 11px;
+    font-weight: bold;
+    font-family: "MS Sans Serif", Arial, sans-serif;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #c0c0c0;
+    border: 2px solid;
+    border-color: #ffffff #808080 #808080 #ffffff;
+}
+
+.mort-cell:active:not(:disabled) {
+    border-color: #808080;
+    border-width: 1px;
+    padding: 1px;
+}
+
+.mort-cell.revealed {
+    background: #c0c0c0;
+    border: 1px solid #808080;
+    cursor: default;
+}
+
+.mort-cell.mine {
+    background: #ff0000;
+}
+
+/* number colors like the real minesweeper */
+.mort-cell.num-1 { color: #0000ff; }
+.mort-cell.num-2 { color: #008000; }
+.mort-cell.num-3 { color: #ff0000; }
+.mort-cell.num-4 { color: #000080; }
+.mort-cell.num-5 { color: #800000; }
+.mort-cell.num-6 { color: #008080; }
+.mort-cell.num-7 { color: #000000; }
+.mort-cell.num-8 { color: #808080; }
+
+.mort-message {
+    font-size: 12px;
+    font-weight: bold;
+    font-family: "MS Sans Serif", Arial, sans-serif;
+    padding: 4px 8px;
+    background: #ffffcc;
+    border: 1px solid #808080;
+}
