@@ -2,16 +2,29 @@ import React, {useState} from 'react';
 import './Mortsweeper.css';
 import mortFace from '../../images/mortface-icon.png';
 
+
 const MINE_GRID = [
-    [0, 0, 0, 1, 0, 0, 0, 0],
-    [0, 1, 0, 0, 0, 1, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 1],
-    [0, 0, 1, 0, 0, 0, 0, 0],
-    [1, 0, 0, 0, 1, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 1, 0],
-    [0, 1, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 1, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
 ];
+
+
+// const MINE_GRID = [
+//     [0, 0, 0, 1, 0, 0, 0, 0],
+//     [0, 1, 0, 0, 0, 1, 0, 0],
+//     [0, 0, 0, 0, 0, 0, 0, 1],
+//     [0, 0, 1, 0, 0, 0, 0, 0],
+//     [1, 0, 0, 0, 1, 0, 0, 0],
+//     [0, 0, 0, 0, 0, 0, 1, 0],
+//     [0, 1, 0, 0, 0, 0, 0, 0],
+//     [0, 0, 0, 1, 0, 0, 0, 1],
+// ];
 
 const GRID_SIZE = 8;
 
@@ -79,7 +92,7 @@ export function MortsweeperContent() {
 
         grid[row][col] = true;
 
-        // if this cell has no adjacent mines, reveal neighbors too
+        // if this cell has no adjacent mines, cascade
         if (countAdjacentMines(row, col) === 0) {
             for (let dr = -1; dr <= 1; dr++) {
                 for (let dc = -1; dc <= 1; dc++) {
