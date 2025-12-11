@@ -1,12 +1,12 @@
-import { FolderItem } from './filesystem';
+import {FolderItem} from './filesystem';
 
 /**
  * Base state for any open window (popup or folder).
  */
 export interface WindowState {
-  id: string;
-  zIndex: number;
-  minimized: boolean;
+    id: string;
+    minimized: boolean;
+    zIndex: number;
 }
 
 /**
@@ -14,9 +14,9 @@ export interface WindowState {
  * with folder-specific properties.
  */
 export interface FolderWindowState extends WindowState {
-  name: string;
-  icon: string;
-  children?: FolderItem[];
+    children?: FolderItem[];
+    icon: string;
+    name: string;
 }
 
 /**
@@ -24,8 +24,8 @@ export interface FolderWindowState extends WindowState {
  * Either opens a folder (with nested navigation) or a popup window.
  */
 export type OpenAction =
-  | { type: 'folder'; item: FolderItem }
-  | { type: 'popup'; id: string };
+    | { type: 'folder'; item: FolderItem }
+    | { type: 'popup'; id: string };
 
 /**
  * Window type identifier for taskbar and focus management.

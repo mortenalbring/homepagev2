@@ -1,2 +1,2 @@
-export { formatTime } from './format';
-export { buildInitialPositions } from './desktop';
+export {formatTime} from './format';
+export {buildInitialPositions} from './desktop';

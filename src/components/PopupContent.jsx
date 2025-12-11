@@ -1,17 +1,17 @@
 import React from 'react';
-import { popupRegistry, NotFoundContent } from '../popups';
+import {NotFoundContent, popupRegistry} from '../popups';
 
 /**
-  Renders stuff based on ID from popup registry (popups/index.tsx
+ Renders stuff based on ID from popup registry (popups/index.tsx
  */
-function PopupContent({ popupId }) {
-  const Component = popupRegistry[popupId];
+function PopupContent({popupId}) {
+    const Component = popupRegistry[popupId];
 
-  if (!Component) {
-    return <NotFoundContent />;
-  }
+    if (!Component) {
+        return <NotFoundContent/>;
+    }
 
-  return <Component />;
+    return <Component/>;
 }
 
 export default PopupContent;

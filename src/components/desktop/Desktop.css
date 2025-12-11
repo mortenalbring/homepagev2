@@ -23,14 +23,10 @@
     /* Authentic CRT monitor bezel */
     border: 3px solid;
     border-color: #404040 #808080 #808080 #404040;
-    box-shadow:
-        inset 0 0 0 2px #000,
-        0 0 60px rgba(0, 0, 0, 0.8);
+    box-shadow: inset 0 0 0 2px #000,
+    0 0 60px rgba(0, 0, 0, 0.8);
     overflow: hidden;
 }
-
-
-
 
 
 /* Desktop Icon Wrapper */
@@ -122,10 +118,8 @@
     position: relative;
 }
 
-/* Start button - Windows 95 style */
 .start-button {
     background: var(--win95-button-face, #c0c0c0);
-    /* Raised 3D button effect */
     border-top: 2px solid #ffffff;
     border-left: 2px solid #ffffff;
     border-right: 2px solid #404040;
@@ -146,7 +140,6 @@
 
 .start-button:active,
 .start-button.active {
-    /* Pressed 3D button effect */
     border-top: 2px solid #404040;
     border-left: 2px solid #404040;
     border-right: 2px solid #ffffff;
@@ -155,7 +148,6 @@
     padding: 3px 5px 1px 7px;
 }
 
-/* Taskbar separator/divider */
 .taskbar-divider {
     width: 2px;
     height: 20px;
@@ -164,13 +156,11 @@
     border-right: 1px solid #ffffff;
 }
 
-/* System tray area (right side) - sunken inset like reference */
 .taskbar-tray {
     margin-left: auto;
     display: flex;
     align-items: center;
     height: 20px;
-    /* Sunken 3D effect - dark on top-left, light on bottom-right */
     border: 1px solid;
     border-color: #808080 #ffffff #ffffff #808080;
     box-shadow: inset 1px 1px 0 #404040;
@@ -179,7 +169,6 @@
     margin-right: 2px;
 }
 
-/* Clock display */
 .taskbar-time {
     font-size: 11px;
     font-family: "MS Sans Serif", "Tahoma", sans-serif;
@@ -187,17 +176,14 @@
     letter-spacing: 0.5px;
 }
 
-/* Quick launch area */
 .taskbar-quicklaunch {
     display: flex;
     align-items: center;
     margin-left: 4px;
     padding-left: 4px;
-    /* Sunken groove effect */
     border-left: 1px solid #808080;
 }
 
-/* Taskbar window buttons area */
 .taskbar-windows {
     display: flex;
     flex: 1;
@@ -207,7 +193,6 @@
     overflow: hidden;
 }
 
-/* Individual taskbar window button */
 .taskbar-window-btn {
     background: var(--win95-button-face, #c0c0c0);
     border-top: 2px solid #ffffff;
@@ -230,7 +215,6 @@
 }
 
 .taskbar-window-btn.active {
-    /* Pressed/active state */
     border-top: 2px solid #404040;
     border-left: 2px solid #404040;
     border-right: 2px solid #ffffff;
@@ -246,9 +230,29 @@
     white-space: nowrap;
 }
 
-/* Start Menu Logo */
 .start-logo {
     height: 16px;
     width: auto;
     margin-right: 4px;
+}
+
+
+.shutdown-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    z-index: 99999;
+    animation: shutdownFade 2s ease-in forwards;
+}
+
+@keyframes shutdownFade {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
 }

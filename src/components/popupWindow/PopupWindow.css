@@ -1,25 +1,18 @@
-/* Windows 95 Popup Window Styles */
 
-/* Main window frame */
 .popup-window {
     position: absolute;
     background: var(--win95-bg, #c0c0c0);
     font-family: "MS Sans Serif", "Tahoma", sans-serif;
-    /* z-index set via inline style */
     display: flex;
     flex-direction: column;
     user-select: none;
-
-    /* Authentic Win95 3D raised border */
     border: 2px solid;
     border-color: #dfdfdf #404040 #404040 #dfdfdf;
-    box-shadow:
-        inset 1px 1px 0 #ffffff,
-        inset -1px -1px 0 #808080,
-        2px 2px 8px rgba(0, 0, 0, 0.3);
+    box-shadow: inset 1px 1px 0 #ffffff,
+    inset -1px -1px 0 #808080,
+    2px 2px 8px rgba(0, 0, 0, 0.3);
 }
 
-/* Window outer frame highlight */
 .popup-window::before {
     content: '';
     position: absolute;
@@ -32,7 +25,6 @@
     pointer-events: none;
 }
 
-/* Title bar - Windows 95 style solid navy */
 .popup-titlebar {
     background: #000080;
     color: #ffffff;
@@ -47,12 +39,10 @@
     font-size: 11px;
 }
 
-/* Inactive window title bar */
 .popup-window.inactive .popup-titlebar {
     background: #808080;
 }
 
-/* Window title text */
 .popup-title {
     font-size: 11px;
     font-weight: bold;
@@ -65,19 +55,16 @@
     gap: 4px;
 }
 
-/* Title icon */
 .popup-title-icon {
     font-size: 14px;
     line-height: 1;
 }
 
-/* Window control buttons container */
 .popup-controls {
     display: flex;
     gap: 2px;
 }
 
-/* Base button style for all window controls */
 .popup-minimize,
 .popup-maximize,
 .popup-close {
@@ -106,7 +93,6 @@
     padding: 1px 0 0 1px;
 }
 
-/* Minimize button icon - line at bottom */
 .popup-minimize::after {
     content: '';
     width: 6px;
@@ -122,7 +108,6 @@
     position: relative;
 }
 
-/* Maximize button icon */
 .popup-maximize::after {
     content: '';
     width: 9px;
@@ -132,7 +117,6 @@
     box-sizing: border-box;
 }
 
-/* Restore button (when maximized) */
 .popup-maximize.restore::after {
     content: '';
     width: 8px;
@@ -143,7 +127,6 @@
     box-shadow: 2px -2px 0 var(--win95-button-face, #c0c0c0), 3px -3px 0 #000000, 3px -1px 0 #000000;
 }
 
-/* Close button X */
 .popup-close::after {
     content: '×';
     font-size: 12px;
@@ -152,7 +135,6 @@
     margin-top: -1px;
 }
 
-/* Menu bar (optional) */
 .popup-menubar {
     background: var(--win95-bg, #c0c0c0);
     padding: 1px 0;
@@ -179,12 +161,10 @@
     color: var(--win95-selection-text, #ffffff);
 }
 
-/* Underlined first letter in menu items */
 .menu-underline {
     text-decoration: underline;
 }
 
-/* Content area */
 .popup-content {
     flex: 1;
     background: var(--win95-bg, #c0c0c0);
@@ -192,14 +172,12 @@
     font-size: 11px;
     overflow: auto;
     user-select: text;
-    /* Sunken content area border */
     margin: 2px;
     border: 2px solid;
     border-color: #808080 #ffffff #ffffff #808080;
     box-shadow: inset 1px 1px 0 #404040;
 }
 
-/* Scrollbar styling for content */
 .popup-content::-webkit-scrollbar {
     width: 16px;
     height: 16px;
@@ -207,11 +185,10 @@
 
 .popup-content::-webkit-scrollbar-track {
     background: #c0c0c0;
-    background-image:
-        linear-gradient(45deg, #a0a0a0 25%, transparent 25%),
-        linear-gradient(-45deg, #a0a0a0 25%, transparent 25%),
-        linear-gradient(45deg, transparent 75%, #a0a0a0 75%),
-        linear-gradient(-45deg, transparent 75%, #a0a0a0 75%);
+    background-image: linear-gradient(45deg, #a0a0a0 25%, transparent 25%),
+    linear-gradient(-45deg, #a0a0a0 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #a0a0a0 75%),
+    linear-gradient(-45deg, transparent 75%, #a0a0a0 75%);
     background-size: 2px 2px;
 }
 
@@ -232,7 +209,6 @@
     width: 16px;
 }
 
-/* Status bar at bottom of window */
 .popup-statusbar {
     background: var(--win95-bg, #c0c0c0);
     padding: 2px 4px;
@@ -248,7 +224,6 @@
     flex: 1;
 }
 
-/* Resize handle - Win95 grip pattern */
 .resize-handle {
     width: 16px;
     height: 16px;
@@ -258,20 +233,18 @@
     cursor: se-resize;
     user-select: none;
     background: var(--win95-bg, #c0c0c0);
-    /* Diagonal grip lines pattern */
-    background-image:
-        linear-gradient(135deg,
-            transparent 0%, transparent 30%,
-            #ffffff 30%, #ffffff 35%,
-            transparent 35%, transparent 45%,
-            #ffffff 45%, #ffffff 50%,
-            transparent 50%, transparent 60%,
-            #ffffff 60%, #ffffff 65%,
-            transparent 65%, transparent 75%,
-            #ffffff 75%, #ffffff 80%,
-            transparent 80%, transparent 100%
-        ),
-        linear-gradient(135deg,
+    background-image: linear-gradient(135deg,
+    transparent 0%, transparent 30%,
+    #ffffff 30%, #ffffff 35%,
+    transparent 35%, transparent 45%,
+    #ffffff 45%, #ffffff 50%,
+    transparent 50%, transparent 60%,
+    #ffffff 60%, #ffffff 65%,
+    transparent 65%, transparent 75%,
+    #ffffff 75%, #ffffff 80%,
+    transparent 80%, transparent 100%
+    ),
+    linear-gradient(135deg,
             transparent 0%, transparent 35%,
             #808080 35%, #808080 40%,
             transparent 40%, transparent 50%,
@@ -281,10 +254,9 @@
             transparent 70%, transparent 80%,
             #808080 80%, #808080 85%,
             transparent 85%, transparent 100%
-        );
+    );
 }
 
-/* Alternative resize handle with dots */
 .resize-handle-dots {
     width: 12px;
     height: 12px;
@@ -299,7 +271,6 @@
     background-position: 0 0;
 }
 
-/* Maximized window state */
 .popup-window.maximized {
     top: 0 !important;
     left: 0 !important;
@@ -312,7 +283,6 @@
     display: none;
 }
 
-/* Win95 Button styles for use within windows */
 .win95-button {
     background: var(--win95-button-face, #c0c0c0);
     border: 2px solid;
@@ -336,13 +306,11 @@
     outline-offset: -4px;
 }
 
-/* Default/primary button */
 .win95-button.default {
     border: 3px solid #000000;
     padding: 3px 15px;
 }
 
-/* Input field styling */
 .win95-input {
     background: #ffffff;
     border: 2px solid;
@@ -357,7 +325,6 @@
     outline: none;
 }
 
-/* Groupbox/fieldset styling */
 .win95-groupbox {
     border: 2px solid;
     border-color: #808080 #ffffff #ffffff #808080;
@@ -372,7 +339,6 @@
     font-size: 11px;
 }
 
-/* Checkbox styling */
 .win95-checkbox {
     appearance: none;
     width: 13px;
@@ -395,7 +361,6 @@
     top: -2px;
 }
 
-/* Radio button styling */
 .win95-radio {
     appearance: none;
     width: 12px;
@@ -420,7 +385,6 @@
     margin: 2px;
 }
 
-/* Dropdown/select styling */
 .win95-select {
     background: #ffffff;
     border: 2px solid;
@@ -436,7 +400,6 @@
     background-position: right 4px center;
 }
 
-/* Tab control */
 .win95-tabs {
     display: flex;
     border-bottom: none;
@@ -469,7 +432,6 @@
     padding: 12px;
 }
 
-/* Progress bar */
 .win95-progress {
     height: 16px;
     background: var(--win95-bg, #c0c0c0);
@@ -483,7 +445,6 @@
     background: var(--win95-selection, #000080);
 }
 
-/* List view styling */
 .win95-listview {
     background: #ffffff;
     border: 2px solid;
@@ -511,7 +472,6 @@
     color: var(--win95-selection-text, #ffffff);
 }
 
-/* Tree view styling */
 .win95-treeview {
     background: #ffffff;
     border: 2px solid;
@@ -521,7 +481,6 @@
     font-size: 11px;
 }
 
-/* Tooltip styling */
 .win95-tooltip {
     background: #ffffcc;
     border: 1px solid #000000;

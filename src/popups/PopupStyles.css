@@ -1,21 +1,21 @@
 .popup-content-inner {
-  padding: 8px;
+    padding: 8px;
 }
 
 .popup-content-inner h3 {
-  margin: 0 0 8px 0;
-  font-size: 13px;
+    margin: 0 0 8px 0;
+    font-size: 13px;
 }
 
 .popup-content-inner p {
-  margin: 0 0 8px 0;
-  line-height: 1.5;
+    margin: 0 0 8px 0;
+    line-height: 1.5;
 }
 
 .popup-content-inner p:last-child {
-  margin-bottom: 0;
+    margin-bottom: 0;
 }
 
 .popup-content-monospace {
-  font-family: 'Fixedsys', 'Courier New', monospace;
+    font-family: 'Fixedsys', 'Courier New', monospace;
 }

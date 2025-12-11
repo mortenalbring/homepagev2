@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import "./PopupWindow.css";
 
 const MIN_WIDTH = 200;
@@ -8,18 +8,18 @@ const MIN_HEIGHT = 120;
 The fake 'windows'
  */
 const PopupWindow = ({
-    title,
-    icon,
-    children,
-    onClose,
-    onMinimize,
-    onFocus,
-    desktopRef,
-    menuItems,
-    statusText,
-    initialSize = {width: 400, height: 300},
-    zIndex = 100
-}) => {
+                         title,
+                         icon,
+                         children,
+                         onClose,
+                         onMinimize,
+                         onFocus,
+                         desktopRef,
+                         menuItems,
+                         statusText,
+                         initialSize = {width: 400, height: 300},
+                         zIndex = 100
+                     }) => {
     const [position, setPosition] = useState({x: 100, y: 50});
     const [size, setSize] = useState(initialSize);
     const [dragging, setDragging] = useState(false);
@@ -43,13 +43,13 @@ const PopupWindow = ({
         }
     };
 
-     
+
     useEffect(() => {
         // Dragging and resizing
         if (!dragging && !resizing) {
             return;
-        } 
-        
+        }
+
         const handleMouseMove = (e) => {
             if (dragging) {
                 setPosition({x: e.clientX - offset.x, y: e.clientY - offset.y});
@@ -79,11 +79,10 @@ const PopupWindow = ({
     }, [dragging, resizing, offset, size]);
 
     const toggleMaximize = () => {
-        if (!desktopRef || !desktopRef.current)
-        {
+        if (!desktopRef || !desktopRef.current) {
             return;
         }
-            
+
         const desktopRect = desktopRef.current.getBoundingClientRect();
 
         if (!isMaximized) {
@@ -161,9 +160,9 @@ const PopupWindow = ({
                     ))}
                 </div>
             )}
-            
+
             <div className="popup-content">{children}</div>
-            
+
             {statusText !== undefined && (
                 <div className="popup-statusbar">
                     <div className="popup-status-section">{statusText}</div>
