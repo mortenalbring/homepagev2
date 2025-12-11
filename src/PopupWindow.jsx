@@ -1,9 +1,12 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import "./PopupWindow.css";
 
 const MIN_WIDTH = 200;
 const MIN_HEIGHT = 120;
 
+/*
+The fake 'windows'
+ */
 const PopupWindow = ({
     title,
     icon,
@@ -40,24 +43,47 @@ const PopupWindow = ({
         }
     };
 
-    const handleMouseMove = (e) => {
-        if (dragging) {
-            setPosition({x: e.clientX - offset.x, y: e.clientY - offset.y});
-        } else if (resizing) {
-            const newWidth = Math.max(MIN_WIDTH, size.width + (e.clientX - offset.x));
-            const newHeight = Math.max(MIN_HEIGHT, size.height + (e.clientY - offset.y));
-            setSize({width: newWidth, height: newHeight});
-            setOffset({x: e.clientX, y: e.clientY});
-        }
-    };
+     
+    useEffect(() => {
+        // Dragging and resizing
+        if (!dragging && !resizing) {
+            return;
+        } 
+        
+        const handleMouseMove = (e) => {
+            if (dragging) {
+                setPosition({x: e.clientX - offset.x, y: e.clientY - offset.y});
+            } else if (resizing) {
+                const newWidth = Math.max(MIN_WIDTH, size.width + (e.clientX - offset.x));
+                const newHeight = Math.max(MIN_HEIGHT, size.height + (e.clientY - offset.y));
+                setSize({width: newWidth, height: newHeight});
+                //this was the key! store the mouse position, and calc the delta between current pos and offset
+                //makes resizing incremental, rather than the jaggedy stuff it was doing before 
+                setOffset({x: e.clientX, y: e.clientY});
+            }
+        };
 
-    const handleMouseUp = () => {
-        setDragging(false);
-        setResizing(false);
-    };
+        const handleMouseUp = () => {
+            setDragging(false);
+            setResizing(false);
+        };
+
+        //yes! this fixed some of the issues with dragging too quickly
+        window.addEventListener('mousemove', handleMouseMove);
+        window.addEventListener('mouseup', handleMouseUp);
+
+        return () => {
+            window.removeEventListener('mousemove', handleMouseMove);
+            window.removeEventListener('mouseup', handleMouseUp);
+        };
+    }, [dragging, resizing, offset, size]);
 
     const toggleMaximize = () => {
-        if (!desktopRef || !desktopRef.current) return;
+        if (!desktopRef || !desktopRef.current)
+        {
+            return;
+        }
+            
         const desktopRect = desktopRef.current.getBoundingClientRect();
 
         if (!isMaximized) {
@@ -99,8 +125,6 @@ const PopupWindow = ({
                 zIndex
             }}
             onMouseDown={handleWindowMouseDown}
-            onMouseMove={handleMouseMove}
-            onMouseUp={handleMouseUp}
         >
             <div className="popup-titlebar" onMouseDown={handleMouseDown}>
                 <span className="popup-title">

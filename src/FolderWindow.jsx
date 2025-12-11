@@ -3,6 +3,9 @@ import PopupWindow from './PopupWindow';
 import DesktopIcon from './DesktopIcon';
 import './FolderWindow.css';
 
+/*
+a popup 'window' that's a folder. 
+ */
 function FolderWindow({ folder, onClose, onMinimize, onFocus, onOpenPopup, desktopRef, zIndex }) {
   // Navigation stack - lets us go back
   const [history, setHistory] = useState([folder]);
@@ -24,7 +27,7 @@ function FolderWindow({ folder, onClose, onMinimize, onFocus, onOpenPopup, deskt
   };
 
   const goUp = () => {
-    // Go to parent (same as back for now)
+    // Go to parent (does same as back)
     goBack();
   };
 
@@ -37,8 +40,7 @@ function FolderWindow({ folder, onClose, onMinimize, onFocus, onOpenPopup, deskt
   };
 
   const clearSelection = () => setSelectedId(null);
-
-  // Build breadcrumb path
+  
   const breadcrumbs = history.map(f => f.name);
 
   return (
@@ -79,8 +81,7 @@ function FolderWindow({ folder, onClose, onMinimize, onFocus, onOpenPopup, deskt
             </span>
           </div>
         </div>
-
-        {/* Contents */}
+          
         <div className="folder-contents" onClick={clearSelection}>
           {currentFolder.children?.map((item) => (
             <DesktopIcon
@@ -97,7 +98,7 @@ function FolderWindow({ folder, onClose, onMinimize, onFocus, onOpenPopup, deskt
           )}
         </div>
 
-        {/* Status bar */}
+        {/* not sure if I need this? */}
         <div className="folder-status">
           {currentFolder.children?.length || 0} object(s)
         </div>

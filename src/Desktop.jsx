@@ -102,8 +102,7 @@ export default function Desktop() {
           onWindowClick={handleTaskbarClick}
           popupConfig={popupConfig}
         />
-
-        {/* Popup Windows */}
+          
         {openPopups.map(popup => {
           if (popup.minimized) return null;
           const config = popupConfig[popup.id] || { title: popup.id, icon: '📄', menu: [] };
@@ -124,8 +123,7 @@ export default function Desktop() {
             </PopupWindow>
           );
         })}
-
-        {/* Folder Windows */}
+          
         {openFolders.map(folder => {
           if (folder.minimized) return null;
           return (

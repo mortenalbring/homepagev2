@@ -126,6 +126,7 @@ export function useWindowManager(): WindowManagerControls {
 
   const handleTaskbarClick = useCallback((type: WindowType, id: string) => {
     if (type === 'popup') {
+        //replace nesting with reducer?
       setOpenPopups(popups => {
         setOpenFolders(folders => {
           const window = popups.find(p => p.id === id);
