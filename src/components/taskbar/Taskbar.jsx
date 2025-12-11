@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
-import StartMenu from './StartMenu';
-import { useClock } from './hooks';
-import { formatTime } from './utils';
-import startLogo from './images/winmort_logo_small.png';
+import StartMenu from '../startMenu/StartMenu';
+import { useClock } from '../../hooks';
+import { formatTime } from '../../utils';
+import startLogo from '../../images/winmort_logo_small.png';
 
 export default function Taskbar({ windows, topZ, onWindowClick, popupConfig }) {
   const startMenuRef = useRef(null);

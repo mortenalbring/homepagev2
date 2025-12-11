@@ -1,5 +1,5 @@
 import React from 'react';
-import { popupRegistry, NotFoundContent } from './popups';
+import { popupRegistry, NotFoundContent } from '../popups';
 
 /**
   Renders stuff based on ID from popup registry (popups/index.tsx

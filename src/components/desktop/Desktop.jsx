@@ -1,12 +1,12 @@
 import React, { useRef, useState, useMemo } from 'react';
-import PopupWindow from './PopupWindow';
-import FolderWindow from './FolderWindow';
-import DesktopIcon from './DesktopIcon';
-import PopupContent from './PopupContent';
-import Taskbar from './Taskbar';
-import fileSystem from './fileSystem.json';
-import { useWindowManager, useURLSync, useIconDrag } from './hooks';
-import { buildInitialPositions } from './utils';
+import PopupWindow from '../popupWindow/PopupWindow';
+import FolderWindow from '../folderWindow/FolderWindow';
+import DesktopIcon from '../desktopIcon/DesktopIcon';
+import PopupContent from '../PopupContent';
+import Taskbar from '../taskbar/Taskbar';
+import fileSystem from '../../fileSystem.json';
+import { useWindowManager, useURLSync, useIconDrag } from '../../hooks';
+import { buildInitialPositions } from '../../utils';
 import './Desktop.css';
 
 const { desktopItems, popupConfig } = fileSystem;

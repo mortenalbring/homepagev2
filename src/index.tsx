@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM, {Root} from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
-import Desktop from "./Desktop";
+import Desktop from "./components/desktop/Desktop";
 import {BrowserRouter} from "react-router-dom";
 
 let root: Root;

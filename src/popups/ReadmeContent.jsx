@@ -1,6 +1,5 @@
 import React from 'react';
 import './PopupStyles.css';
-import {popupRegistry} from "./index";
 
 export function ReadmeContent() {
   return (

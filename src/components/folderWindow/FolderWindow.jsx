@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import PopupWindow from './PopupWindow';
-import DesktopIcon from './DesktopIcon';
+import PopupWindow from '../popupWindow/PopupWindow';
+import DesktopIcon from '../desktopIcon/DesktopIcon';
 import './FolderWindow.css';
 
 /*
