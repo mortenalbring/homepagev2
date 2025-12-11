@@ -1,9 +1,7 @@
 import React, {useState} from 'react';
 import './Mortsweeper.css';
-import mortFace from '../images/mortface-icon.png';
+import mortFace from '../../images/mortface-icon.png';
 
-// hardcoded 8x8 grid - 1 means mine, 0 means safe
-// not random, just a fixed layout that's somewhat playable
 const MINE_GRID = [
     [0, 0, 0, 1, 0, 0, 0, 0],
     [0, 1, 0, 0, 0, 1, 0, 0],
@@ -17,12 +15,13 @@ const MINE_GRID = [
 
 const GRID_SIZE = 8;
 
-// counts how many mines are adjacent to a cell
 function countAdjacentMines(row, col) {
     let count = 0;
     for (let dr = -1; dr <= 1; dr++) {
         for (let dc = -1; dc <= 1; dc++) {
-            if (dr === 0 && dc === 0) continue;
+            if (dr === 0 && dc === 0) {
+                continue;
+            }
             const nr = row + dr;
             const nc = col + dc;
             if (nr >= 0 && nr < GRID_SIZE && nc >= 0 && nc < GRID_SIZE) {
@@ -34,11 +33,11 @@ function countAdjacentMines(row, col) {
 }
 
 export function MortsweeperContent() {
-    // tracks which cells have been revealed
+    // which things have been releaved
     const [revealed, setRevealed] = useState(() =>
         Array(GRID_SIZE).fill(null).map(() => Array(GRID_SIZE).fill(false))
     );
-    // tracks flagged cells (right click)
+    // flags
     const [flagged, setFlagged] = useState(() =>
         Array(GRID_SIZE).fill(null).map(() => Array(GRID_SIZE).fill(false))
     );
@@ -49,26 +48,34 @@ export function MortsweeperContent() {
         if (gameOver || won || flagged[row][col]) return;
 
         if (MINE_GRID[row][col] === 1) {
-            // boom! reveal all mines
+            // boom
             setGameOver(true);
             setRevealed(Array(GRID_SIZE).fill(null).map(() => Array(GRID_SIZE).fill(true)));
             return;
         }
 
-        // reveal this cell and maybe cascade if it's a 0
+        // reveal this cell
         const newRevealed = revealed.map(r => [...r]);
         revealCell(row, col, newRevealed);
         setRevealed(newRevealed);
 
-        // check for win - all non-mine cells revealed
+        // check win
         checkWin(newRevealed);
     };
 
-    // recursively reveal empty cells (the satisfying cascade thing)
+    // reveal empty cells, and do that neato cascade thing
     const revealCell = (row, col, grid) => {
-        if (row < 0 || row >= GRID_SIZE || col < 0 || col >= GRID_SIZE) return;
-        if (grid[row][col]) return; // already revealed
-        if (MINE_GRID[row][col] === 1) return; // don't reveal mines
+        if (row < 0 || row >= GRID_SIZE || col < 0 || col >= GRID_SIZE) {
+            return;
+        }
+        if (grid[row][col]) {
+            // already revealed
+            return;
+        }
+
+        if (MINE_GRID[row][col] === 1) {
+            return;
+        }
 
         grid[row][col] = true;
 
@@ -149,7 +156,7 @@ export function MortsweeperContent() {
         <div className="mortsweeper">
             <div className="mort-header">
                 <div className={`mort-face ${gameOver ? 'dead' : won ? 'winner' : ''}`} onClick={resetGame}>
-                    <img src={mortFace} alt="face" />
+                    <img src={mortFace} alt="face"/>
                 </div>
             </div>
             <div className="mort-grid">
@@ -161,7 +168,7 @@ export function MortsweeperContent() {
             </div>
             {(gameOver || won) && (
                 <div className="mort-message">
-                    {gameOver ? 'Game Over!' : 'You Win!'}
+                    {gameOver ? 'nope' : 'yep'}
                 </div>
             )}
         </div>
