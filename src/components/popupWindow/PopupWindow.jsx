@@ -1,22 +1,25 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import "./PopupWindow.css";
 
 const MIN_WIDTH = 200;
 const MIN_HEIGHT = 120;
 
+/*
+The fake 'windows'
+ */
 const PopupWindow = ({
-    title,
-    icon,
-    children,
-    onClose,
-    onMinimize,
-    onFocus,
-    desktopRef,
-    menuItems,
-    statusText,
-    initialSize = {width: 400, height: 300},
-    zIndex = 100
-}) => {
+                         title,
+                         icon,
+                         children,
+                         onClose,
+                         onMinimize,
+                         onFocus,
+                         desktopRef,
+                         menuItems,
+                         statusText,
+                         initialSize = {width: 400, height: 300},
+                         zIndex = 100
+                     }) => {
     const [position, setPosition] = useState({x: 100, y: 50});
     const [size, setSize] = useState(initialSize);
     const [dragging, setDragging] = useState(false);
@@ -40,24 +43,46 @@ const PopupWindow = ({
         }
     };
 
-    const handleMouseMove = (e) => {
-        if (dragging) {
-            setPosition({x: e.clientX - offset.x, y: e.clientY - offset.y});
-        } else if (resizing) {
-            const newWidth = Math.max(MIN_WIDTH, size.width + (e.clientX - offset.x));
-            const newHeight = Math.max(MIN_HEIGHT, size.height + (e.clientY - offset.y));
-            setSize({width: newWidth, height: newHeight});
-            setOffset({x: e.clientX, y: e.clientY});
-        }
-    };
 
-    const handleMouseUp = () => {
-        setDragging(false);
-        setResizing(false);
-    };
+    useEffect(() => {
+        // Dragging and resizing
+        if (!dragging && !resizing) {
+            return;
+        }
+
+        const handleMouseMove = (e) => {
+            if (dragging) {
+                setPosition({x: e.clientX - offset.x, y: e.clientY - offset.y});
+            } else if (resizing) {
+                const newWidth = Math.max(MIN_WIDTH, size.width + (e.clientX - offset.x));
+                const newHeight = Math.max(MIN_HEIGHT, size.height + (e.clientY - offset.y));
+                setSize({width: newWidth, height: newHeight});
+                //this was the key! store the mouse position, and calc the delta between current pos and offset
+                //makes resizing incremental, rather than the jaggedy stuff it was doing before 
+                setOffset({x: e.clientX, y: e.clientY});
+            }
+        };
+
+        const handleMouseUp = () => {
+            setDragging(false);
+            setResizing(false);
+        };
+
+        //yes! this fixed some of the issues with dragging too quickly
+        window.addEventListener('mousemove', handleMouseMove);
+        window.addEventListener('mouseup', handleMouseUp);
+
+        return () => {
+            window.removeEventListener('mousemove', handleMouseMove);
+            window.removeEventListener('mouseup', handleMouseUp);
+        };
+    }, [dragging, resizing, offset, size]);
 
     const toggleMaximize = () => {
-        if (!desktopRef || !desktopRef.current) return;
+        if (!desktopRef || !desktopRef.current) {
+            return;
+        }
+
         const desktopRect = desktopRef.current.getBoundingClientRect();
 
         if (!isMaximized) {
@@ -99,10 +124,7 @@ const PopupWindow = ({
                 zIndex
             }}
             onMouseDown={handleWindowMouseDown}
-            onMouseMove={handleMouseMove}
-            onMouseUp={handleMouseUp}
         >
-            {/* Title Bar */}
             <div className="popup-titlebar" onMouseDown={handleMouseDown}>
                 <span className="popup-title">
                     {icon && <span className="popup-title-icon">{icon}</span>}
@@ -127,7 +149,7 @@ const PopupWindow = ({
                 </div>
             </div>
 
-            {/* Menu Bar (optional) */}
+            {/* menu stuff (File, Edit). doesn't do anything (yet) */}
             {menuItems && menuItems.length > 0 && (
                 <div className="popup-menubar">
                     {menuItems.map((item, index) => (
@@ -139,17 +161,15 @@ const PopupWindow = ({
                 </div>
             )}
 
-            {/* Content Area */}
             <div className="popup-content">{children}</div>
 
-            {/* Status Bar (optional) */}
             {statusText !== undefined && (
                 <div className="popup-statusbar">
                     <div className="popup-status-section">{statusText}</div>
                 </div>
             )}
 
-            {/* Resize Handle */}
+            {/* this handle needs some work */}
             {!isMaximized && <div className="resize-handle" onMouseDown={handleResizeMouseDown}/>}
         </div>
     );
