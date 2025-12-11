@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import './Mortsweeper.css';
+import mortFace from '../images/mortface-icon.png';
 
 // hardcoded 8x8 grid - 1 means mine, 0 means safe
 // not random, just a fixed layout that's somewhat playable
@@ -147,8 +148,8 @@ export function MortsweeperContent() {
     return (
         <div className="mortsweeper">
             <div className="mort-header">
-                <div className="mort-face" onClick={resetGame}>
-                    {gameOver ? '😵' : won ? '😎' : '🙂'}
+                <div className={`mort-face ${gameOver ? 'dead' : won ? 'winner' : ''}`} onClick={resetGame}>
+                    <img src={mortFace} alt="face" />
                 </div>
             </div>
             <div className="mort-grid">
