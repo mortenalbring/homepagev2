@@ -29,6 +29,7 @@ const PopupWindow = ({
     const [prevState, setPrevState] = useState(null);
 
     const handleMouseDown = (e) => {
+        e.stopPropagation(); 
         if (!isMaximized) {
             setDragging(true);
             setOffset({x: e.clientX - position.x, y: e.clientY - position.y});

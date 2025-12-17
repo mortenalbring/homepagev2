@@ -153,7 +153,9 @@ export function windowReducer(state: State, action: WindowAction): State {
         }
 
         case 'ADD_POPUP_FROM_URL':
-            if (state.popups.some(p => p.id === action.id)) return state;
+            if (state.popups.some(p => p.id === action.id)) {
+                return state;
+            }
 
             return {
                 ...state,

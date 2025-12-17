@@ -25,6 +25,10 @@ export interface URLPopupSync {
     updateURL: (popupIds: string[]) => void;
 }
 
+/*
+Methods for syncing the URL queryparams with the window state. 
+Could maybe merge this into the window manager reducer? 
+ */
 export function useURLSync(
     openPopups: WindowState[],
     addPopupFromURL: (popupId: string, zIndex: number) => void,

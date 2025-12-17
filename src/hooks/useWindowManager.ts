@@ -1,6 +1,6 @@
 import {useReducer} from 'react';
 import {FolderItem, FolderWindowState, OpenAction, WindowState, WindowType} from '../types';
-import {windowReducer} from "./reducer";
+import {windowReducer} from "./windowManagerReducer";
 
 // Controls all the fakey 'windows' on the desktop 
 export interface WindowManagerControls {
