@@ -6,6 +6,8 @@ import {ExperimentsContent} from './ExperimentsContent';
 import {OldStuffContent} from './OldStuffContent';
 import {BlogComponent} from "./blog/BlogComponent";
 import {ContactComponent} from "./contact/ContactComponent";
+import {MortsweeperContent} from "./mortsweeper/MortsweeperContent";
+
 
 /**
  Registry mapping popup IDs to their content components.
@@ -19,6 +21,7 @@ export const popupRegistry = {
     'api-work': ApiWorkContent,
     'experiments': ExperimentsContent,
     'old-stuff': OldStuffContent,
+    'mortsweeper': MortsweeperContent,
 };
 
 export function NotFoundContent() {

@@ -12,11 +12,10 @@ import './Desktop.css';
 const {desktopItems, popupConfig} = fileSystem;
 
 export default function Desktop() {
-    //Reference to desktop DOM, used for dragging the icons and maximise windows
+    //used for dragging the icons and maximise windows
     const desktopRef = useRef(null);
-    //Tracks which icons are single clicked
+    //Tracks which icon is single clicked
     const [selectedId, setSelectedId] = useState(null);
-    //Shutdown effect
     const [isShuttingDown, setIsShuttingDown] = useState(false);
 
     const handleShutdown = () => {
