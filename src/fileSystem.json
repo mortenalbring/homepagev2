@@ -43,7 +43,7 @@
     {
       "id": "test",
       "name": "test",
-      "icon": "b",
+      "icon": "\uD83D\uDCC1",
       "position": {
         "x": 200,
         "y": 235
@@ -74,7 +74,7 @@
     {
       "id": "projects",
       "name": "Projects",
-      "icon": "📁",
+      "icon": "\uD83D\uDCC1",
       "position": {
         "x": 10,
         "y": 310
@@ -90,21 +90,29 @@
               "name": "Site Redesign",
               "icon": "📄",
               "popup": "site-redesign"
-            },
-            {
-              "id": "api-work",
-              "name": "API Work",
-              "icon": "📄",
-              "popup": "api-work"
             }
           ]
         },
         {
-          "id": "experiments",
-          "name": "Experiments",
+          "id": "homeassistant",
+          "name": "Home Assistant",
           "icon": "\uD83D\uDCC1",
-          "popup": "experiments"
+          "children": [
+            {
+              "id": "ha-dashboards",
+              "name": "Dashboards",
+              "icon": "📄",
+              "popup": "dashboards"
+            },
+            {
+              "id": "ha-automations",
+              "name": "Automations",
+              "icon": "📄",
+              "popup": "automations"
+            }
+          ]
         },
+        
         {
           "id": "archive",
           "name": "Archive",
