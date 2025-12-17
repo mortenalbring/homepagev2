@@ -103,7 +103,8 @@ const PopupWindow = ({
         }
     };
 
-    const handleMinimize = () => {
+    const handleMinimize = (e) => {
+        e.stopPropagation();
         if (onMinimize) {
             onMinimize();
         }
@@ -112,6 +113,11 @@ const PopupWindow = ({
     const handleWindowMouseDown = () => {
         onFocus?.();
     };
+
+    const handleClose = (e) => {
+        e.stopPropagation();
+        onClose?.();
+    };    
 
     return (
         <div
@@ -143,7 +149,7 @@ const PopupWindow = ({
                     ></button>
                     <button
                         className="popup-close"
-                        onClick={onClose}
+                        onClick={handleClose}
                         title="Close"
                     ></button>
                 </div>

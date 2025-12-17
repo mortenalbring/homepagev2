@@ -40,7 +40,7 @@ function FolderWindow({folder, onClose, onMinimize, onFocus, onOpenPopup, deskto
     };
 
     const clearSelection = () => setSelectedId(null);
-  
+
     const breadcrumbs = history.map(f => f.name);
 
     return (
