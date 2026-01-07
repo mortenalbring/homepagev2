@@ -1,213 +1,111 @@
-import {useCallback, useState} from 'react';
+import {useCallback, useEffect, useReducer, useRef} from 'react';
+import {useLocation, useNavigate} from 'react-router-dom';
 import {FolderItem, FolderWindowState, OpenAction, WindowState, WindowType} from '../types';
+import {initialState, windowManagerReducer} from './windowManagerReducer';
 
-// Controls all the fakey 'windows' on the desktop 
 export interface WindowManagerControls {
-    /*
-    Handles pre-opening stuff from the queryparam when refreshing page
-     */
-    addPopupFromURL: (popupId: string, zIndex: number) => void;
-    bringToFront: (type: WindowType, id: string) => void;
-    closeFolder: (folderId: string) => void;
-    /*
-    Closes
-     */
+    openPopups: WindowState[];
+    openFolders: FolderWindowState[];
+    topZ: number;
+    openPopup: (popupId: string) => void;
     closePopup: (popupId: string) => void;
-    handleItemOpen: (action: OpenAction) => void;
-    handleTaskbarClick: (type: WindowType, id: string) => void;
-    minimizeFolder: (folderId: string) => void;
-    /*
-    Minimimizes
-     */
     minimizePopup: (popupId: string) => void;
     openFolder: (folder: FolderItem) => void;
-    /*
-    List of all the open 'folders' (consolidate with above?)
-     */
-    openFolders: FolderWindowState[];
-    /* 
-    Opens a window (or pops an existing one to the front)  
-     */
-    openPopup: (popupId: string) => void;
-    /*
-    List of all the windows that are open
-     */
-    openPopups: WindowState[];
-    /*
-    The biggest z-index, so new 'windows' appear on top. Might need to check if there's a max z-index?
-     */
-    topZ: number;
+    closeFolder: (folderId: string) => void;
+    minimizeFolder: (folderId: string) => void;
+    bringToFront: (type: WindowType, id: string) => void;
+    handleTaskbarClick: (type: WindowType, id: string) => void;
+    handleItemOpen: (action: OpenAction) => void;
 }
 
-/*
- Controls all the fakey 'windows' on the desktop
+/**
+ * Central state management for desktop windows.
+ * Handles popups, folders, z-index stacking, and URL sync.
  */
 export function useWindowManager(): WindowManagerControls {
-    const [openPopups, setOpenPopups] = useState<WindowState[]>([]);
-    const [openFolders, setOpenFolders] = useState<FolderWindowState[]>([]);
-    const [topZ, setTopZ] = useState(100);
+    const [state, dispatch] = useReducer(windowManagerReducer, initialState);
+    const location = useLocation();
+    const navigate = useNavigate();
+    const isInitialized = useRef(false);
 
+    // Parse popups from URL query params
+    const getPopupsFromURL = useCallback((): string[] => {
+        const params = new URLSearchParams(location.search);
+        const open = params.get('open');
+        return open ? open.split(',') : [];
+    }, [location.search]);
+
+    // Update URL to reflect open popups
+    const updateURL = useCallback((popupIds: string[]) => {
+        const params = new URLSearchParams();
+        if (popupIds.length) {
+            params.set('open', popupIds.join(','));
+        }
+        navigate({search: params.toString()}, {replace: true});
+    }, [navigate]);
+
+    // Initialize from URL on mount
+    useEffect(() => {
+        if (isInitialized.current) return;
+        isInitialized.current = true;
+
+        const urlPopups = getPopupsFromURL();
+        if (urlPopups.length) {
+            dispatch({type: 'INIT_FROM_URL', popupIds: urlPopups});
+        }
+    }, [getPopupsFromURL]);
+
+    // Sync URL when popups change (after initialization)
+    useEffect(() => {
+        if (!isInitialized.current) return;
+        updateURL(state.openPopups.map(p => p.id));
+    }, [state.openPopups, updateURL]);
+
+    // Action creators
     const openPopup = useCallback((popupId: string) => {
-        setTopZ(prev => {
-            const newZ = prev + 1;
-            setOpenPopups(popups => {
-                const existing = popups.find(p => p.id === popupId);
-                if (existing) {
-                    //If the thing is already open, still need to update z-index to bring to front, and unminimizme it 
-                    return popups.map(p =>
-                        p.id === popupId ? {...p, zIndex: newZ, minimized: false} : p
-                    );
-                }
-                //Otherwise pop it in 
-                return [...popups, {id: popupId, zIndex: newZ, minimized: false}];
-            });
-            return newZ;
-        });
+        dispatch({type: 'OPEN_POPUP', popupId});
     }, []);
 
     const closePopup = useCallback((popupId: string) => {
-        setOpenPopups(prev => prev.filter(p => p.id !== popupId));
+        dispatch({type: 'CLOSE_POPUP', popupId});
     }, []);
 
     const minimizePopup = useCallback((popupId: string) => {
-        setOpenPopups(prev => prev.map(p =>
-            p.id === popupId ? {...p, minimized: true} : p
-        ));
+        dispatch({type: 'MINIMIZE_POPUP', popupId});
     }, []);
 
     const openFolder = useCallback((folder: FolderItem) => {
-        setTopZ(prev => {
-            const newZ = prev + 1;
-            setOpenFolders(folders => {
-                const existing = folders.find(f => f.id === folder.id);
-                if (existing) {
-                    return folders.map(f =>
-                        f.id === folder.id ? {...f, zIndex: newZ, minimized: false} : f
-                    );
-                }
-                return [...folders, {...folder, zIndex: newZ, minimized: false}];
-            });
-            return newZ;
-        });
+        dispatch({type: 'OPEN_FOLDER', folder});
     }, []);
 
     const closeFolder = useCallback((folderId: string) => {
-        setOpenFolders(prev => prev.filter(f => f.id !== folderId));
+        dispatch({type: 'CLOSE_FOLDER', folderId});
     }, []);
 
     const minimizeFolder = useCallback((folderId: string) => {
-        setOpenFolders(prev => prev.map(f =>
-            f.id === folderId ? {...f, minimized: true} : f
-        ));
+        dispatch({type: 'MINIMIZE_FOLDER', folderId});
     }, []);
 
-    const bringToFront = useCallback((type: WindowType, id: string) => {
-        setTopZ(prev => {
-            const newZ = prev + 1;
-            if (type === 'popup') {
-                setOpenPopups(popups => popups.map(p =>
-                    p.id === id ? {...p, zIndex: newZ, minimized: false} : p
-                ));
-            } else {
-                setOpenFolders(folders => folders.map(f =>
-                    f.id === id ? {...f, zIndex: newZ, minimized: false} : f
-                ));
-            }
-            return newZ;
-        });
+    const bringToFront = useCallback((windowType: WindowType, id: string) => {
+        dispatch({type: 'BRING_TO_FRONT', windowType, id});
     }, []);
 
-    const handleTaskbarClick = useCallback((type: WindowType, id: string) => {
-        console.log("taskbarClick","type", type, "id", id);
-        if (type === 'popup') {
-            //replace nesting with reducer?
-            setOpenPopups(popups => {
-                setOpenFolders(folders => {
-                    const window = popups.find(p => p.id === id);
-                    console.log("window", window);
-                    if (!window) {
-                        return folders;
-                    }
-
-                    const maxZ = Math.max(
-                        ...popups.map(p => p.zIndex),
-                        ...folders.map(f => f.zIndex),
-                        0
-                    );
-
-                    if (window.minimized) {
-                        setOpenPopups(prev => prev.map(p =>
-                            p.id === id ? {...p, zIndex: maxZ + 1, minimized: false} : p
-                        ));
-                        setTopZ(maxZ + 1);
-                    } else if (window.zIndex === maxZ) {
-                        setOpenPopups(prev => prev.map(p =>
-                            p.id === id ? {...p, minimized: true} : p
-                        ));
-                    } else {
-                        setOpenPopups(prev => prev.map(p =>
-                            p.id === id ? {...p, zIndex: maxZ + 1, minimized: false} : p
-                        ));
-                        setTopZ(maxZ + 1);
-                    }
-                    return folders;
-                });
-                return popups;
-            });
-        } else {
-            setOpenFolders(folders => {
-                setOpenPopups(popups => {
-                    const window = folders.find(f => f.id === id);
-                    if (!window) return popups;
-
-                    const maxZ = Math.max(
-                        ...popups.map(p => p.zIndex),
-                        ...folders.map(f => f.zIndex),
-                        0
-                    );
-
-                    if (window.minimized) {
-                        setOpenFolders(prev => prev.map(f =>
-                            f.id === id ? {...f, zIndex: maxZ + 1, minimized: false} : f
-                        ));
-                        setTopZ(maxZ + 1);
-                    } else if (window.zIndex === maxZ) {
-                        setOpenFolders(prev => prev.map(f =>
-                            f.id === id ? {...f, minimized: true} : f
-                        ));
-                    } else {
-                        setOpenFolders(prev => prev.map(f =>
-                            f.id === id ? {...f, zIndex: maxZ + 1, minimized: false} : f
-                        ));
-                        setTopZ(maxZ + 1);
-                    }
-                    return popups;
-                });
-                return folders;
-            });
-        }
+    const handleTaskbarClick = useCallback((windowType: WindowType, id: string) => {
+        dispatch({type: 'TASKBAR_CLICK', windowType, id});
     }, []);
 
     const handleItemOpen = useCallback((action: OpenAction) => {
         if (action.type === 'folder') {
-            openFolder(action.item);
-        } else if (action.type === 'popup') {
-            openPopup(action.id);
+            dispatch({type: 'OPEN_FOLDER', folder: action.item});
+        } else {
+            dispatch({type: 'OPEN_POPUP', popupId: action.id});
         }
-    }, [openFolder, openPopup]);
-
-
-    const addPopupFromURL = useCallback((popupId: string, zIndex: number) => {
-        setOpenPopups(prev => {
-            if (prev.find(p => p.id === popupId)) return prev;
-            return [...prev, {id: popupId, zIndex, minimized: false}];
-        });
     }, []);
 
     return {
-        openPopups,
-        openFolders,
-        topZ,
+        openPopups: state.openPopups,
+        openFolders: state.openFolders,
+        topZ: state.topZ,
         openPopup,
         closePopup,
         minimizePopup,
@@ -216,7 +114,6 @@ export function useWindowManager(): WindowManagerControls {
         minimizeFolder,
         bringToFront,
         handleTaskbarClick,
-        handleItemOpen,
-        addPopupFromURL
+        handleItemOpen
     };
 }
