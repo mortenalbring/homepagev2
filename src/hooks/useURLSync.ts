@@ -25,6 +25,9 @@ export interface URLPopupSync {
     updateURL: (popupIds: string[]) => void;
 }
 
+/*
+Methods for syncing the URL queryparams with the window state.  
+ */
 export function useURLSync(
     openPopups: WindowState[],
     addPopupFromURL: (popupId: string, zIndex: number) => void,
@@ -47,17 +50,17 @@ export function useURLSync(
         navigate({search: params.toString()}, {replace: true});
     }, [navigate]);
 
+    //look only at location for the 'source of truth' about the popups
     useEffect(() => {
         const urlPopups = getPopupsFromURL();
         const currentIds = new Set(openPopups.map(p => p.id));
         const newIds = urlPopups.filter(id => !currentIds.has(id));
 
-        if (newIds.length) {
-            newIds.forEach((id, i) => {
-                addPopupFromURL(id, topZ + i + 1);
-            });
-        }
-    }, [location.search, openPopups, getPopupsFromURL, addPopupFromURL, topZ]);
+        newIds.forEach((id, i) => {
+            addPopupFromURL(id, topZ + i + 1);
+        });
+    }, [location.search]);
+
 
     const openPopupWithURL = useCallback((
         popupId: string,
