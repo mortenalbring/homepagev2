@@ -5,7 +5,8 @@ import {windowReducer} from "./windowManagerReducer";
 // Controls all the fakey 'windows' on the desktop 
 export interface WindowManagerControls {
     /*
-    Handles pre-opening stuff from the queryparam when refreshing page
+    Handles pre-opening stuff from the queryparam when refreshing page 
+    (might be cause of double popup issue..) 
      */
     addPopupFromURL: (popupId: string, zIndex: number) => void;
     bringToFront: (type: WindowType, id: string) => void;

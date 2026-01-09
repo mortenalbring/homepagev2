@@ -1,4 +1,4 @@
-import {WindowAction, State} from "./state";
+import {State, WindowAction} from "./state";
 
 function getMaxZ(state: State) {
     return Math.max(
@@ -17,7 +17,7 @@ export function windowReducer(state: State, action: WindowAction): State {
     switch (action.type) {
 
         case 'OPEN_POPUP': {
-            
+
             const maxZ = getMaxZ(state) + 1;
             const existing = state.popups.find(p => p.id === action.id);
 

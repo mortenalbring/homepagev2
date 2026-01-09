@@ -1,12 +1,12 @@
 import {PortfolioContent} from './PortfolioContent';
 import {ReadmeContent} from './ReadmeContent';
 import {SiteRedesignContent} from './SiteRedesignContent';
-import {ApiWorkContent} from './ApiWorkContent';
 import {ExperimentsContent} from './ExperimentsContent';
 import {OldStuffContent} from './OldStuffContent';
 import {BlogComponent} from "./blog/BlogComponent";
 import {ContactComponent} from "./contact/ContactComponent";
 import {MortsweeperContent} from "./mortsweeper/MortsweeperContent";
+import {HomeAssistantDashboards} from "./HomeAssistantDashboards";
 
 
 /**
@@ -18,7 +18,7 @@ export const popupRegistry = {
     'contact': ContactComponent,
     'blog': BlogComponent,
     'site-redesign': SiteRedesignContent,
-    'api-work': ApiWorkContent,
+    'ha-dashboards': HomeAssistantDashboards,
     'experiments': ExperimentsContent,
     'old-stuff': OldStuffContent,
     'mortsweeper': MortsweeperContent,
