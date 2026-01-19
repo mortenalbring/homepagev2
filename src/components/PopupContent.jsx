@@ -4,14 +4,14 @@ import {NotFoundContent, popupRegistry} from '../popups';
 /**
  Renders stuff based on ID from popup registry (popups/index.tsx
  */
-function PopupContent({popupId}) {
+function PopupContent({popupId, onClose, ...otherProps}) {
     const Component = popupRegistry[popupId];
 
     if (!Component) {
         return <NotFoundContent/>;
     }
 
-    return <Component/>;
+    return <Component onClose={onClose} {...otherProps} />;
 }
 
 export default PopupContent;

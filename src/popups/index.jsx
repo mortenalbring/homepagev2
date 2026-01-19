@@ -7,12 +7,14 @@ import {BlogComponent} from "./blog/BlogComponent";
 import {ContactComponent} from "./contact/ContactComponent";
 import {MortsweeperContent} from "./mortsweeper/MortsweeperContent";
 import {HomeAssistantDashboards} from "./HomeAssistantDashboards";
+import {WelcomeContent} from "./WelcomeContent";
 
 
 /**
  Registry mapping popup IDs to their content components.
  */
 export const popupRegistry = {
+    'welcome': WelcomeContent,
     'portfolio': PortfolioContent,
     'readme': ReadmeContent,
     'contact': ContactComponent,

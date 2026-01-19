@@ -149,6 +149,15 @@
     }
   ],
   "popupConfig": {
+    "welcome": {
+      "title": "Welcome to Mortensoft 95",
+      "icon": "🪟",
+      "menu": [
+        "File",
+        "Help"
+      ],
+      "status": ""
+    },
     "portfolio": {
       "title": "Portfolio",
       "icon": "💼",

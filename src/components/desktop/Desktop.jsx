@@ -1,4 +1,4 @@
-import React, {useMemo, useRef, useState} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import PopupWindow from '../popupWindow/PopupWindow';
 import FolderWindow from '../folderWindow/FolderWindow';
 import DesktopIcon from '../desktopIcon/DesktopIcon';
@@ -40,6 +40,18 @@ export default function Desktop() {
         desktopRef,
         buildInitialPositions(desktopItems)
     );
+
+    // Show welcome popup on first visit
+    useEffect(() => {
+        const welcomeShown = localStorage.getItem('welcomeShown');
+        if (!welcomeShown) {
+            // Small delay to let the desktop render first
+            const timer = setTimeout(() => {
+                openPopup('welcome');
+            }, 500);
+            return () => clearTimeout(timer);
+        }
+    }, [openPopup]);
 
     //caching this stuff between re-renders
     //so it doesn't need to do this when single-clicking or dragging
@@ -108,7 +120,7 @@ export default function Desktop() {
                             onFocus={() => bringToFront('popup', popup.id)}
                             desktopRef={desktopRef}
                         >
-                            <PopupContent popupId={popup.id}/>
+                            <PopupContent popupId={popup.id} onClose={() => closePopup(popup.id)} />
                         </PopupWindow>
                     );
                 })}
