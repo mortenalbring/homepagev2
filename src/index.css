@@ -1,3 +1,6 @@
+/* Windows 95 Utility Classes */
+@import './win95-utilities.css';
+
 /* Windows 95 Authentic Styling */
 body {
     margin: 0;
@@ -25,6 +28,15 @@ body {
     --win95-selection: #000080;
     --win95-selection-text: #ffffff;
     --win95-button-face: #c0c0c0;
+
+    /* Border patterns */
+    --win95-border-raised: #ffffff #404040 #404040 #ffffff;
+    --win95-border-inset: #808080 #ffffff #ffffff #808080;
+    --win95-shadow-raised: inset -1px -1px 0 #808080, inset 1px 1px 0 #dfdfdf;
+    --win95-shadow-inset: inset 1px 1px 0 #404040;
+
+    /* Typography */
+    --win95-font-family: "MS Sans Serif", "Tahoma", sans-serif;
 }
 
 code {
