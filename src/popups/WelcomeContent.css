@@ -101,27 +101,3 @@
     font-size: 11px;
     font-family: 'MS Sans Serif', 'Tahoma', sans-serif;
 }
-
-.win95-button {
-    background: var(--win95-button-face);
-    border: 2px solid;
-    border-color: var(--win95-highlight) var(--win95-dark-shadow) var(--win95-dark-shadow) var(--win95-highlight);
-    outline: 1px solid var(--win95-shadow);
-    outline-offset: -3px;
-    cursor: pointer;
-    font-family: 'MS Sans Serif', 'Tahoma', sans-serif;
-}
-
-.win95-button:hover {
-    filter: brightness(1.05);
-}
-
-.win95-button:active {
-    border-color: var(--win95-dark-shadow) var(--win95-highlight) var(--win95-highlight) var(--win95-dark-shadow);
-    padding: 2px 10px 0 14px;
-}
-
-.win95-button:focus {
-    outline: 1px dotted #000;
-    outline-offset: -4px;
-}
