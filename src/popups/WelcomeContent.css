@@ -1,10 +1,14 @@
+.welcome-container {
+    display: flex;
+}
+
 .welcome-content {
     padding: 16px;
     display: flex;
     flex-direction: column;
     gap: 16px;
     height: 100%;
-    background: var(--win95-bg);
+ 
 }
 
 .welcome-header {
@@ -12,6 +16,7 @@
     align-items: center;
     gap: 16px;
     padding-bottom: 12px;
+    background: var(--win95-bg);
     border-bottom: 2px solid var(--win95-shadow);
 }
 
@@ -36,6 +41,7 @@
 }
 
 .welcome-body {
+    background: #FFFFDF;    
     flex: 1;
     overflow-y: auto;
     display: flex;

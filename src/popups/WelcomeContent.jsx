@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import './WelcomeContent.css';
 
-export function WelcomeContent({ onClose }) {
+export function WelcomeContent({onClose}) {
     const [showAgain, setShowAgain] = useState(true);
 
     const handleClose = () => {
-        // Store preference in localStorage
+        console.log("showAgain", showAgain);
         if (!showAgain) {
             localStorage.setItem('welcomeShown', 'true');
         }
@@ -15,6 +15,9 @@ export function WelcomeContent({ onClose }) {
     };
 
     return (
+        <div className="welcome-container">
+            
+        
         <div className="welcome-content">
             <div className="welcome-header">
                 <div className="welcome-icon">🪟</div>
@@ -26,24 +29,12 @@ export function WelcomeContent({ onClose }) {
 
             <div className="welcome-body">
                 <div className="welcome-section">
-                    <h3>Getting Started</h3>
+                    <h3>Did you know?</h3>
                     <ul>
-                        <li>Double-click icons to open windows</li>
-                        <li>Drag windows by their title bars</li>
-                        <li>Resize windows from the bottom-right corner</li>
-                        <li>Use the taskbar to switch between open windows</li>
+                        <li>You can double-click icons to open windows</li>
                     </ul>
                 </div>
 
-                <div className="welcome-section">
-                    <h3>What's Inside</h3>
-                    <ul>
-                        <li><strong>Portfolio</strong> - View my work and projects</li>
-                        <li><strong>Blog</strong> - Read my thoughts and experiences</li>
-                        <li><strong>Contact</strong> - Get in touch with me</li>
-                        <li><strong>Mortsweeper</strong> - Play a classic game!</li>
-                    </ul>
-                </div>
 
                 <div className="welcome-tip">
                     <strong>Tip:</strong> Try clicking the Start button for quick access to shutdown!
@@ -63,6 +54,10 @@ export function WelcomeContent({ onClose }) {
                     OK
                 </button>
             </div>
+        </div>
+        <div className="welcome-controls">
+            
+        </div>
         </div>
     );
 }

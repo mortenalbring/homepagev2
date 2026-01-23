@@ -44,6 +44,8 @@ export default function Desktop() {
     // Show welcome popup on first visit
     useEffect(() => {
         const welcomeShown = localStorage.getItem('welcomeShown');
+        console.log("welcomeShown", welcomeShown);
+        localStorage.clear();
         if (!welcomeShown) {
             // Small delay to let the desktop render first
             const timer = setTimeout(() => {
@@ -120,7 +122,7 @@ export default function Desktop() {
                             onFocus={() => bringToFront('popup', popup.id)}
                             desktopRef={desktopRef}
                         >
-                            <PopupContent popupId={popup.id} onClose={() => closePopup(popup.id)} />
+                            <PopupContent popupId={popup.id} onClose={() => closePopup(popup.id)}/>
                         </PopupWindow>
                     );
                 })}
