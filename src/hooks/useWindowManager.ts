@@ -46,7 +46,9 @@ export function useWindowManager(): WindowManagerControls {
 
     // Initialize from URL on mount
     useEffect(() => {
-        if (isInitialized.current) return;
+        if (isInitialized.current) {
+            return;
+        }
         isInitialized.current = true;
 
         const urlPopups = getPopupsFromURL();
@@ -57,7 +59,9 @@ export function useWindowManager(): WindowManagerControls {
 
     // Sync URL when popups change (after initialization)
     useEffect(() => {
-        if (!isInitialized.current) return;
+        if (!isInitialized.current) {
+            return;
+        }
         updateURL(state.openPopups.map(p => p.id));
     }, [state.openPopups, updateURL]);
 
