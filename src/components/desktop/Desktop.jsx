@@ -47,7 +47,7 @@ export default function Desktop() {
         console.log("welcomeShown", welcomeShown);
         localStorage.clear();
         if (!welcomeShown) {
-            // Small delay to let the desktop render first
+            // Small delay to let the desktop render first. maybe animate?
             const timer = setTimeout(() => {
                 openPopup('welcome');
             }, 500);
@@ -107,7 +107,10 @@ export default function Desktop() {
                 />
 
                 {openPopups.map(popup => {
-                    if (popup.minimized) return null;
+                    if (popup.minimized) {
+                        return null; 
+                    }
+                    
                     const config = popupConfig[popup.id] || {title: popup.id, icon: '📄', menu: []};
                     return (
                         <PopupWindow

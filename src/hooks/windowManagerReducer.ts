@@ -170,7 +170,9 @@ export function windowManagerReducer(
                 }
             } else {
                 const window = state.openFolders.find(f => f.id === id);
-                if (!window) return state;
+                if (!window) {
+                    return state;
+                }
 
                 if (window.minimized) {
                     return {
