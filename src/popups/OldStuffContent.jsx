@@ -12,15 +12,14 @@ export function OldStuffContent() {
             </p>
             <p>
                 A process is physically reversible if the initial state can be recovered from the initial state without changing the system. That is so say, if there is no preferred arrow of time.
-
+            </p>
                 <p>
                     This is a concept introduced by Arthur Eddington, an astronomer and mathematician. Eddington was also a Quaker, and declared himself a pacifist during World War 1. His religious beliefs were expressed in his writings on the philosophy of science in his work Science and the unseen world, published 1929. Eddington wrote that the unseen world could not be discovered from science alone but must also be sought through the understanding of spiritual reality.    
                 </p>
-                
-<p>
+            
     The arrow of time is itself a philosophical concept as much as it is a mathematical one.
-</p>
-    
+
+    <p>
 
                 Consider the dynamics of a collection of j particles with mass m governed by Newtonian equations of motion
             </p>
