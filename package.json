@@ -11,6 +11,7 @@
     "@types/node": "^16.18.126",
     "@types/react": "^18.3.24",
     "@types/react-dom": "^18.3.7",
+    "better-react-mathjax": "^3.0.0",
     "gh-pages": "^6.3.0",
     "npm": "^11.5.2",
     "react": "^18.3.1",
