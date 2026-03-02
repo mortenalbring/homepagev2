@@ -8,7 +8,7 @@
     flex-direction: column;
     gap: 16px;
     height: 100%;
- 
+
 }
 
 .welcome-header {
@@ -41,7 +41,7 @@
 }
 
 .welcome-body {
-    background: #FFFFDF;    
+    background: #FFFFDF;
     flex: 1;
     overflow-y: auto;
     display: flex;

@@ -108,9 +108,9 @@ export default function Desktop() {
 
                 {openPopups.map(popup => {
                     if (popup.minimized) {
-                        return null; 
+                        return null;
                     }
-                    
+
                     const config = popupConfig[popup.id] || {title: popup.id, icon: '📄', menu: []};
                     return (
                         <PopupWindow
