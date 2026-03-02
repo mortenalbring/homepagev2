@@ -1,5 +1,6 @@
 import React from 'react';
 import './PopupStyles.css';
+import {MathJax, MathJaxContext} from "better-react-mathjax";
 
 export function OldStuffContent() {
     return (
@@ -23,6 +24,12 @@ export function OldStuffContent() {
 
                 Consider the dynamics of a collection of j particles with mass m governed by Newtonian equations of motion
             </p>
+
+            <MathJaxContext>
+                <MathJax>
+                    {'\\(\\frac{1}{\\sqrt{2\\pi \\sigma^2}} e^{-\\frac{(x-\\mu)^2}{2\\sigma^2}}\\)'}
+                </MathJax>
+            </MathJaxContext>            
         </div>
     );
 }
