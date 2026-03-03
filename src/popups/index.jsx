@@ -9,6 +9,7 @@ import {MortsweeperContent} from "./mortsweeper/MortsweeperContent";
 import {HomeAssistantDashboards} from "./HomeAssistantDashboards";
 import {WelcomeContent} from "./WelcomeContent";
 
+import 'typeface-ibm-plex-mono';
 
 /**
  Registry mapping popup IDs to their content components.

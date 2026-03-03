@@ -2,9 +2,14 @@
     padding: 8px;
 }
 
+.popup-content-inner img {
+    border: 1px solid red;
+}
+
 .popup-content-inner h3 {
     margin: 0 0 8px 0;
-    font-size: 13px;
+    font-size: 20px;
+    
 }
 
 .popup-content-inner p {
@@ -17,5 +22,9 @@
 }
 
 .popup-content-monospace {
-    font-family: 'Fixedsys', 'Courier New', monospace;
+    font-family: "IBM Plex Mono", monospace;
+}
+
+.popup-content-monospace-2 {
+    font-family: "Fixedsys", monospace;
 }
