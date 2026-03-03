@@ -1,11 +1,11 @@
-import React, {useMemo, useRef, useState} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import PopupWindow from '../popupWindow/PopupWindow';
 import FolderWindow from '../folderWindow/FolderWindow';
 import DesktopIcon from '../desktopIcon/DesktopIcon';
 import PopupContent from '../PopupContent';
 import Taskbar from '../taskbar/Taskbar';
 import fileSystem from '../../fileSystem.json';
-import {useIconDrag, useURLSync, useWindowManager} from '../../hooks';
+import {useIconDrag, useWindowManager} from '../../hooks';
 import {buildInitialPositions} from '../../utils';
 import './Desktop.css';
 
@@ -33,31 +33,27 @@ export default function Desktop() {
         minimizeFolder,
         bringToFront,
         handleTaskbarClick,
-        handleItemOpen,
-        addPopupFromURL
+        handleItemOpen
     } = useWindowManager();
-
-    const {openPopupWithURL, closePopupWithURL} = useURLSync(
-        openPopups,
-        addPopupFromURL,
-        topZ
-    );
 
     const {iconPositions, handleDragStart} = useIconDrag(
         desktopRef,
         buildInitialPositions(desktopItems)
     );
 
-    const handleOpenPopup = (popupId) => openPopupWithURL(popupId, openPopup);
-    const handleClosePopup = (popupId) => closePopupWithURL(popupId, closePopup);
-
-    const handleItemOpenWithURL = (action) => {
-        if (action.type === 'popup') {
-            handleOpenPopup(action.id);
-        } else {
-            handleItemOpen(action);
+    // Show welcome popup on first visit
+    useEffect(() => {
+        const welcomeShown = localStorage.getItem('welcomeShown');
+        console.log("welcomeShown", welcomeShown);
+        localStorage.clear();
+        if (!welcomeShown) {
+            // Small delay to let the desktop render first. maybe animate?
+            const timer = setTimeout(() => {
+                openPopup('welcome');
+            }, 500);
+            return () => clearTimeout(timer);
         }
-    };
+    }, [openPopup]);
 
     //caching this stuff between re-renders
     //so it doesn't need to do this when single-clicking or dragging
@@ -97,7 +93,7 @@ export default function Desktop() {
                             zIndex: 1
                         }}
                         onSelect={setSelectedId}
-                        onOpen={handleItemOpenWithURL}
+                        onOpen={handleItemOpen}
                         onDragStart={handleDragStart}
                     />
                 ))}
@@ -111,7 +107,10 @@ export default function Desktop() {
                 />
 
                 {openPopups.map(popup => {
-                    if (popup.minimized) return null;
+                    if (popup.minimized) {
+                        return null;
+                    }
+
                     const config = popupConfig[popup.id] || {title: popup.id, icon: '📄', menu: []};
                     return (
                         <PopupWindow
@@ -121,12 +120,12 @@ export default function Desktop() {
                             menuItems={config.menu}
                             statusText={config.status}
                             zIndex={popup.zIndex}
-                            onClose={() => handleClosePopup(popup.id)}
+                            onClose={() => closePopup(popup.id)}
                             onMinimize={() => minimizePopup(popup.id)}
                             onFocus={() => bringToFront('popup', popup.id)}
                             desktopRef={desktopRef}
                         >
-                            <PopupContent popupId={popup.id}/>
+                            <PopupContent popupId={popup.id} onClose={() => closePopup(popup.id)}/>
                         </PopupWindow>
                     );
                 })}
@@ -141,7 +140,7 @@ export default function Desktop() {
                             onClose={() => closeFolder(folder.id)}
                             onMinimize={() => minimizeFolder(folder.id)}
                             onFocus={() => bringToFront('folder', folder.id)}
-                            onOpenPopup={handleOpenPopup}
+                            onOpenPopup={openPopup}
                             desktopRef={desktopRef}
                         />
                     );

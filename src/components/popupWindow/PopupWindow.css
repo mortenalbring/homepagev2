@@ -283,84 +283,6 @@
     display: none;
 }
 
-.win95-button {
-    background: var(--win95-button-face, #c0c0c0);
-    border: 2px solid;
-    border-color: #ffffff #404040 #404040 #ffffff;
-    box-shadow: inset -1px -1px 0 #808080, inset 1px 1px 0 #dfdfdf;
-    padding: 4px 16px;
-    font-size: 11px;
-    font-family: "MS Sans Serif", "Tahoma", sans-serif;
-    cursor: pointer;
-    min-width: 75px;
-}
-
-.win95-button:active {
-    border-color: #404040 #ffffff #ffffff #404040;
-    box-shadow: inset 1px 1px 0 #808080;
-    padding: 5px 15px 3px 17px;
-}
-
-.win95-button:focus {
-    outline: 1px dotted #000000;
-    outline-offset: -4px;
-}
-
-.win95-button.default {
-    border: 3px solid #000000;
-    padding: 3px 15px;
-}
-
-.win95-input {
-    background: #ffffff;
-    border: 2px solid;
-    border-color: #808080 #ffffff #ffffff #808080;
-    box-shadow: inset 1px 1px 0 #404040;
-    padding: 3px 4px;
-    font-size: 11px;
-    font-family: "MS Sans Serif", "Tahoma", sans-serif;
-}
-
-.win95-input:focus {
-    outline: none;
-}
-
-.win95-groupbox {
-    border: 2px solid;
-    border-color: #808080 #ffffff #ffffff #808080;
-    padding: 12px 8px 8px 8px;
-    margin: 8px 0;
-    position: relative;
-}
-
-.win95-groupbox legend {
-    background: var(--win95-bg, #c0c0c0);
-    padding: 0 4px;
-    font-size: 11px;
-}
-
-.win95-checkbox {
-    appearance: none;
-    width: 13px;
-    height: 13px;
-    background: #ffffff;
-    border: 2px solid;
-    border-color: #808080 #ffffff #ffffff #808080;
-    box-shadow: inset 1px 1px 0 #404040;
-    cursor: pointer;
-    vertical-align: middle;
-    margin-right: 4px;
-}
-
-.win95-checkbox:checked::after {
-    content: '✓';
-    font-size: 10px;
-    font-weight: bold;
-    position: relative;
-    left: 1px;
-    top: -2px;
-}
-
 .win95-radio {
     appearance: none;
     width: 12px;
@@ -479,13 +401,4 @@
     box-shadow: inset 1px 1px 0 #404040;
     padding: 4px;
     font-size: 11px;
-}
-
-.win95-tooltip {
-    background: #ffffcc;
-    border: 1px solid #000000;
-    padding: 2px 4px;
-    font-size: 11px;
-    font-family: "MS Sans Serif", "Tahoma", sans-serif;
-    box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
 }

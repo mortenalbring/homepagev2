@@ -29,6 +29,7 @@ const PopupWindow = ({
     const [prevState, setPrevState] = useState(null);
 
     const handleMouseDown = (e) => {
+        e.stopPropagation();
         if (!isMaximized) {
             setDragging(true);
             setOffset({x: e.clientX - position.x, y: e.clientY - position.y});
@@ -103,7 +104,8 @@ const PopupWindow = ({
         }
     };
 
-    const handleMinimize = () => {
+    const handleMinimize = (e) => {
+        e.stopPropagation();
         if (onMinimize) {
             onMinimize();
         }
@@ -111,6 +113,11 @@ const PopupWindow = ({
 
     const handleWindowMouseDown = () => {
         onFocus?.();
+    };
+
+    const handleClose = (e) => {
+        e.stopPropagation();
+        onClose?.();
     };
 
     return (
@@ -143,7 +150,7 @@ const PopupWindow = ({
                     ></button>
                     <button
                         className="popup-close"
-                        onClick={onClose}
+                        onClick={handleClose}
                         title="Close"
                     ></button>
                 </div>

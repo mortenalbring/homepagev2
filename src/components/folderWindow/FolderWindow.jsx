@@ -40,7 +40,7 @@ function FolderWindow({folder, onClose, onMinimize, onFocus, onOpenPopup, deskto
     };
 
     const clearSelection = () => setSelectedId(null);
-  
+
     const breadcrumbs = history.map(f => f.name);
 
     return (
@@ -56,7 +56,6 @@ function FolderWindow({folder, onClose, onMinimize, onFocus, onOpenPopup, deskto
             zIndex={zIndex}
         >
             <div className="folder-container">
-                {/* Toolbar */}
                 <div className="folder-toolbar">
                     <button
                         className="folder-toolbar-btn"
@@ -77,7 +76,7 @@ function FolderWindow({folder, onClose, onMinimize, onFocus, onOpenPopup, deskto
                     <div className="folder-address">
                         <span className="address-icon">📁</span>
                         <span className="address-path">
-              C:\{breadcrumbs.join('\\')}
+              M:\{breadcrumbs.join('\\')}
             </span>
                     </div>
                 </div>
@@ -98,7 +97,7 @@ function FolderWindow({folder, onClose, onMinimize, onFocus, onOpenPopup, deskto
                     )}
                 </div>
 
-                {/* not sure if I need this? */}
+                {/* hmm, need to shift a bit */}
                 <div className="folder-status">
                     {currentFolder.children?.length || 0} object(s)
                 </div>

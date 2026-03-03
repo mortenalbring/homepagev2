@@ -112,17 +112,16 @@
             }
           ]
         },
-        
         {
           "id": "archive",
           "name": "Archive",
           "icon": "📦",
           "children": [
             {
-              "id": "old-stuff",
-              "name": "Old Stuff",
+              "id": "computations",
+              "name": "Computations and Irreversibility",
               "icon": "📄",
-              "popup": "old-stuff"
+              "popup": "computations"
             }
           ]
         }
@@ -136,6 +135,10 @@
       "position": {
         "x": 10,
         "y": 385
+      },
+      "initialSize": {
+        "width": 900,
+        "height": 900
       }
     },
     {
@@ -150,96 +153,14 @@
     }
   ],
   "popupConfig": {
-    "portfolio": {
-      "title": "Portfolio",
-      "icon": "💼",
+    "welcome": {
+      "title": "Welcome to Mortensoft 95",
+      "icon": "🪟",
       "menu": [
         "File",
-        "Edit",
-        "View",
-        "Help"
-      ],
-      "status": "Welcome to my portfolio"
-    },
-    "blog": {
-      "title": "Untitled - Notepad",
-      "icon": "📓",
-      "menu": [
-        "File",
-        "Edit",
-        "Search",
         "Help"
       ],
       "status": ""
-    },
-    "contact": {
-      "title": "Contact",
-      "icon": "📧",
-      "menu": [
-        "File",
-        "Edit",
-        "Help"
-      ],
-      "status": "Contact information"
-    },
-    "readme": {
-      "title": "README.txt - Notepad",
-      "icon": "📝",
-      "menu": [
-        "File",
-        "Edit",
-        "Search",
-        "Help"
-      ],
-      "status": ""
-    },
-    "site-redesign": {
-      "title": "Site Redesign",
-      "icon": "📄",
-      "menu": [
-        "File",
-        "Edit",
-        "Help"
-      ],
-      "status": "Project details"
-    },
-    "api-work": {
-      "title": "API Work",
-      "icon": "📄",
-      "menu": [
-        "File",
-        "Edit",
-        "Help"
-      ],
-      "status": "Project details"
-    },
-    "experiments": {
-      "title": "Experiments",
-      "icon": "🧪",
-      "menu": [
-        "File",
-        "Edit",
-        "Help"
-      ],
-      "status": ""
-    },
-    "old-stuff": {
-      "title": "Old Stuff",
-      "icon": "📄",
-      "menu": [
-        "File",
-        "Help"
-      ],
-      "status": "Archived content"
-    },
-    "mortsweeper": {
-      "title": "Mortsweeper",
-      "icon": "💣",
-      "menu": [
-        "Game",
-        "Help"
-      ],
-      "status": "Mines: 10"
     }
   }
 }
