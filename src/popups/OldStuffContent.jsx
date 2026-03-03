@@ -1,10 +1,15 @@
 import React from 'react';
 import './PopupStyles.css';
 import {MathJax, MathJaxContext} from "better-react-mathjax";
+import slizardImage from "../images/computations/slizardbennet.jpg";
 
 export function OldStuffContent() {
     return (
         <div className="popup-content-inner">
+
+
+      
+
             <h3>Old Stuff</h3>
             <MathJaxContext>
                 <p>
@@ -95,35 +100,35 @@ export function OldStuffContent() {
                         {"\\(\\vec{v}\\)"}
                     </MathJax>{" "}
                     at a time <em>t</em>. This gives us the <em>Boltzmann equation</em>.
-
-                    <p>
-                        <MathJax>
-                            {
-                                "\\[\\frac{d}{dt}f(t) = -\\vec{v} \\cdot \\Delta_{r}f(t) + Q(f(t),f(t))\\]"
-                            }
-                        </MathJax>
-                    </p>
-
-                    <br/>
-
-                    <p>
-                        The first term in this equation describes the free motion of particles,
-                        while the second term describes the binary collisions between pairs of
-                        particles.
-                    </p>
-
-                    <p>
-                        In this equation, if we substitute <em>t</em> for <em>-t</em>, the equation
-                        does <strong>not</strong> remain unchanged. As we also have to change the
-                        sign of the velocity <em>v</em>, the second term ends up with a negative
-                        sign.
-                    </p>
-
-                    <p>
-                        This is our first indication of an irreversible process arising entirely
-                        out of reversible fundamental physics.
-                    </p>
                 </p>
+                <p>
+                    <MathJax>
+                        {
+                            "\\[\\frac{d}{dt}f(t) = -\\vec{v} \\cdot \\Delta_{r}f(t) + Q(f(t),f(t))\\]"
+                        }
+                    </MathJax>
+                </p>
+
+                <br/>
+
+                <p>
+                    The first term in this equation describes the free motion of particles,
+                    while the second term describes the binary collisions between pairs of
+                    particles.
+                </p>
+
+                <p>
+                    In this equation, if we substitute <em>t</em> for <em>-t</em>, the equation
+                    does <strong>not</strong> remain unchanged. As we also have to change the
+                    sign of the velocity <em>v</em>, the second term ends up with a negative
+                    sign.
+                </p>
+
+                <p>
+                    This is our first indication of an irreversible process arising entirely
+                    out of reversible fundamental physics.
+                </p>
+
 
                 <div>
                     <h3>The Exorcism of Maxwell's Demon</h3>
@@ -151,8 +156,8 @@ export function OldStuffContent() {
                     </p>
 
                     <img
-                        className="img-thumbnail center-block"
-                        src="/images/computations/slizardbennet.jpg"
+                        className=""
+                        src={slizardImage}
                         alt=""
                     />
 
