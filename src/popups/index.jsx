@@ -2,7 +2,7 @@ import {PortfolioContent} from './PortfolioContent';
 import {ReadmeContent} from './ReadmeContent';
 import {SiteRedesignContent} from './SiteRedesignContent';
 import {ExperimentsContent} from './ExperimentsContent';
-import {OldStuffContent} from './OldStuffContent';
+import {ComputationsIrreversibilityContent} from './ComputationsIrreversibilityContent';
 import {BlogComponent} from "./blog/BlogComponent";
 import {ContactComponent} from "./contact/ContactComponent";
 import {MortsweeperContent} from "./mortsweeper/MortsweeperContent";
@@ -22,7 +22,7 @@ export const popupRegistry = {
     'site-redesign': SiteRedesignContent,
     'ha-dashboards': HomeAssistantDashboards,
     'experiments': ExperimentsContent,
-    'old-stuff': OldStuffContent,
+    'old-stuff': ComputationsIrreversibilityContent,
     'mortsweeper': MortsweeperContent,
 };
 

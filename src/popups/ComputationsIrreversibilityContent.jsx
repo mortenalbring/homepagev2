@@ -3,13 +3,9 @@ import './PopupStyles.css';
 import {MathJax, MathJaxContext} from "better-react-mathjax";
 import slizardImage from "../images/computations/slizardbennet.jpg";
 
-export function OldStuffContent() {
+export function ComputationsIrreversibilityContent() {
     return (
         <div className="popup-content-inner">
-
-
-      
-
             <h3>Old Stuff</h3>
             <MathJaxContext>
                 <p>
