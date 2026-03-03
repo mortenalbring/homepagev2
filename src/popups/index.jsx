@@ -22,7 +22,7 @@ export const popupRegistry = {
     'site-redesign': SiteRedesignContent,
     'ha-dashboards': HomeAssistantDashboards,
     'experiments': ExperimentsContent,
-    'old-stuff': ComputationsIrreversibilityContent,
+    'computations': ComputationsIrreversibilityContent,
     'mortsweeper': MortsweeperContent,
 };
 

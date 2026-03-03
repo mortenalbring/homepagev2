@@ -118,10 +118,10 @@
           "icon": "📦",
           "children": [
             {
-              "id": "old-stuff",
-              "name": "Old Stuff",
+              "id": "computations",
+              "name": "Computations and Irreversibility",
               "icon": "📄",
-              "popup": "old-stuff"
+              "popup": "computations"
             }
           ]
         }
