@@ -27,16 +27,13 @@
 
 .popup-titlebar {
     background: #000080;
-    color: #ffffff;
-    padding: 2px 3px;
-    font-weight: bold;
+    color: white;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 13px;
+    padding: 2px 6px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    cursor: move;
-    user-select: none;
-    min-height: 18px;
-    font-size: 11px;
+    justify-content: space-between;
 }
 
 .popup-window.inactive .popup-titlebar {

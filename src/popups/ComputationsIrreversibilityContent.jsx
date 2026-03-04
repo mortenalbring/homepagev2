@@ -5,8 +5,8 @@ import slizardImage from "../images/computations/slizardbennet.jpg";
 
 export function ComputationsIrreversibilityContent() {
     return (
-        <div className="popup-content-inner popup-content-monospace-2">
-            <h3 className="popup-content-monospace-2">Computations, Thermodynamics and Irreversibility</h3>
+        <div className="popup-content-inner popup-content-monospace">
+            <h3>Computations, Thermodynamics and Irreversibility</h3>
             <MathJaxContext>
                 <p>
                     This post is about the fundamental link between thermodynamics and computations. This is not on the

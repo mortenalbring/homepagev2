@@ -1,14 +1,14 @@
 .popup-content-inner {
     padding: 8px;
-    max-width: 72ch;
-    margin: 0 auto;    
+    
+        
     color: #222;
     background: #d4d0c8;
     border: 2px inset #fff;
 }
 
 .popup-content-inner img {
-    border: 1px solid red;
+    border: 2px inset #fff;
 }
 
 .popup-content-inner h3 {
@@ -31,9 +31,9 @@
 
 .popup-content-monospace {
     font-family: "IBM Plex Mono", monospace;
-    font-size: 16px;
-    line-height: 1.65;
-    letter-spacing: 0.2px;    
+    font-size: 13px;
+    line-height: 1.4;
+        
 }
 
 .popup-content-monospace-2 {
