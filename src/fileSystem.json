@@ -1,6 +1,27 @@
 {
   "desktopItems": [
     {
+      "id": "jellyfin",
+      "name": "Jellyfin",
+      "icon": "\uD83D\uDD3A",
+      "position": {
+        "x": 140,
+        "y": 10
+      },
+      "children": [
+        {
+          "id": "ytdlp",
+          "name": "YTDlp",
+          "icon": "💼",
+          "popup": "ytdlp",
+          "position": {
+            "x": 10,
+            "y": 10
+          }
+        }
+      ]
+    },    
+    {
       "id": "portfolio",
       "name": "Portfolio",
       "icon": "💼",

@@ -3,8 +3,8 @@
 
 
     color: #222;
-    background: #d4d0c8;
-    border: 2px inset #fff;
+    
+    
 }
 
 .popup-content-inner img {
@@ -33,8 +33,14 @@
     font-family: "IBM Plex Mono", monospace;
     font-size: 13px;
     line-height: 1.4;
-
 }
+
+.popup-content-sanserif {
+    font-family: "MS Sans Serif", monospace;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
 
 .popup-content-monospace-2 {
     font-family: "Fixedsys", monospace;

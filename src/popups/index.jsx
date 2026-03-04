@@ -10,6 +10,7 @@ import {HomeAssistantDashboards} from "./HomeAssistantDashboards";
 import {WelcomeContent} from "./WelcomeContent";
 
 import 'typeface-ibm-plex-mono';
+import {YtDlp} from "./jellyfin/ytdlp";
 
 /**
  Registry mapping popup IDs to their content components.
@@ -24,6 +25,7 @@ export const popupRegistry = {
     'ha-dashboards': HomeAssistantDashboards,
     'experiments': ExperimentsContent,
     'computations': ComputationsIrreversibilityContent,
+    'ytdlp': YtDlp,
     'mortsweeper': MortsweeperContent,
 };
 
