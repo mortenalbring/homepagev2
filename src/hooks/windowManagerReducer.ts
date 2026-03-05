@@ -142,7 +142,9 @@ export function windowManagerReducer(
             const newZ = state.topZ + 1;
             const list = getWindowList(state, windowType);
 
-            return setWindowList(state, windowType, updateWindow(list, id, {zIndex: newZ, minimized: false})) as any;
+            const updatedList = updateWindow(list, id, {zIndex: newZ, minimized: false});
+            const newState = setWindowList(state, windowType, updatedList) as any;
+            return {...newState, topZ: newZ};
         }
 
         case 'TASKBAR_CLICK': {

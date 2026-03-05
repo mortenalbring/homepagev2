@@ -46,6 +46,79 @@ const PopupWindow = ({
 
 
     useEffect(() => {
+        // Constrain popup position/size to desktop bounds on window resize
+        const handleResize = () => {
+            console.log(`[${title}] Resize handler fired`);
+            if (!desktopRef || !desktopRef.current) return;
+            
+            const desktopRect = desktopRef.current.getBoundingClientRect();
+            const TITLE_BAR_HEIGHT = 22;
+            
+            setPosition(currentPosition => {
+                let newPosition = {...currentPosition};
+                let changed = false;
+                
+                // Constrain right edge
+                if (newPosition.x + size.width > desktopRect.width) {
+                    newPosition.x = Math.max(0, desktopRect.width - size.width);
+                    changed = true;
+                }
+                
+                // Constrain bottom edge
+                if (newPosition.y + size.height > desktopRect.height) {
+                    newPosition.y = Math.max(TITLE_BAR_HEIGHT, desktopRect.height - size.height);
+                    changed = true;
+                }
+                
+                // Constrain left edge
+                if (newPosition.x < 0) {
+                    newPosition.x = 0;
+                    changed = true;
+                }
+                
+                // Constrain top edge
+                if (newPosition.y < 0) {
+                    newPosition.y = 0;
+                    changed = true;
+                }
+                
+                if (changed) {
+                    console.log(`[${title}] Position constrained: from`, currentPosition, 'to', newPosition);
+                }
+                return changed ? newPosition : currentPosition;
+            });
+            
+            setSize(currentSize => {
+                let newSize = {...currentSize};
+                let changed = false;
+                
+                // If popup is too large for desktop, shrink it
+                if (newSize.width > desktopRect.width) {
+                    newSize.width = Math.max(MIN_WIDTH, desktopRect.width);
+                    changed = true;
+                }
+                
+                if (newSize.height > desktopRect.height - TITLE_BAR_HEIGHT) {
+                    newSize.height = Math.max(MIN_HEIGHT, desktopRect.height - TITLE_BAR_HEIGHT);
+                    changed = true;
+                }
+                
+                if (changed) {
+                    console.log(`[${title}] Size constrained: from`, currentSize, 'to', newSize);
+                }
+                return changed ? newSize : currentSize;
+            });
+        };
+        
+        console.log(`[${title}] Attaching resize listener (dependency: desktopRef)`);
+        window.addEventListener('resize', handleResize);
+        return () => {
+            console.log(`[${title}] Removing resize listener`);
+            window.removeEventListener('resize', handleResize);
+        };
+    }, [desktopRef]);
+
+    useEffect(() => {
         // Dragging and resizing
         if (!dragging && !resizing) {
             return;
