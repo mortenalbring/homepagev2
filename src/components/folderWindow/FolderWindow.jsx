@@ -35,7 +35,8 @@ function FolderWindow({folder, onClose, onMinimize, onFocus, onOpenPopup, deskto
         if (action.type === 'folder') {
             navigateTo(action.item);
         } else if (action.type === 'popup') {
-            onOpenPopup(action.id);
+            // Forward initialSize from the action if provided
+            onOpenPopup(action.id, action.initialSize);
         }
     };
 

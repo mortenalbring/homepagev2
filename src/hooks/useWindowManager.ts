@@ -7,7 +7,7 @@ export interface WindowManagerControls {
     openPopups: WindowState[];
     openFolders: FolderWindowState[];
     topZ: number;
-    openPopup: (popupId: string) => void;
+    openPopup: (popupId: string, initialSize?: { width: number; height: number }) => void;
     closePopup: (popupId: string) => void;
     minimizePopup: (popupId: string) => void;
     openFolder: (folder: FolderItem) => void;
@@ -66,8 +66,8 @@ export function useWindowManager(): WindowManagerControls {
     }, [state.openPopups, updateURL]);
 
     // Action creators
-    const openPopup = useCallback((popupId: string) => {
-        dispatch({type: 'OPEN_POPUP', popupId});
+    const openPopup = useCallback((popupId: string, initialSize?: { width: number; height: number }) => {
+        dispatch({type: 'OPEN_POPUP', popupId, initialSize});
     }, []);
 
     const closePopup = useCallback((popupId: string) => {
@@ -102,7 +102,8 @@ export function useWindowManager(): WindowManagerControls {
         if (action.type === 'folder') {
             dispatch({type: 'OPEN_FOLDER', folder: action.item});
         } else {
-            dispatch({type: 'OPEN_POPUP', popupId: action.id});
+            // Forward initialSize when opening a popup from an action (optional)
+            dispatch({type: 'OPEN_POPUP', popupId: action.id, initialSize: (action as any).initialSize});
         }
     }, []);
 

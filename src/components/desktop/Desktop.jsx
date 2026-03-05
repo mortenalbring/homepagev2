@@ -113,6 +113,8 @@ export default function Desktop() {
                     }
 
                     const config = popupConfig[popup.id] || {title: popup.id, icon: '📄', menu: []};
+                    // Use initialSize from popup state (if the open action supplied it), otherwise fall back to popupConfig
+                    const initialSize = popup.initialSize ?? config.initialSize;
                     return (
                         <PopupWindow
                             key={popup.id}
@@ -120,6 +122,7 @@ export default function Desktop() {
                             icon={config.icon}
                             menuItems={config.menu}
                             statusText={config.status}
+                            initialSize={initialSize}
                             zIndex={popup.zIndex}
                             onClose={() => closePopup(popup.id)}
                             onMinimize={() => minimizePopup(popup.id)}

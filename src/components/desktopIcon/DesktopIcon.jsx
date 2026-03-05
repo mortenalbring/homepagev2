@@ -14,7 +14,8 @@ function DesktopIcon({
         if (item.children) {
             onOpen({type: 'folder', item});
         } else if (item.popup) {
-            onOpen({type: 'popup', id: item.popup});
+            // Include initialSize if specified on the desktop item
+            onOpen({type: 'popup', id: item.popup, initialSize: item.initialSize});
         } else if (item.link) {
             window.open(item.link, '_blank');
         }

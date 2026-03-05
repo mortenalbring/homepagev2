@@ -9,7 +9,7 @@ export interface WindowManagerState {
 
 // Action types
 export type WindowManagerAction =
-    | { type: 'OPEN_POPUP'; popupId: string }
+    | { type: 'OPEN_POPUP'; popupId: string; initialSize?: { width: number; height: number } }
     | { type: 'CLOSE_POPUP'; popupId: string }
     | { type: 'MINIMIZE_POPUP'; popupId: string }
     | { type: 'OPEN_FOLDER'; folder: FolderItem }
@@ -48,7 +48,7 @@ export function windowManagerReducer(
             return {
                 ...state,
                 topZ: newZ,
-                openPopups: [...state.openPopups, {id: popupId, zIndex: newZ, minimized: false}]
+                openPopups: [...state.openPopups, {id: popupId, zIndex: newZ, minimized: false, initialSize: action.initialSize}]
             };
         }
 
