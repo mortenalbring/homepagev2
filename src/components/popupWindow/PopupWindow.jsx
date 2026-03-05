@@ -18,9 +18,10 @@ const PopupWindow = ({
                          menuItems,
                          statusText,
                          initialSize = {width: 400, height: 300},
+                         cascadeOffset = 0,
                          zIndex = 100
                      }) => {
-    const [position, setPosition] = useState({x: 100, y: 50});
+    const [position, setPosition] = useState({x: 100 + cascadeOffset, y: 50 + cascadeOffset});
     const [size, setSize] = useState(initialSize);
     const [dragging, setDragging] = useState(false);
     const [resizing, setResizing] = useState(false);

@@ -85,13 +85,14 @@ export default function Desktop() {
                     onShutdown={handleShutdown}
                 />
 
-                {openPopups.map(popup => {
+                {openPopups.map((popup, index) => {
                     if (popup.minimized) {
                         return null;
                     }
 
                     const config = popupConfig[popup.id] || {title: popup.id, icon: '📄', menu: []};
                     const initialSize = popup.initialSize ?? config.initialSize;
+                    const cascadeOffset = index * 20; // Offset each popup by 20px down and right
                     return (
                         <PopupWindow
                             key={popup.id}
@@ -100,6 +101,7 @@ export default function Desktop() {
                             menuItems={config.menu}
                             statusText={config.status}
                             initialSize={initialSize}
+                            cascadeOffset={cascadeOffset}
                             zIndex={popup.zIndex}
                             onClose={() => closePopup(popup.id)}
                             onMinimize={() => minimizePopup(popup.id)}
