@@ -38,11 +38,11 @@ export function useIconDrag(
         const handleResize = () => {
             if (!desktopRef.current) return;
             const rect = desktopRef.current.getBoundingClientRect();
-            
+
             setIconPositions(prev => {
                 const constrained = {...prev};
                 let changed = false;
-                
+
                 Object.entries(prev).forEach(([id, pos]) => {
                     const newPos = constrainIconPosition(pos.x, pos.y, rect);
                     if (newPos.x !== pos.x || newPos.y !== pos.y) {
@@ -50,7 +50,7 @@ export function useIconDrag(
                         changed = true;
                     }
                 });
-                
+
                 return changed ? constrained : prev;
             });
         };

@@ -84,7 +84,7 @@ export function useWindowManager(): WindowManagerControls {
         const urlIds = parseOpenParam();
         if (urlIds.length) {
             // create popup specs with initialSize looked up from config / desktop items
-            const specs = urlIds.map(id => ({ id, initialSize: findInitialSizeForPopup(id) }));
+            const specs = urlIds.map(id => ({id, initialSize: findInitialSizeForPopup(id)}));
             dispatch({type: 'INIT_FROM_URL', popupSpecs: specs});
         }
     }, [parseOpenParam, findInitialSizeForPopup]);

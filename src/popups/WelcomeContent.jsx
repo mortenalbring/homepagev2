@@ -90,7 +90,7 @@ export function WelcomeContent({onClose}) {
                 <div className="welcome-body">
                     <h2>{screen.title}</h2>
                     <p className="welcome-tagline">{screen.tagline}</p>
-                    
+
                     <div className="welcome-section">
                         <h3>{screen.heading}</h3>
                         <ul>
@@ -115,22 +115,22 @@ export function WelcomeContent({onClose}) {
                         Show this Welcome Screen on startup
                     </label>
                     <div className="welcome-buttons">
-                        <button 
-                            className="win95-button welcome-button" 
+                        <button
+                            className="win95-button welcome-button"
                             onClick={handlePrevious}
                             disabled={isFirstScreen}
                         >
                             &lt; Back
                         </button>
-                        <button 
-                            className="win95-button welcome-button" 
+                        <button
+                            className="win95-button welcome-button"
                             onClick={handleNext}
                             disabled={isLastScreen}
                         >
                             Next &gt;
                         </button>
-                        <button 
-                            className="win95-button welcome-button welcome-button-finish" 
+                        <button
+                            className="win95-button welcome-button welcome-button-finish"
                             onClick={handleClose}
                         >
                             {isLastScreen ? 'Finish' : 'OK'}

@@ -17,7 +17,7 @@ export type WindowManagerAction =
     | { type: 'MINIMIZE_FOLDER'; folderId: string }
     | { type: 'BRING_TO_FRONT'; windowType: WindowType; id: string }
     | { type: 'TASKBAR_CLICK'; windowType: WindowType; id: string }
-    | { type: 'INIT_FROM_URL'; popupSpecs: Array<{id: string; initialSize?: {width:number; height:number}}>} ;
+    | { type: 'INIT_FROM_URL'; popupSpecs: Array<{ id: string; initialSize?: { width: number; height: number } }> };
 
 export const initialState: WindowManagerState = {
     openPopups: [],
@@ -85,7 +85,12 @@ export function windowManagerReducer(
             return {
                 ...state,
                 topZ: newZ,
-                openPopups: [...state.openPopups, {id: popupId, zIndex: newZ, minimized: false, initialSize: action.initialSize}]
+                openPopups: [...state.openPopups, {
+                    id: popupId,
+                    zIndex: newZ,
+                    minimized: false,
+                    initialSize: action.initialSize
+                }]
             };
         }
 
