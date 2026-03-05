@@ -10,7 +10,7 @@ const WELCOME_SCREENS = [
             'Double-click icons on the desktop to open windows',
             'Click and drag windows to move them around',
             'Resize windows using the resize handle in the bottom-right corner',
-            'Click the Start button for shutdown options'
+            'Icons will not go off the side of the desktop anymore!'
         ]
     },
     {
@@ -18,10 +18,9 @@ const WELCOME_SCREENS = [
         tagline: 'Master the desktop',
         heading: 'Icon Management',
         content: [
-            'Drag desktop icons to reorganize them on your desktop',
+            'Drag desktop icons around!',
             'Icons snap to a grid for neat alignment',
-            'Single-click to select, double-click to open',
-            'Right-clicking on the desktop is ready for future menus'
+            'Single-click to select, double-click to open'
         ]
     },
     {
@@ -42,8 +41,7 @@ const WELCOME_SCREENS = [
         content: [
             'The desktop is fully responsive - resize your browser!',
             'Windows automatically stay within bounds',
-            'Each popup has its own configurable initial size',
-            'Built with modern React but designed with retro style'
+            'Each popup has its own configurable initial size'
         ]
     }
 ];

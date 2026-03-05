@@ -3,7 +3,7 @@
     {
       "id": "jellyfin",
       "name": "Jellyfin",
-      "icon": "\uD83D\uDD3A",
+      "icon": "\uD83D\uDCC1",
       "position": {
         "x": 140,
         "y": 10
@@ -158,8 +158,8 @@
         "y": 385
       },
       "initialSize": {
-        "width": 90,
-        "height": 90
+        "width": 400,
+        "height": 200
       }
     },
     {

@@ -7,7 +7,7 @@ import {BlogComponent} from "./blog/BlogComponent";
 import {ContactComponent} from "./contact/ContactComponent";
 import {MortsweeperContent} from "./mortsweeper/MortsweeperContent";
 import {HomeAssistantDashboards} from "./HomeAssistantDashboards";
-import {WelcomeContent} from "./WelcomeContent";
+import {WelcomeContent} from "./welcomeContent/WelcomeContent";
 
 import 'typeface-ibm-plex-mono';
 import {YtDlp} from "./jellyfin/ytdlp";
