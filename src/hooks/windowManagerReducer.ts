@@ -56,11 +56,15 @@ function handleMinimizeOrFocus(state: WindowManagerState, windowType: WindowType
     );
 
     if (window.minimized) {
-        return setWindowList(state, windowType, updateWindow(list, id, {zIndex: maxZ + 1, minimized: false})) as any;
+        const newZ = maxZ + 1;
+        const newState = setWindowList(state, windowType, updateWindow(list, id, {zIndex: newZ, minimized: false})) as any;
+        return {...newState, topZ: newZ};
     } else if (window.zIndex === maxZ) {
         return setWindowList(state, windowType, updateWindow(list, id, {minimized: true})) as any;
     } else {
-        return setWindowList(state, windowType, updateWindow(list, id, {zIndex: maxZ + 1, minimized: false})) as any;
+        const newZ = maxZ + 1;
+        const newState = setWindowList(state, windowType, updateWindow(list, id, {zIndex: newZ, minimized: false})) as any;
+        return {...newState, topZ: newZ};
     }
 }
 
