@@ -2,11 +2,13 @@ import {useCallback, useEffect, useReducer, useRef} from 'react';
 import {useLocation, useNavigate} from 'react-router-dom';
 import {FolderItem, FolderWindowState, OpenAction, WindowState, WindowType} from '../types';
 import {initialState, windowManagerReducer} from './windowManagerReducer';
+import fileSystem from '../fileSystem.json';
 
 export interface WindowManagerControls {
     openPopups: WindowState[];
     openFolders: FolderWindowState[];
     topZ: number;
+    allWindows: Array<{ type: WindowType; id: string; zIndex: number; minimized: boolean; title: string }>;
     openPopup: (popupId: string, initialSize?: { width: number; height: number }) => void;
     closePopup: (popupId: string) => void;
     minimizePopup: (popupId: string) => void;
@@ -28,18 +30,46 @@ export function useWindowManager(): WindowManagerControls {
     const navigate = useNavigate();
     const isInitialized = useRef(false);
 
-    // Parse popups from URL query params
-    const getPopupsFromURL = useCallback((): string[] => {
+    const {desktopItems, popupConfig} = (fileSystem as any) || {desktopItems: [], popupConfig: {}};
+
+    // Parse popups from URL query params (ids only)
+    const parseOpenParam = useCallback((): string[] => {
         const params = new URLSearchParams(location.search);
         const open = params.get('open');
-        return open ? open.split(',') : [];
+        return open ? open.split(',').map(s => decodeURIComponent(s)) : [];
     }, [location.search]);
 
-    // Update URL to reflect open popups
+    // Helper: find initialSize for a popup id from popupConfig or desktopItems recursively
+    const findInitialSizeForPopup = useCallback((popupId: string) => {
+        // Check popupConfig first (priority)
+        const cfg = popupConfig?.[popupId];
+        if (cfg && cfg.initialSize && cfg.initialSize.width && cfg.initialSize.height) {
+            return cfg.initialSize;
+        }
+
+        // Search desktopItems recursively for a matching item with initialSize
+        const stack: any[] = [...desktopItems];
+        while (stack.length) {
+            const item = stack.shift();
+            if (!item) continue;
+            if (item.popup === popupId && item.initialSize && item.initialSize.width && item.initialSize.height) {
+                return item.initialSize;
+            }
+            if (item.children && item.children.length) {
+                stack.push(...item.children);
+            }
+        }
+
+        // Not found — return undefined
+        return undefined;
+    }, [desktopItems, popupConfig]);
+
+    // Update URL to reflect open popups (ids only)
     const updateURL = useCallback((popupIds: string[]) => {
         const params = new URLSearchParams();
         if (popupIds.length) {
-            params.set('open', popupIds.join(','));
+            const encoded = popupIds.map(id => encodeURIComponent(id)).join(',');
+            params.set('open', encoded);
         }
         navigate({search: params.toString()}, {replace: true});
     }, [navigate]);
@@ -51,11 +81,13 @@ export function useWindowManager(): WindowManagerControls {
         }
         isInitialized.current = true;
 
-        const urlPopups = getPopupsFromURL();
-        if (urlPopups.length) {
-            dispatch({type: 'INIT_FROM_URL', popupIds: urlPopups});
+        const urlIds = parseOpenParam();
+        if (urlIds.length) {
+            // create popup specs with initialSize looked up from config / desktop items
+            const specs = urlIds.map(id => ({ id, initialSize: findInitialSizeForPopup(id) }));
+            dispatch({type: 'INIT_FROM_URL', popupSpecs: specs});
         }
-    }, [getPopupsFromURL]);
+    }, [parseOpenParam, findInitialSizeForPopup]);
 
     // Sync URL when popups change (after initialization)
     useEffect(() => {
@@ -102,15 +134,32 @@ export function useWindowManager(): WindowManagerControls {
         if (action.type === 'folder') {
             dispatch({type: 'OPEN_FOLDER', folder: action.item});
         } else {
-            // Forward initialSize when opening a popup from an action (optional)
             dispatch({type: 'OPEN_POPUP', popupId: action.id, initialSize: (action as any).initialSize});
         }
     }, []);
+
+    const allWindows = [
+        ...state.openPopups.map(p => ({
+            type: 'popup' as const,
+            id: p.id,
+            zIndex: p.zIndex,
+            minimized: p.minimized,
+            title: popupConfig[p.id]?.title || p.id
+        })),
+        ...state.openFolders.map(f => ({
+            type: 'folder' as const,
+            id: f.id,
+            zIndex: f.zIndex,
+            minimized: f.minimized,
+            title: f.name
+        }))
+    ];
 
     return {
         openPopups: state.openPopups,
         openFolders: state.openFolders,
         topZ: state.topZ,
+        allWindows,
         openPopup,
         closePopup,
         minimizePopup,
