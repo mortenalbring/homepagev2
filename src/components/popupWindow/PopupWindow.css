@@ -164,6 +164,7 @@
 
 .popup-content {
     flex: 1;
+    min-height: 0;
     background: var(--win95-bg, #c0c0c0);
     padding: 8px;
     font-size: 11px;

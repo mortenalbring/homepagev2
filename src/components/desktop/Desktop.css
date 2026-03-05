@@ -7,13 +7,13 @@
     width: 100vw;
     position: relative;
     user-select: none;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 .desktop {
-    height: 100vh;
-    width: 100vw;
-    max-width: 1200px;
-    max-height: 800px;
+    height: 100%;
+    width: 100%;
     background: var(--win95-desktop, #008080);
     position: relative;
     font-family: "MS Sans Serif", "Tahoma", "Verdana", sans-serif;
