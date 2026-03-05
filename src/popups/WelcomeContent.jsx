@@ -1,11 +1,74 @@
 import React, {useState} from 'react';
 import './WelcomeContent.css';
 
+const WELCOME_SCREENS = [
+    {
+        title: 'Welcome to Mortensoft 95',
+        tagline: 'Where yesterday meets tomorrow',
+        heading: 'Getting Started',
+        content: [
+            'Double-click icons on the desktop to open windows',
+            'Click and drag windows to move them around',
+            'Resize windows using the resize handle in the bottom-right corner',
+            'Click the Start button for shutdown options'
+        ]
+    },
+    {
+        title: 'Desktop Tips',
+        tagline: 'Master the desktop',
+        heading: 'Icon Management',
+        content: [
+            'Drag desktop icons to reorganize them on your desktop',
+            'Icons snap to a grid for neat alignment',
+            'Single-click to select, double-click to open',
+            'Right-clicking on the desktop is ready for future menus'
+        ]
+    },
+    {
+        title: 'Window Management',
+        tagline: 'Control your windows',
+        heading: 'Window Controls',
+        content: [
+            'Drag windows by their title bar to move them',
+            'Click minimize (−) to hide a window to the taskbar',
+            'Click maximize (□) to fill the screen',
+            'Click close (×) to close the window'
+        ]
+    },
+    {
+        title: 'Customization',
+        tagline: 'Make it your own',
+        heading: 'Features',
+        content: [
+            'The desktop is fully responsive - resize your browser!',
+            'Windows automatically stay within bounds',
+            'Each popup has its own configurable initial size',
+            'Built with modern React but designed with retro style'
+        ]
+    }
+];
+
 export function WelcomeContent({onClose}) {
+    const [currentScreen, setCurrentScreen] = useState(0);
     const [showAgain, setShowAgain] = useState(true);
 
+    const screen = WELCOME_SCREENS[currentScreen];
+    const isFirstScreen = currentScreen === 0;
+    const isLastScreen = currentScreen === WELCOME_SCREENS.length - 1;
+
+    const handlePrevious = () => {
+        if (currentScreen > 0) {
+            setCurrentScreen(currentScreen - 1);
+        }
+    };
+
+    const handleNext = () => {
+        if (currentScreen < WELCOME_SCREENS.length - 1) {
+            setCurrentScreen(currentScreen + 1);
+        }
+    };
+
     const handleClose = () => {
-        console.log("showAgain", showAgain);
         if (!showAgain) {
             localStorage.setItem('welcomeShown', 'true');
         }
@@ -16,28 +79,29 @@ export function WelcomeContent({onClose}) {
 
     return (
         <div className="welcome-container">
-
-
-            <div className="welcome-content">
-                <div className="welcome-header">
-                    <div className="welcome-icon">🪟</div>
-                    <div className="welcome-text">
-                        <h2>Welcome to Mortensoft 95</h2>
-                        <p className="welcome-tagline">Where yesterday meets tomorrow</p>
-                    </div>
+            <div className="welcome-sidebar">
+                <div className="welcome-sidebar-content">
+                    <div className="welcome-logo">🪟</div>
+                    <h1>Mortensoft 95</h1>
                 </div>
+            </div>
 
+            <div className="welcome-main">
                 <div className="welcome-body">
+                    <h2>{screen.title}</h2>
+                    <p className="welcome-tagline">{screen.tagline}</p>
+                    
                     <div className="welcome-section">
-                        <h3>Did you know?</h3>
+                        <h3>{screen.heading}</h3>
                         <ul>
-                            <li>You can double-click icons to open windows</li>
+                            {screen.content.map((item, index) => (
+                                <li key={index}>{item}</li>
+                            ))}
                         </ul>
                     </div>
 
-
                     <div className="welcome-tip">
-                        <strong>Tip:</strong> Try clicking the Start button for quick access to shutdown!
+                        <strong>💡 Screen {currentScreen + 1} of {WELCOME_SCREENS.length}</strong>
                     </div>
                 </div>
 
@@ -48,14 +112,31 @@ export function WelcomeContent({onClose}) {
                             checked={showAgain}
                             onChange={(e) => setShowAgain(e.target.checked)}
                         />
-                        Show this Welcome Screen next time
+                        Show this Welcome Screen on startup
                     </label>
-                    <button className="win95-button welcome-button" onClick={handleClose}>
-                        OK
-                    </button>
+                    <div className="welcome-buttons">
+                        <button 
+                            className="win95-button welcome-button" 
+                            onClick={handlePrevious}
+                            disabled={isFirstScreen}
+                        >
+                            &lt; Back
+                        </button>
+                        <button 
+                            className="win95-button welcome-button" 
+                            onClick={handleNext}
+                            disabled={isLastScreen}
+                        >
+                            Next &gt;
+                        </button>
+                        <button 
+                            className="win95-button welcome-button welcome-button-finish" 
+                            onClick={handleClose}
+                        >
+                            {isLastScreen ? 'Finish' : 'OK'}
+                        </button>
+                    </div>
                 </div>
-            </div>
-            <div className="welcome-controls">
 
             </div>
         </div>

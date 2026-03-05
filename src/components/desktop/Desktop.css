@@ -37,6 +37,10 @@
     border: 1px solid transparent;
 }
 
+.icon-wrapper:hover {
+    cursor: grab;
+}
+
 .icon-wrapper:active {
     cursor: grabbing;
 }

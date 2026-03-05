@@ -181,7 +181,11 @@
         "File",
         "Help"
       ],
-      "status": ""
+      "status": "",
+      "initialSize": {
+        "width": 520,
+        "height": 380
+      }
     }
   }
 }

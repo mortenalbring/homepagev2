@@ -38,6 +38,11 @@
     line-height: 1.2;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    cursor: grab;
+}
+
+.popup-titlebar:active {
+    cursor: grabbing;
 }
 
 .popup-window.inactive .popup-titlebar {
