@@ -5,7 +5,7 @@
 body {
     margin: 0;
     padding: 0;
-    font-family: "MS Sans Serif", "Tahoma", "Verdana", Arial, sans-serif;
+    font-family: "MS Sans Serif", "Tahoma", "Verdana", system-ui, -apple-system, sans-serif;
     font-size: 11px;
     /* Disable font smoothing for authentic pixelated look */
     -webkit-font-smoothing: none;

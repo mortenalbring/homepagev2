@@ -41,7 +41,7 @@
 }
 
 .welcome-body {
-    background: #FFFFDF;
+    background: #c0c0c0;
     flex: 1;
     overflow-y: auto;
     display: flex;

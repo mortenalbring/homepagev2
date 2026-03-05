@@ -45,7 +45,8 @@ export default function Desktop() {
     useEffect(() => {
         const welcomeShown = localStorage.getItem('welcomeShown');
         console.log("welcomeShown", welcomeShown);
-        localStorage.clear();
+        // Avoid clearing all localStorage here — this previously wiped all stored keys unexpectedly.
+        // localStorage.clear(); // removed for safety
         if (!welcomeShown) {
             // Small delay to let the desktop render first. maybe animate?
             const timer = setTimeout(() => {

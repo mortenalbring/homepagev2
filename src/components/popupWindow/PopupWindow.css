@@ -28,8 +28,8 @@
 .popup-titlebar {
     background: #000080;
     color: white;
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 13px;
+    font-family: "MS Sans Serif", "Tahoma", sans-serif;
+    font-size: 11px;
     padding: 2px 6px;
     display: flex;
     align-items: center;
