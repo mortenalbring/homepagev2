@@ -1,8 +1,23 @@
-import React from "react";
-import {useDragResize, useResizeConstraint, useMaximize} from "../../hooks";
+﻿import React, { FC, ReactNode, RefObject } from "react";
+import { useDragResize, useResizeConstraint, useMaximize } from "../../hooks";
 import "./PopupWindow.css";
 
-const PopupWindow = ({
+interface PopupWindowProps {
+    title: string;
+    icon?: string;
+    children: ReactNode;
+    onClose: () => void;
+    onMinimize: () => void;
+    onFocus: () => void;
+    desktopRef: RefObject<HTMLDivElement>;
+    menuItems?: string[];
+    statusText?: string;
+    initialSize?: { width: number; height: number };
+    cascadeOffset?: number;
+    zIndex?: number;
+}
+
+const PopupWindow: FC<PopupWindowProps> = ({
     title,
     icon,
     children,
@@ -12,12 +27,12 @@ const PopupWindow = ({
     desktopRef,
     menuItems,
     statusText,
-    initialSize = {width: 400, height: 300},
+    initialSize = { width: 400, height: 300 },
     cascadeOffset = 0,
     zIndex = 100
 }) => {
-    const initialPosition = {x: 100 + cascadeOffset, y: 50 + cascadeOffset};
-    
+    const initialPosition = { x: 100 + cascadeOffset, y: 50 + cascadeOffset };
+
     const {
         position,
         setPosition,
@@ -27,7 +42,7 @@ const PopupWindow = ({
         handleResizeStart
     } = useDragResize(initialPosition, initialSize);
 
-    const {isMaximized, toggleMaximize} = useMaximize(
+    const { isMaximized, toggleMaximize } = useMaximize(
         desktopRef,
         position,
         size,
@@ -37,12 +52,12 @@ const PopupWindow = ({
 
     useResizeConstraint(desktopRef, position, size, setPosition, setSize);
 
-    const handleMinimize = (e) => {
+    const handleMinimize = (e: React.MouseEvent) => {
         e.stopPropagation();
         onMinimize?.();
     };
 
-    const handleClose = (e) => {
+    const handleClose = (e: React.MouseEvent) => {
         e.stopPropagation();
         onClose?.();
     };
@@ -63,7 +78,7 @@ const PopupWindow = ({
             }}
             onMouseDown={handleWindowMouseDown}
         >
-            <div className="popup-titlebar" onMouseDown={(e) => handleDragStart(e, isMaximized)}>
+            <div className="popup-titlebar" onMouseDown={(e) => handleDragStart(e as React.MouseEvent, isMaximized)}>
                 <span className="popup-title">
                     {icon && <span className="popup-title-icon">{icon}</span>}
                     {title}
@@ -106,7 +121,7 @@ const PopupWindow = ({
                 </div>
             )}
 
-            {!isMaximized && <div className="resize-handle" onMouseDown={(e) => handleResizeStart(e, isMaximized)}/>}
+            {!isMaximized && <div className="resize-handle" onMouseDown={(e) => handleResizeStart(e as React.MouseEvent, isMaximized)}/>}
         </div>
     );
 };

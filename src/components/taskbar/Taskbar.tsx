@@ -1,21 +1,37 @@
-import React, {useEffect, useRef, useState} from 'react';
+﻿import React, { FC, useEffect, useRef, useState } from 'react';
 import StartMenu from '../startMenu/StartMenu';
-import {useClock} from '../../hooks';
-import {formatTime} from '../../utils';
+import { useClock } from '../../hooks';
+import { formatTime } from '../../utils';
 import startLogo from '../../images/winmort_logo_small.png';
+import { WindowType } from '../../types';
 
-export default function Taskbar({windows, topZ, onWindowClick, popupConfig, onShutdown}) {
-    const startMenuRef = useRef(null);
+interface Window {
+    type: WindowType;
+    id: string;
+    zIndex: number;
+    minimized: boolean;
+    title: string;
+}
+
+interface TaskbarProps {
+    windows: Window[];
+    topZ: number;
+    onWindowClick: (type: WindowType, id: string) => void;
+    popupConfig: Record<string, { icon?: string }>;
+    onShutdown: () => void;
+}
+
+const Taskbar: FC<TaskbarProps> = ({ windows, topZ, onWindowClick, popupConfig, onShutdown }) => {
+    const startMenuRef = useRef<HTMLDivElement>(null);
     const [startMenuOpen, setStartMenuOpen] = useState(false);
     const currentTime = useClock();
 
-    // Close start menu when clicking outside
     useEffect(() => {
-        const handleClickOutside = (e) => {
+        const handleClickOutside = (e: MouseEvent) => {
             if (startMenuOpen &&
                 startMenuRef.current &&
-                !startMenuRef.current.contains(e.target) &&
-                !e.target.closest('.start-button')) {
+                !startMenuRef.current.contains(e.target as Node) &&
+                !(e.target as HTMLElement).closest('.start-button')) {
                 setStartMenuOpen(false);
             }
         };
@@ -56,4 +72,6 @@ export default function Taskbar({windows, topZ, onWindowClick, popupConfig, onSh
             </div>
         </div>
     );
-}
+};
+
+export default Taskbar;

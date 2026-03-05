@@ -1,7 +1,14 @@
-import React, {useState} from 'react';
+import React, { FC, useState } from 'react';
 import './WelcomeContent.css';
 
-const WELCOME_SCREENS = [
+interface WelcomeScreen {
+    title: string;
+    tagline: string;
+    heading: string;
+    content: string[];
+}
+
+const WELCOME_SCREENS: WelcomeScreen[] = [
     {
         title: 'Welcome to Mortensoft 95',
         tagline: 'Where yesterday meets tomorrow',
@@ -46,7 +53,11 @@ const WELCOME_SCREENS = [
     }
 ];
 
-export function WelcomeContent({onClose}) {
+interface WelcomeContentProps {
+    onClose?: () => void;
+}
+
+export const WelcomeContent: FC<WelcomeContentProps> = ({ onClose }) => {
     const [currentScreen, setCurrentScreen] = useState(0);
     const [showAgain, setShowAgain] = useState(true);
 
@@ -139,4 +150,5 @@ export function WelcomeContent({onClose}) {
             </div>
         </div>
     );
-}
+};
+

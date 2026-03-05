@@ -1,21 +1,19 @@
-import React, {useEffect, useRef, useState} from 'react';
+﻿import React, { FC, useEffect, useRef, useState } from 'react';
 import PopupWindow from '../popupWindow/PopupWindow';
 import FolderWindow from '../folderWindow/FolderWindow';
 import DesktopIcon from '../desktopIcon/DesktopIcon';
 import PopupContent from '../PopupContent';
 import Taskbar from '../taskbar/Taskbar';
 import fileSystem from '../../fileSystem.json';
-import {useIconDrag, useWindowManager} from '../../hooks';
-import {buildInitialPositions} from '../../utils';
+import { useIconDrag, useWindowManager } from '../../hooks';
+import { buildInitialPositions } from '../../utils';
 import './Desktop.css';
 
-const {desktopItems, popupConfig} = fileSystem;
+const { desktopItems, popupConfig } = fileSystem;
 
-export default function Desktop() {
-    //used for dragging the icons and maximise windows
-    const desktopRef = useRef(null);
-    //Tracks which icon is single clicked
-    const [selectedId, setSelectedId] = useState(null);
+const Desktop: FC = () => {
+    const desktopRef = useRef<HTMLDivElement>(null);
+    const [selectedId, setSelectedId] = useState<string | null>(null);
     const [isShuttingDown, setIsShuttingDown] = useState(false);
 
     const handleShutdown = () => {
@@ -37,7 +35,7 @@ export default function Desktop() {
         handleItemOpen
     } = useWindowManager();
 
-    const {iconPositions, handleDragStart} = useIconDrag(
+    const { iconPositions, handleDragStart } = useIconDrag(
         desktopRef,
         buildInitialPositions(desktopItems)
     );
@@ -51,7 +49,6 @@ export default function Desktop() {
             return () => clearTimeout(timer);
         }
     }, [openPopup]);
-
 
     const clearSelection = () => setSelectedId(null);
 
@@ -90,9 +87,9 @@ export default function Desktop() {
                         return null;
                     }
 
-                    const config = popupConfig[popup.id] || {title: popup.id, icon: '📄', menu: []};
+                    const config = (popupConfig as Record<string, any>)[popup.id] || { title: popup.id, icon: '📄', menu: [] };
                     const initialSize = popup.initialSize ?? config.initialSize;
-                    const cascadeOffset = index * 20; // Offset each popup by 20px down and right
+                    const cascadeOffset = index * 20;
                     return (
                         <PopupWindow
                             key={popup.id}
@@ -131,4 +128,6 @@ export default function Desktop() {
             </div>
         </div>
     );
-}
+};
+
+export default Desktop;

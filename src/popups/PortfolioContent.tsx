@@ -1,11 +1,12 @@
 import React from 'react';
 import './PopupStyles.css';
 
-export function ExperimentsContent() {
+export function PortfolioContent() {
     return (
         <div className="popup-content-inner">
-            <h3>Experiments</h3>
-            <p>Project details coming soon...</p>
+            <h3>Portfolio</h3>
+            <p>Portfolio window</p>
         </div>
     );
 }
+
