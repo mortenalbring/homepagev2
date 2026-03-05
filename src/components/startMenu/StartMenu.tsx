@@ -1,4 +1,4 @@
-﻿import React, { FC } from 'react';
+﻿import React, {FC} from 'react';
 import './StartMenu.css';
 
 interface MenuItem {
@@ -10,14 +10,14 @@ interface MenuItem {
 }
 
 const menuItems: MenuItem[] = [
-    { id: 'programs', label: 'Programs', icon: '📁', hasSubmenu: true },
-    { id: 'documents', label: 'Documents', icon: '📄', hasSubmenu: true },
-    { id: 'settings', label: 'Settings', icon: '⚙️', hasSubmenu: true },
-    { id: 'find', label: 'Find', icon: '🔍', hasSubmenu: true },
-    { id: 'help', label: 'Help', icon: '❓', hasSubmenu: false },
-    { id: 'run', label: 'Run...', icon: '▶️', hasSubmenu: false },
-    { id: 'separator', type: 'separator' },
-    { id: 'shutdown', label: 'Shut Down...', icon: '🔌', hasSubmenu: false },
+    {id: 'programs', label: 'Programs', icon: '📁', hasSubmenu: true},
+    {id: 'documents', label: 'Documents', icon: '📄', hasSubmenu: true},
+    {id: 'settings', label: 'Settings', icon: '⚙️', hasSubmenu: true},
+    {id: 'find', label: 'Find', icon: '🔍', hasSubmenu: true},
+    {id: 'help', label: 'Help', icon: '❓', hasSubmenu: false},
+    {id: 'run', label: 'Run...', icon: '▶️', hasSubmenu: false},
+    {id: 'separator', type: 'separator'},
+    {id: 'shutdown', label: 'Shut Down...', icon: '🔌', hasSubmenu: false},
 ];
 
 interface StartMenuProps {
@@ -25,7 +25,7 @@ interface StartMenuProps {
     onShutdown?: () => void;
 }
 
-const StartMenu: FC<StartMenuProps> = ({ onClose, onShutdown }) => {
+const StartMenu: FC<StartMenuProps> = ({onClose, onShutdown}) => {
     const handleItemClick = (item: MenuItem) => {
         if (item.id === 'shutdown') {
             onShutdown?.();

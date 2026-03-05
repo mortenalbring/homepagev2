@@ -1,4 +1,4 @@
-﻿import {useEffect, RefObject} from 'react';
+﻿import {RefObject, useEffect} from 'react';
 
 const MIN_WIDTH = 200;
 const MIN_HEIGHT = 120;

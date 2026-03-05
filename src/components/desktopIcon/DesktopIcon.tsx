@@ -1,5 +1,5 @@
-﻿import React, { FC, CSSProperties, MouseEvent } from 'react';
-import { FolderItem, OpenAction } from '../../types';
+﻿import React, {CSSProperties, FC, MouseEvent} from 'react';
+import {FolderItem, OpenAction} from '../../types';
 
 interface DesktopIconProps {
     item: FolderItem;
@@ -11,20 +11,20 @@ interface DesktopIconProps {
 }
 
 const DesktopIcon: FC<DesktopIconProps> = ({
-    item,
-    selected,
-    style,
-    onSelect,
-    onOpen,
-    onDragStart
-}) => {
+                                               item,
+                                               selected,
+                                               style,
+                                               onSelect,
+                                               onOpen,
+                                               onDragStart
+                                           }) => {
     const handleDoubleClick = (e: MouseEvent) => {
         e.stopPropagation();
 
         if (item.children) {
-            onOpen({ type: 'folder', item });
+            onOpen({type: 'folder', item});
         } else if (item.popup) {
-            onOpen({ type: 'popup', id: item.popup, initialSize: item.initialSize } as OpenAction);
+            onOpen({type: 'popup', id: item.popup, initialSize: item.initialSize} as OpenAction);
         } else if (item.link) {
             window.open(item.link, '_blank');
         }

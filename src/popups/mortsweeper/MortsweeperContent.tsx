@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, {FC, useState} from 'react';
 import './Mortsweeper.css';
 import mortFace from '../../images/mortface-icon.png';
 

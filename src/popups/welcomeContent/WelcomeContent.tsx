@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, {FC, useState} from 'react';
 import './WelcomeContent.css';
 
 interface WelcomeScreen {
@@ -57,7 +57,7 @@ interface WelcomeContentProps {
     onClose?: () => void;
 }
 
-export const WelcomeContent: FC<WelcomeContentProps> = ({ onClose }) => {
+export const WelcomeContent: FC<WelcomeContentProps> = ({onClose}) => {
     const [currentScreen, setCurrentScreen] = useState(0);
     const [showAgain, setShowAgain] = useState(true);
 

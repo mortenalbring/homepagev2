@@ -1,5 +1,5 @@
-﻿import React, { FC, ReactNode, RefObject } from "react";
-import { useDragResize, useResizeConstraint, useMaximize } from "../../hooks";
+﻿import React, {FC, ReactNode, RefObject} from "react";
+import {useDragResize, useMaximize, useResizeConstraint} from "../../hooks";
 import "./PopupWindow.css";
 
 interface PopupWindowProps {
@@ -18,20 +18,20 @@ interface PopupWindowProps {
 }
 
 const PopupWindow: FC<PopupWindowProps> = ({
-    title,
-    icon,
-    children,
-    onClose,
-    onMinimize,
-    onFocus,
-    desktopRef,
-    menuItems,
-    statusText,
-    initialSize = { width: 400, height: 300 },
-    cascadeOffset = 0,
-    zIndex = 100
-}) => {
-    const initialPosition = { x: 100 + cascadeOffset, y: 50 + cascadeOffset };
+                                               title,
+                                               icon,
+                                               children,
+                                               onClose,
+                                               onMinimize,
+                                               onFocus,
+                                               desktopRef,
+                                               menuItems,
+                                               statusText,
+                                               initialSize = {width: 400, height: 300},
+                                               cascadeOffset = 0,
+                                               zIndex = 100
+                                           }) => {
+    const initialPosition = {x: 100 + cascadeOffset, y: 50 + cascadeOffset};
 
     const {
         position,
@@ -42,7 +42,7 @@ const PopupWindow: FC<PopupWindowProps> = ({
         handleResizeStart
     } = useDragResize(initialPosition, initialSize);
 
-    const { isMaximized, toggleMaximize } = useMaximize(
+    const {isMaximized, toggleMaximize} = useMaximize(
         desktopRef,
         position,
         size,
@@ -121,7 +121,8 @@ const PopupWindow: FC<PopupWindowProps> = ({
                 </div>
             )}
 
-            {!isMaximized && <div className="resize-handle" onMouseDown={(e) => handleResizeStart(e as React.MouseEvent, isMaximized)}/>}
+            {!isMaximized && <div className="resize-handle"
+                                  onMouseDown={(e) => handleResizeStart(e as React.MouseEvent, isMaximized)}/>}
         </div>
     );
 };

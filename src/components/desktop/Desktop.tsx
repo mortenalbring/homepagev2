@@ -1,15 +1,15 @@
-﻿import React, { FC, useEffect, useRef, useState } from 'react';
+﻿import React, {FC, useEffect, useRef, useState} from 'react';
 import PopupWindow from '../popupWindow/PopupWindow';
 import FolderWindow from '../folderWindow/FolderWindow';
 import DesktopIcon from '../desktopIcon/DesktopIcon';
 import PopupContent from '../PopupContent';
 import Taskbar from '../taskbar/Taskbar';
 import fileSystem from '../../fileSystem.json';
-import { useIconDrag, useWindowManager } from '../../hooks';
-import { buildInitialPositions } from '../../utils';
+import {useIconDrag, useWindowManager} from '../../hooks';
+import {buildInitialPositions} from '../../utils';
 import './Desktop.css';
 
-const { desktopItems, popupConfig } = fileSystem;
+const {desktopItems, popupConfig} = fileSystem;
 
 const Desktop: FC = () => {
     const desktopRef = useRef<HTMLDivElement>(null);
@@ -35,7 +35,7 @@ const Desktop: FC = () => {
         handleItemOpen
     } = useWindowManager();
 
-    const { iconPositions, handleDragStart } = useIconDrag(
+    const {iconPositions, handleDragStart} = useIconDrag(
         desktopRef,
         buildInitialPositions(desktopItems)
     );
@@ -87,7 +87,11 @@ const Desktop: FC = () => {
                         return null;
                     }
 
-                    const config = (popupConfig as Record<string, any>)[popup.id] || { title: popup.id, icon: '📄', menu: [] };
+                    const config = (popupConfig as Record<string, any>)[popup.id] || {
+                        title: popup.id,
+                        icon: '📄',
+                        menu: []
+                    };
                     const initialSize = popup.initialSize ?? config.initialSize;
                     const cascadeOffset = index * 20;
                     return (

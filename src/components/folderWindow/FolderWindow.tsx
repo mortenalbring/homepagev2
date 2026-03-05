@@ -1,7 +1,7 @@
-﻿import React, { FC, RefObject, useState } from 'react';
+﻿import React, {FC, RefObject, useState} from 'react';
 import PopupWindow from '../popupWindow/PopupWindow';
 import DesktopIcon from '../desktopIcon/DesktopIcon';
-import { FolderItem, OpenAction } from '../../types';
+import {FolderItem, OpenAction} from '../../types';
 import './FolderWindow.css';
 
 interface FolderWindowProps {
@@ -15,14 +15,14 @@ interface FolderWindowProps {
 }
 
 const FolderWindow: FC<FolderWindowProps> = ({
-    folder,
-    onClose,
-    onMinimize,
-    onFocus,
-    onOpenPopup,
-    desktopRef,
-    zIndex
-}) => {
+                                                 folder,
+                                                 onClose,
+                                                 onMinimize,
+                                                 onFocus,
+                                                 onOpenPopup,
+                                                 desktopRef,
+                                                 zIndex
+                                             }) => {
     const [history, setHistory] = useState<FolderItem[]>([folder]);
     const [selectedId, setSelectedId] = useState<string | null>(null);
 
@@ -66,7 +66,7 @@ const FolderWindow: FC<FolderWindowProps> = ({
             onFocus={onFocus}
             desktopRef={desktopRef}
             menuItems={['File', 'Edit', 'View', 'Help']}
-            initialSize={{ width: 450, height: 350 }}
+            initialSize={{width: 450, height: 350}}
             zIndex={zIndex}
         >
             <div className="folder-container">
@@ -103,7 +103,8 @@ const FolderWindow: FC<FolderWindowProps> = ({
                             selected={selectedId === item.id}
                             onSelect={setSelectedId}
                             onOpen={handleItemOpen}
-                            onDragStart={() => {}}
+                            onDragStart={() => {
+                            }}
                             style={{}}
                         />
                     ))}

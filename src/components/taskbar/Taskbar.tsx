@@ -1,9 +1,9 @@
-﻿import React, { FC, useEffect, useRef, useState } from 'react';
+﻿import React, {FC, useEffect, useRef, useState} from 'react';
 import StartMenu from '../startMenu/StartMenu';
-import { useClock } from '../../hooks';
-import { formatTime } from '../../utils';
+import {useClock} from '../../hooks';
+import {formatTime} from '../../utils';
 import startLogo from '../../images/winmort_logo_small.png';
-import { WindowType } from '../../types';
+import {WindowType} from '../../types';
 
 interface Window {
     type: WindowType;
@@ -21,7 +21,7 @@ interface TaskbarProps {
     onShutdown: () => void;
 }
 
-const Taskbar: FC<TaskbarProps> = ({ windows, topZ, onWindowClick, popupConfig, onShutdown }) => {
+const Taskbar: FC<TaskbarProps> = ({windows, topZ, onWindowClick, popupConfig, onShutdown}) => {
     const startMenuRef = useRef<HTMLDivElement>(null);
     const [startMenuOpen, setStartMenuOpen] = useState(false);
     const currentTime = useClock();
