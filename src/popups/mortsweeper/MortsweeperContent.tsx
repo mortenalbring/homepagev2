@@ -33,9 +33,11 @@ function countAdjacentMines(row: number, col: number): number {
 }
 
 export const MortsweeperContent: FC = () => {
+    // which things have been revealed
     const [revealed, setRevealed] = useState<boolean[][]>(() =>
         Array(GRID_SIZE).fill(null).map(() => Array(GRID_SIZE).fill(false))
     );
+    // flags
     const [flagged, setFlagged] = useState<boolean[][]>(() =>
         Array(GRID_SIZE).fill(null).map(() => Array(GRID_SIZE).fill(false))
     );
@@ -46,23 +48,28 @@ export const MortsweeperContent: FC = () => {
         if (gameOver || won || flagged[row][col]) return;
 
         if (MINE_GRID[row][col] === 1) {
+            // boom
             setGameOver(true);
             setRevealed(Array(GRID_SIZE).fill(null).map(() => Array(GRID_SIZE).fill(true)));
             return;
         }
 
+        // reveal this cell
         const newRevealed = revealed.map(r => [...r]);
         revealCell(row, col, newRevealed);
         setRevealed(newRevealed);
 
+        // check win
         checkWin(newRevealed);
     };
 
+    // reveal empty cells, and do that neato cascade thing
     const revealCell = (row: number, col: number, grid: boolean[][]): void => {
         if (row < 0 || row >= GRID_SIZE || col < 0 || col >= GRID_SIZE) {
             return;
         }
         if (grid[row][col]) {
+            // already revealed
             return;
         }
 
@@ -72,6 +79,7 @@ export const MortsweeperContent: FC = () => {
 
         grid[row][col] = true;
 
+        // if this cell has no adjacent mines, cascade
         if (countAdjacentMines(row, col) === 0) {
             for (let dr = -1; dr <= 1; dr++) {
                 for (let dc = -1; dc <= 1; dc++) {
