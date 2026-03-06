@@ -2,6 +2,7 @@
     display: flex;
     height: 100%;
     background: #c0c0c0;
+   
 }
 
 .welcome-sidebar {
@@ -44,6 +45,9 @@
     flex-direction: column;
     padding: 20px;
     overflow: hidden;
+    
+    
+   
 }
 
 .welcome-body {

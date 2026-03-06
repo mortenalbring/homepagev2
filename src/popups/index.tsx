@@ -12,6 +12,7 @@ import {WelcomeContent} from "./welcomeContent/WelcomeContent";
 
 import 'typeface-ibm-plex-mono';
 import {YtDlp} from "./jellyfin/ytdlp";
+import {YtDlpConfig} from "./jellyfin/ytdlp-config";
 
 type PopupComponent = FC<any>;
 
@@ -29,6 +30,7 @@ export const popupRegistry: Record<string, PopupComponent> = {
     'experiments': ExperimentsContent,
     'computations': ComputationsIrreversibilityContent,
     'ytdlp': YtDlp,
+    'ytdlp-config': YtDlpConfig,
     'mortsweeper': MortsweeperContent,
 };
 

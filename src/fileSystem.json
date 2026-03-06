@@ -18,7 +18,18 @@
             "x": 10,
             "y": 10
           }
+        },
+        {
+          "id": "ytdlp-config",
+          "name": "ytdlp-config.txt",
+          "icon": "\uD83D\uDCDD",
+          "popup": "ytdlp-config",
+          "position": {
+            "x": 10,
+            "y": 10
+          }
         }
+        
       ]
     },
     {
