@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useRef, useState} from 'react';
+﻿import React, {FC, useEffect, useRef, useState} from 'react';
 import PopupWindow from '../popupWindow/PopupWindow';
 import FolderWindow from '../folderWindow/FolderWindow';
 import DesktopIcon from '../desktopIcon/DesktopIcon';
@@ -11,11 +11,9 @@ import './Desktop.css';
 
 const {desktopItems, popupConfig} = fileSystem;
 
-export default function Desktop() {
-    //used for dragging the icons and maximise windows
-    const desktopRef = useRef(null);
-    //Tracks which icon is single clicked
-    const [selectedId, setSelectedId] = useState(null);
+const Desktop: FC = () => {
+    const desktopRef = useRef<HTMLDivElement>(null);
+    const [selectedId, setSelectedId] = useState<string | null>(null);
     const [isShuttingDown, setIsShuttingDown] = useState(false);
 
     const handleShutdown = () => {
@@ -26,6 +24,7 @@ export default function Desktop() {
         openPopups,
         openFolders,
         topZ,
+        allWindows,
         openPopup,
         closePopup,
         minimizePopup,
@@ -41,38 +40,15 @@ export default function Desktop() {
         buildInitialPositions(desktopItems)
     );
 
-    // Show welcome popup on first visit
     useEffect(() => {
         const welcomeShown = localStorage.getItem('welcomeShown');
-        console.log("welcomeShown", welcomeShown);
-        localStorage.clear();
         if (!welcomeShown) {
-            // Small delay to let the desktop render first. maybe animate?
             const timer = setTimeout(() => {
                 openPopup('welcome');
             }, 500);
             return () => clearTimeout(timer);
         }
     }, [openPopup]);
-
-    //caching this stuff between re-renders
-    //so it doesn't need to do this when single-clicking or dragging
-    const allWindows = useMemo(() => [
-        ...openPopups.map(p => ({
-            type: 'popup',
-            id: p.id,
-            zIndex: p.zIndex,
-            minimized: p.minimized,
-            title: popupConfig[p.id]?.title || p.id
-        })),
-        ...openFolders.map(f => ({
-            type: 'folder',
-            id: f.id,
-            zIndex: f.zIndex,
-            minimized: f.minimized,
-            title: f.name
-        }))
-    ], [openPopups, openFolders]);
 
     const clearSelection = () => setSelectedId(null);
 
@@ -106,12 +82,18 @@ export default function Desktop() {
                     onShutdown={handleShutdown}
                 />
 
-                {openPopups.map(popup => {
+                {openPopups.map((popup, index) => {
                     if (popup.minimized) {
                         return null;
                     }
 
-                    const config = popupConfig[popup.id] || {title: popup.id, icon: '📄', menu: []};
+                    const config = (popupConfig as Record<string, any>)[popup.id] || {
+                        title: popup.id,
+                        icon: '📄',
+                        menu: []
+                    };
+                    const initialSize = popup.initialSize ?? config.initialSize;
+                    const cascadeOffset = index * 20;
                     return (
                         <PopupWindow
                             key={popup.id}
@@ -119,6 +101,8 @@ export default function Desktop() {
                             icon={config.icon}
                             menuItems={config.menu}
                             statusText={config.status}
+                            initialSize={initialSize}
+                            cascadeOffset={cascadeOffset}
                             zIndex={popup.zIndex}
                             onClose={() => closePopup(popup.id)}
                             onMinimize={() => minimizePopup(popup.id)}
@@ -148,4 +132,6 @@ export default function Desktop() {
             </div>
         </div>
     );
-}
+};
+
+export default Desktop;

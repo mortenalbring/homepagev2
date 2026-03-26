@@ -9,7 +9,7 @@ export interface WindowManagerState {
 
 // Action types
 export type WindowManagerAction =
-    | { type: 'OPEN_POPUP'; popupId: string }
+    | { type: 'OPEN_POPUP'; popupId: string; initialSize?: { width: number; height: number } }
     | { type: 'CLOSE_POPUP'; popupId: string }
     | { type: 'MINIMIZE_POPUP'; popupId: string }
     | { type: 'OPEN_FOLDER'; folder: FolderItem }
@@ -17,13 +17,62 @@ export type WindowManagerAction =
     | { type: 'MINIMIZE_FOLDER'; folderId: string }
     | { type: 'BRING_TO_FRONT'; windowType: WindowType; id: string }
     | { type: 'TASKBAR_CLICK'; windowType: WindowType; id: string }
-    | { type: 'INIT_FROM_URL'; popupIds: string[] };
+    | { type: 'INIT_FROM_URL'; popupSpecs: Array<{ id: string; initialSize?: { width: number; height: number } }> };
 
 export const initialState: WindowManagerState = {
     openPopups: [],
     openFolders: [],
     topZ: 100
 };
+
+// Helper: generic window operations for popups and folders
+function getWindowList(state: WindowManagerState, type: WindowType) {
+    return type === 'popup' ? state.openPopups : state.openFolders;
+}
+
+function setWindowList(state: WindowManagerState, type: WindowType, list: any[]) {
+    return type === 'popup'
+        ? {...state, openPopups: list}
+        : {...state, openFolders: list};
+}
+
+function findWindow(list: any[], id: string) {
+    return list.find(w => w.id === id);
+}
+
+function updateWindow(list: any[], id: string, update: any) {
+    return list.map(w => (w.id === id ? {...w, ...update} : w));
+}
+
+function handleMinimizeOrFocus(state: WindowManagerState, windowType: WindowType, id: string) {
+    const list = getWindowList(state, windowType);
+    const window = findWindow(list, id);
+    if (!window) return state;
+
+    const maxZ = Math.max(
+        ...state.openPopups.map(p => p.zIndex),
+        ...state.openFolders.map(f => f.zIndex),
+        0
+    );
+
+    if (window.minimized) {
+        const newZ = maxZ + 1;
+        const newState = setWindowList(state, windowType, updateWindow(list, id, {
+            zIndex: newZ,
+            minimized: false
+        })) as any;
+        return {...newState, topZ: newZ};
+    } else if (window.zIndex === maxZ) {
+        return setWindowList(state, windowType, updateWindow(list, id, {minimized: true})) as any;
+    } else {
+        const newZ = maxZ + 1;
+        const newState = setWindowList(state, windowType, updateWindow(list, id, {
+            zIndex: newZ,
+            minimized: false
+        })) as any;
+        return {...newState, topZ: newZ};
+    }
+}
 
 export function windowManagerReducer(
     state: WindowManagerState,
@@ -33,22 +82,25 @@ export function windowManagerReducer(
         case 'OPEN_POPUP': {
             const {popupId} = action;
             const newZ = state.topZ + 1;
-            const existing = state.openPopups.find(p => p.id === popupId);
+            const existing = findWindow(state.openPopups, popupId);
 
             if (existing) {
                 return {
                     ...state,
                     topZ: newZ,
-                    openPopups: state.openPopups.map(p =>
-                        p.id === popupId ? {...p, zIndex: newZ, minimized: false} : p
-                    )
+                    openPopups: updateWindow(state.openPopups, popupId, {zIndex: newZ, minimized: false})
                 };
             }
 
             return {
                 ...state,
                 topZ: newZ,
-                openPopups: [...state.openPopups, {id: popupId, zIndex: newZ, minimized: false}]
+                openPopups: [...state.openPopups, {
+                    id: popupId,
+                    zIndex: newZ,
+                    minimized: false,
+                    initialSize: action.initialSize
+                }]
             };
         }
 
@@ -62,24 +114,20 @@ export function windowManagerReducer(
         case 'MINIMIZE_POPUP': {
             return {
                 ...state,
-                openPopups: state.openPopups.map(p =>
-                    p.id === action.popupId ? {...p, minimized: true} : p
-                )
+                openPopups: updateWindow(state.openPopups, action.popupId, {minimized: true})
             };
         }
 
         case 'OPEN_FOLDER': {
             const {folder} = action;
             const newZ = state.topZ + 1;
-            const existing = state.openFolders.find(f => f.id === folder.id);
+            const existing = findWindow(state.openFolders, folder.id);
 
             if (existing) {
                 return {
                     ...state,
                     topZ: newZ,
-                    openFolders: state.openFolders.map(f =>
-                        f.id === folder.id ? {...f, zIndex: newZ, minimized: false} : f
-                    )
+                    openFolders: updateWindow(state.openFolders, folder.id, {zIndex: newZ, minimized: false})
                 };
             }
 
@@ -100,119 +148,37 @@ export function windowManagerReducer(
         case 'MINIMIZE_FOLDER': {
             return {
                 ...state,
-                openFolders: state.openFolders.map(f =>
-                    f.id === action.folderId ? {...f, minimized: true} : f
-                )
+                openFolders: updateWindow(state.openFolders, action.folderId, {minimized: true})
             };
         }
 
         case 'BRING_TO_FRONT': {
             const {windowType, id} = action;
             const newZ = state.topZ + 1;
+            const list = getWindowList(state, windowType);
 
-            if (windowType === 'popup') {
-                return {
-                    ...state,
-                    topZ: newZ,
-                    openPopups: state.openPopups.map(p =>
-                        p.id === id ? {...p, zIndex: newZ, minimized: false} : p
-                    )
-                };
-            }
-
-            return {
-                ...state,
-                topZ: newZ,
-                openFolders: state.openFolders.map(f =>
-                    f.id === id ? {...f, zIndex: newZ, minimized: false} : f
-                )
-            };
+            const updatedList = updateWindow(list, id, {zIndex: newZ, minimized: false});
+            const newState = setWindowList(state, windowType, updatedList) as any;
+            return {...newState, topZ: newZ};
         }
 
         case 'TASKBAR_CLICK': {
-            const {windowType, id} = action;
-            const maxZ = Math.max(
-                ...state.openPopups.map(p => p.zIndex),
-                ...state.openFolders.map(f => f.zIndex),
-                0
-            );
-
-            if (windowType === 'popup') {
-                const window = state.openPopups.find(p => p.id === id);
-                if (!window) return state;
-
-                if (window.minimized) {
-                    // Restore minimized window
-                    return {
-                        ...state,
-                        topZ: maxZ + 1,
-                        openPopups: state.openPopups.map(p =>
-                            p.id === id ? {...p, zIndex: maxZ + 1, minimized: false} : p
-                        )
-                    };
-                } else if (window.zIndex === maxZ) {
-                    // Already on top, minimize it
-                    return {
-                        ...state,
-                        openPopups: state.openPopups.map(p =>
-                            p.id === id ? {...p, minimized: true} : p
-                        )
-                    };
-                } else {
-                    // Bring to front
-                    return {
-                        ...state,
-                        topZ: maxZ + 1,
-                        openPopups: state.openPopups.map(p =>
-                            p.id === id ? {...p, zIndex: maxZ + 1, minimized: false} : p
-                        )
-                    };
-                }
-            } else {
-                const window = state.openFolders.find(f => f.id === id);
-                if (!window) {
-                    return state;
-                }
-
-                if (window.minimized) {
-                    return {
-                        ...state,
-                        topZ: maxZ + 1,
-                        openFolders: state.openFolders.map(f =>
-                            f.id === id ? {...f, zIndex: maxZ + 1, minimized: false} : f
-                        )
-                    };
-                } else if (window.zIndex === maxZ) {
-                    return {
-                        ...state,
-                        openFolders: state.openFolders.map(f =>
-                            f.id === id ? {...f, minimized: true} : f
-                        )
-                    };
-                } else {
-                    return {
-                        ...state,
-                        topZ: maxZ + 1,
-                        openFolders: state.openFolders.map(f =>
-                            f.id === id ? {...f, zIndex: maxZ + 1, minimized: false} : f
-                        )
-                    };
-                }
-            }
+            return handleMinimizeOrFocus(state, action.windowType, action.id);
         }
 
         case 'INIT_FROM_URL': {
-            const {popupIds} = action;
+            const {popupSpecs} = action as any;
             const currentIds = new Set(state.openPopups.map(p => p.id));
-            const newPopups = popupIds.filter(id => !currentIds.has(id));
+            const newSpecs = popupSpecs.filter((s: any) => !currentIds.has(s.id));
 
-            if (newPopups.length === 0) return state;
+            if (newSpecs.length === 0) return state;
 
             let z = state.topZ;
-            const popupsToAdd: WindowState[] = newPopups.map(id => ({
-                id,
+            const popupsToAdd: WindowState[] = newSpecs.map((s: any) => ({
+                id: s.id,
                 zIndex: ++z,
-                minimized: false
+                minimized: false,
+                initialSize: s.initialSize
             }));
 
             return {

@@ -1,4 +1,3 @@
-/* Monitor Container - CRT style frame */
 .monitor {
     display: flex;
     align-items: center;
@@ -8,19 +7,17 @@
     width: 100vw;
     position: relative;
     user-select: none;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
-/* Desktop inside monitor */
 .desktop {
-    height: 100vh;
-    width: 100vw;
-    max-width: 1200px;
-    max-height: 800px;
+    height: 100%;
+    width: 100%;
     background: var(--win95-desktop, #008080);
     position: relative;
     font-family: "MS Sans Serif", "Tahoma", "Verdana", sans-serif;
     user-select: none;
-    /* Authentic CRT monitor bezel */
     border: 3px solid;
     border-color: #404040 #808080 #808080 #404040;
     box-shadow: inset 0 0 0 2px #000,
@@ -29,7 +26,6 @@
 }
 
 
-/* Desktop Icon Wrapper */
 .icon-wrapper {
     display: flex;
     flex-direction: column;
@@ -39,6 +35,10 @@
     position: absolute;
     padding: 4px;
     border: 1px solid transparent;
+}
+
+.icon-wrapper:hover {
+    cursor: grab;
 }
 
 .icon-wrapper:active {

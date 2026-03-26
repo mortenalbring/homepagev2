@@ -26,8 +26,40 @@ export function useIconDrag(
     const [iconPositions, setIconPositions] = useState<IconPositions>(initialPositions);
     const [dragging, setDragging] = useState<DragState | null>(null);
 
+    const constrainIconPosition = useCallback((x: number, y: number, desktopRect: DOMRect) => {
+        x = Math.round(x / GRID_SIZE) * GRID_SIZE;
+        y = Math.round(y / GRID_SIZE) * GRID_SIZE;
+        x = Math.max(0, Math.min(x, desktopRect.width - ICON_SIZE));
+        y = Math.max(0, Math.min(y, desktopRect.height - ICON_SIZE - TASKBAR_HEIGHT));
+        return {x, y};
+    }, []);
+
     useEffect(() => {
-        //don't do stuff if I'm not dragging (ie, if I'm trying to open the thing) 
+        const handleResize = () => {
+            if (!desktopRef.current) return;
+            const rect = desktopRef.current.getBoundingClientRect();
+
+            setIconPositions(prev => {
+                const constrained = {...prev};
+                let changed = false;
+
+                Object.entries(prev).forEach(([id, pos]) => {
+                    const newPos = constrainIconPosition(pos.x, pos.y, rect);
+                    if (newPos.x !== pos.x || newPos.y !== pos.y) {
+                        constrained[id] = newPos;
+                        changed = true;
+                    }
+                });
+
+                return changed ? constrained : prev;
+            });
+        };
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, [desktopRef, constrainIconPosition]);
+
+    useEffect(() => {
         if (!dragging) {
             return;
         }
@@ -38,23 +70,11 @@ export function useIconDrag(
             }
 
             const rect = desktopRef.current.getBoundingClientRect();
-
-            //This offset stuff is so it remembers where exactly on the icon I clicked it
-            //Without it, it kinda does a weird 'jump' if you click it wrong.
-
-
             let x = e.clientX - rect.left - dragging.offsetX;
             let y = e.clientY - rect.top - dragging.offsetY;
 
-            // Snaps the thing to the grid (nearest multiple of 80, or whatever I finally set the grid size to be)
-            x = Math.round(x / GRID_SIZE) * GRID_SIZE;
-            y = Math.round(y / GRID_SIZE) * GRID_SIZE;
-
-            // and then also stop the things going off the screen
-            x = Math.max(0, Math.min(x, rect.width - ICON_SIZE));
-            y = Math.max(0, Math.min(y, rect.height - ICON_SIZE - TASKBAR_HEIGHT));
-
-            setIconPositions(prev => ({...prev, [dragging.id]: {x, y}}));
+            const constrained = constrainIconPosition(x, y, rect);
+            setIconPositions(prev => ({...prev, [dragging.id]: constrained}));
         };
 
         const handleUp = () => setDragging(null);
@@ -63,11 +83,10 @@ export function useIconDrag(
         window.addEventListener('mouseup', handleUp);
 
         return () => {
-            //remove event listeners when thing unmounts 
             window.removeEventListener('mousemove', handleMove);
             window.removeEventListener('mouseup', handleUp);
         };
-    }, [dragging, desktopRef]);
+    }, [dragging, desktopRef, constrainIconPosition]);
 
     const handleDragStart = useCallback((e: React.MouseEvent, item: FolderItem) => {
         if (!desktopRef.current) {
@@ -76,7 +95,6 @@ export function useIconDrag(
 
         const rect = desktopRef.current.getBoundingClientRect();
         const pos = iconPositions[item.id];
-        //store the thing being dragged, and ALSO the DOM bounding box of the 'desktop'.
         setDragging({
             id: item.id,
             offsetX: e.clientX - rect.left - pos.x,

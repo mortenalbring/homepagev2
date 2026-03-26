@@ -5,7 +5,7 @@ import slizardImage from "../images/computations/slizardbennet.jpg";
 
 export function ComputationsIrreversibilityContent() {
     return (
-        <div className="popup-content-inner">
+        <div className="popup-content-inner popup-content-monospace">
             <h3>Computations, Thermodynamics and Irreversibility</h3>
             <MathJaxContext>
                 <p>
@@ -218,3 +218,4 @@ export function ComputationsIrreversibilityContent() {
         </div>
     );
 }
+

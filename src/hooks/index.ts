@@ -2,6 +2,9 @@
 export {useWindowManager} from './useWindowManager';
 export {useIconDrag} from './useIconDrag';
 export {useClock} from './useClock';
+export {useDragResize} from './usePopupDragResize';
+export {useResizeConstraint} from './useResizeConstraint';
+export {useMaximize} from './useMaximize';
 
 // Hook return types
 export type {WindowManagerControls} from './useWindowManager';

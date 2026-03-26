@@ -1,7 +1,15 @@
-import React from 'react';
+﻿import React, {FC} from 'react';
 import './StartMenu.css';
 
-const menuItems = [
+interface MenuItem {
+    id: string;
+    label?: string;
+    icon?: string;
+    hasSubmenu?: boolean;
+    type?: string;
+}
+
+const menuItems: MenuItem[] = [
     {id: 'programs', label: 'Programs', icon: '📁', hasSubmenu: true},
     {id: 'documents', label: 'Documents', icon: '📄', hasSubmenu: true},
     {id: 'settings', label: 'Settings', icon: '⚙️', hasSubmenu: true},
@@ -12,8 +20,13 @@ const menuItems = [
     {id: 'shutdown', label: 'Shut Down...', icon: '🔌', hasSubmenu: false},
 ];
 
-export default function StartMenu({onClose, onShutdown}) {
-    const handleItemClick = (item) => {
+interface StartMenuProps {
+    onClose: () => void;
+    onShutdown?: () => void;
+}
+
+const StartMenu: FC<StartMenuProps> = ({onClose, onShutdown}) => {
+    const handleItemClick = (item: MenuItem) => {
         if (item.id === 'shutdown') {
             onShutdown?.();
         }
@@ -45,4 +58,6 @@ export default function StartMenu({onClose, onShutdown}) {
             </div>
         </div>
     );
-}
+};
+
+export default StartMenu;

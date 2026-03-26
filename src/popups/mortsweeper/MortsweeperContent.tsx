@@ -1,7 +1,6 @@
-import React, {useState} from 'react';
+import React, {FC, useState} from 'react';
 import './Mortsweeper.css';
 import mortFace from '../../images/mortface-icon.png';
-
 
 const MINE_GRID = [
     [1, 0, 0, 0, 0, 0, 0, 0],
@@ -14,21 +13,9 @@ const MINE_GRID = [
     [0, 0, 0, 0, 0, 0, 0, 0],
 ];
 
-
-// const MINE_GRID = [
-//     [0, 0, 0, 1, 0, 0, 0, 0],
-//     [0, 1, 0, 0, 0, 1, 0, 0],
-//     [0, 0, 0, 0, 0, 0, 0, 1],
-//     [0, 0, 1, 0, 0, 0, 0, 0],
-//     [1, 0, 0, 0, 1, 0, 0, 0],
-//     [0, 0, 0, 0, 0, 0, 1, 0],
-//     [0, 1, 0, 0, 0, 0, 0, 0],
-//     [0, 0, 0, 1, 0, 0, 0, 1],
-// ];
-
 const GRID_SIZE = 8;
 
-function countAdjacentMines(row, col) {
+function countAdjacentMines(row: number, col: number): number {
     let count = 0;
     for (let dr = -1; dr <= 1; dr++) {
         for (let dc = -1; dc <= 1; dc++) {
@@ -45,19 +32,19 @@ function countAdjacentMines(row, col) {
     return count;
 }
 
-export function MortsweeperContent() {
-    // which things have been releaved
-    const [revealed, setRevealed] = useState(() =>
+export const MortsweeperContent: FC = () => {
+    // which things have been revealed
+    const [revealed, setRevealed] = useState<boolean[][]>(() =>
         Array(GRID_SIZE).fill(null).map(() => Array(GRID_SIZE).fill(false))
     );
     // flags
-    const [flagged, setFlagged] = useState(() =>
+    const [flagged, setFlagged] = useState<boolean[][]>(() =>
         Array(GRID_SIZE).fill(null).map(() => Array(GRID_SIZE).fill(false))
     );
     const [gameOver, setGameOver] = useState(false);
     const [won, setWon] = useState(false);
 
-    const handleClick = (row, col) => {
+    const handleClick = (row: number, col: number) => {
         if (gameOver || won || flagged[row][col]) return;
 
         if (MINE_GRID[row][col] === 1) {
@@ -77,7 +64,7 @@ export function MortsweeperContent() {
     };
 
     // reveal empty cells, and do that neato cascade thing
-    const revealCell = (row, col, grid) => {
+    const revealCell = (row: number, col: number, grid: boolean[][]): void => {
         if (row < 0 || row >= GRID_SIZE || col < 0 || col >= GRID_SIZE) {
             return;
         }
@@ -102,7 +89,7 @@ export function MortsweeperContent() {
         }
     };
 
-    const handleRightClick = (e, row, col) => {
+    const handleRightClick = (e: React.MouseEvent, row: number, col: number) => {
         e.preventDefault();
         if (gameOver || won || revealed[row][col]) return;
 
@@ -111,10 +98,9 @@ export function MortsweeperContent() {
         setFlagged(newFlagged);
     };
 
-    const checkWin = (revealedGrid) => {
+    const checkWin = (revealedGrid: boolean[][]): void => {
         for (let r = 0; r < GRID_SIZE; r++) {
             for (let c = 0; c < GRID_SIZE; c++) {
-                // if there's a non-mine cell that's not revealed, we haven't won yet
                 if (MINE_GRID[r][c] === 0 && !revealedGrid[r][c]) {
                     return;
                 }
@@ -130,13 +116,13 @@ export function MortsweeperContent() {
         setWon(false);
     };
 
-    const renderCell = (row, col) => {
+    const renderCell = (row: number, col: number) => {
         const isRevealed = revealed[row][col];
         const isFlagged = flagged[row][col];
         const isMine = MINE_GRID[row][col] === 1;
         const adjacentMines = countAdjacentMines(row, col);
 
-        let content = '';
+        let content: string | number = '';
         let className = 'mort-cell';
 
         if (isRevealed) {
@@ -186,4 +172,5 @@ export function MortsweeperContent() {
             )}
         </div>
     );
-}
+};
+
