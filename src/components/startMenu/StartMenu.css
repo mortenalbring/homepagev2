@@ -13,7 +13,7 @@
 
 .start-menu-sidebar {
     width: 24px;
-    background: linear-gradient(to top, #000080, #1084d0);
+    background: #000080;
     display: flex;
     align-items: flex-end;
     padding-bottom: 4px;

@@ -10,6 +10,7 @@ export interface FolderItem {
     name: string;
     popup?: string;
     position?: { x: number; y: number };
+    initialSize?: { width: number; height: number };
 }
 
 /**
@@ -20,6 +21,7 @@ export interface PopupConfig {
     menu: string[];
     status?: string;
     title: string;
+    initialSize?: { width: number; height: number };
 }
 
 /**

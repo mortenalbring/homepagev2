@@ -28,12 +28,21 @@
 .popup-titlebar {
     background: #000080;
     color: white;
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 13px;
-    padding: 2px 6px;
+    font-family: "MS Sans Serif", "Tahoma", sans-serif;
+    font-size: 11px;
+    padding: 3px 4px;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    height: 22px;
+    line-height: 1.2;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    cursor: grab;
+}
+
+.popup-titlebar:active {
+    cursor: grabbing;
 }
 
 .popup-window.inactive .popup-titlebar {
@@ -42,24 +51,29 @@
 
 .popup-title {
     font-size: 11px;
-    font-weight: bold;
+    font-weight: 600;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    padding-left: 2px;
+    padding-left: 1px;
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 5px;
+    line-height: 1.2;
+    letter-spacing: 0.3px;
 }
 
 .popup-title-icon {
     font-size: 14px;
     line-height: 1;
+    flex-shrink: 0;
 }
 
 .popup-controls {
     display: flex;
-    gap: 2px;
+    gap: 3px;
+    flex-shrink: 0;
+    align-items: center;
 }
 
 .popup-minimize,
@@ -70,16 +84,18 @@
     background: var(--win95-button-face, #c0c0c0);
     border: 1px solid;
     border-color: #ffffff #404040 #404040 #ffffff;
-    box-shadow: inset -1px -1px 0 #808080;
+    box-shadow: inset 0px 1px 0px 0px #ffffff, inset -1px -1px 0px 0px #808080;
     color: #000000;
     font-size: 9px;
-    font-weight: bold;
+    font-weight: 600;
     cursor: pointer;
     padding: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 .popup-minimize:active,
@@ -164,6 +180,7 @@
 
 .popup-content {
     flex: 1;
+    min-height: 0;
     background: var(--win95-bg, #c0c0c0);
     padding: 8px;
     font-size: 11px;

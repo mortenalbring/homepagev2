@@ -1,20 +1,35 @@
-import React, {useState} from 'react';
+﻿import React, {FC, RefObject, useState} from 'react';
 import PopupWindow from '../popupWindow/PopupWindow';
 import DesktopIcon from '../desktopIcon/DesktopIcon';
+import {FolderItem, OpenAction} from '../../types';
 import './FolderWindow.css';
 
-/*
-a popup 'window' that's a folder. 
- */
-function FolderWindow({folder, onClose, onMinimize, onFocus, onOpenPopup, desktopRef, zIndex}) {
-    // Navigation stack - lets us go back
-    const [history, setHistory] = useState([folder]);
-    const [selectedId, setSelectedId] = useState(null);
+interface FolderWindowProps {
+    folder: FolderItem;
+    onClose: () => void;
+    onMinimize: () => void;
+    onFocus: () => void;
+    onOpenPopup: (id: string, initialSize?: { width: number; height: number }) => void;
+    desktopRef: RefObject<HTMLDivElement>;
+    zIndex: number;
+}
+
+const FolderWindow: FC<FolderWindowProps> = ({
+                                                 folder,
+                                                 onClose,
+                                                 onMinimize,
+                                                 onFocus,
+                                                 onOpenPopup,
+                                                 desktopRef,
+                                                 zIndex
+                                             }) => {
+    const [history, setHistory] = useState<FolderItem[]>([folder]);
+    const [selectedId, setSelectedId] = useState<string | null>(null);
 
     const currentFolder = history[history.length - 1];
     const canGoBack = history.length > 1;
 
-    const navigateTo = (newFolder) => {
+    const navigateTo = (newFolder: FolderItem) => {
         setHistory([...history, newFolder]);
         setSelectedId(null);
     };
@@ -27,15 +42,14 @@ function FolderWindow({folder, onClose, onMinimize, onFocus, onOpenPopup, deskto
     };
 
     const goUp = () => {
-        // Go to parent (does same as back)
         goBack();
     };
 
-    const handleItemOpen = (action) => {
+    const handleItemOpen = (action: OpenAction) => {
         if (action.type === 'folder') {
             navigateTo(action.item);
         } else if (action.type === 'popup') {
-            onOpenPopup(action.id);
+            onOpenPopup(action.id, (action as any).initialSize);
         }
     };
 
@@ -76,8 +90,8 @@ function FolderWindow({folder, onClose, onMinimize, onFocus, onOpenPopup, deskto
                     <div className="folder-address">
                         <span className="address-icon">📁</span>
                         <span className="address-path">
-              M:\{breadcrumbs.join('\\')}
-            </span>
+                            M:\{breadcrumbs.join('\\')}
+                        </span>
                     </div>
                 </div>
 
@@ -89,6 +103,9 @@ function FolderWindow({folder, onClose, onMinimize, onFocus, onOpenPopup, deskto
                             selected={selectedId === item.id}
                             onSelect={setSelectedId}
                             onOpen={handleItemOpen}
+                            onDragStart={() => {
+                            }}
+                            style={{}}
                         />
                     ))}
 
@@ -97,13 +114,12 @@ function FolderWindow({folder, onClose, onMinimize, onFocus, onOpenPopup, deskto
                     )}
                 </div>
 
-                {/* hmm, need to shift a bit */}
                 <div className="folder-status">
                     {currentFolder.children?.length || 0} object(s)
                 </div>
             </div>
         </PopupWindow>
     );
-}
+};
 
 export default FolderWindow;
