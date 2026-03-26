@@ -50,7 +50,7 @@ const PopupWindow: FC<PopupWindowProps> = ({
         setSize
     );
 
-    useResizeConstraint(desktopRef, position, size, setPosition, setSize);
+    useResizeConstraint(desktopRef, size, setPosition, setSize);
 
     const handleMinimize = (e: React.MouseEvent) => {
         e.stopPropagation();
