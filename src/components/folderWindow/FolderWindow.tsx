@@ -1,4 +1,4 @@
-﻿import React, {FC, RefObject, useState} from 'react';
+import React, {FC, RefObject, useState} from 'react';
 import PopupWindow from '../popupWindow/PopupWindow';
 import DesktopIcon from '../desktopIcon/DesktopIcon';
 import {FolderItem, OpenAction} from '../../types';

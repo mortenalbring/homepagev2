@@ -1,4 +1,4 @@
-﻿import {useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 
 const MIN_WIDTH = 200;
 const MIN_HEIGHT = 120;

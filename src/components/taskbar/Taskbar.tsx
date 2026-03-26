@@ -1,4 +1,4 @@
-﻿import React, {FC, useEffect, useRef, useState} from 'react';
+import React, {FC, useEffect, useRef, useState} from 'react';
 import StartMenu from '../startMenu/StartMenu';
 import {useClock} from '../../hooks';
 import {formatTime} from '../../utils';

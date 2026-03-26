@@ -1,4 +1,4 @@
-﻿import {RefObject, useState} from 'react';
+import {RefObject, useState} from 'react';
 
 interface Position {
     x: number;

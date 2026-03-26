@@ -1,4 +1,4 @@
-﻿import React, {FC, useEffect, useRef, useState} from 'react';
+import React, {FC, useEffect, useRef, useState} from 'react';
 import PopupWindow from '../popupWindow/PopupWindow';
 import FolderWindow from '../folderWindow/FolderWindow';
 import DesktopIcon from '../desktopIcon/DesktopIcon';

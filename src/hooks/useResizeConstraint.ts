@@ -1,4 +1,4 @@
-﻿import {RefObject, useEffect} from 'react';
+import {RefObject, useEffect} from 'react';
 
 const MIN_WIDTH = 200;
 const MIN_HEIGHT = 120;
@@ -16,7 +16,6 @@ interface Size {
 
 export function useResizeConstraint(
     desktopRef: RefObject<HTMLDivElement>,
-    position: Position,
     size: Size,
     setPosition: (pos: Position | ((prev: Position) => Position)) => void,
     setSize: (size: Size | ((prev: Size) => Size)) => void

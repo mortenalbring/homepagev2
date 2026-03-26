@@ -1,4 +1,4 @@
-﻿import React, {CSSProperties, FC, MouseEvent} from 'react';
+import React, {CSSProperties, FC, MouseEvent} from 'react';
 import {FolderItem, OpenAction} from '../../types';
 
 interface DesktopIconProps {

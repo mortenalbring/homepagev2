@@ -1,4 +1,4 @@
-﻿import React, {FC, ReactNode, RefObject} from "react";
+import React, {FC, ReactNode, RefObject} from "react";
 import {useDragResize, useMaximize, useResizeConstraint} from "../../hooks";
 import "./PopupWindow.css";
 
