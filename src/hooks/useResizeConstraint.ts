@@ -1,4 +1,4 @@
-import { RefObject, useEffect } from 'react';
+import {RefObject, useEffect} from 'react';
 
 const MIN_WIDTH = 200;
 const MIN_HEIGHT = 120;
@@ -27,7 +27,7 @@ export function useResizeConstraint(
             const desktopRect = desktopRef.current.getBoundingClientRect();
 
             setPosition((currentPosition: Position) => {
-                let newPosition = { ...currentPosition };
+                let newPosition = {...currentPosition};
                 let changed = false;
 
                 if (newPosition.x + size.width > desktopRect.width) {
@@ -54,7 +54,7 @@ export function useResizeConstraint(
             });
 
             setSize((currentSize: Size) => {
-                let newSize = { ...currentSize };
+                let newSize = {...currentSize};
                 let changed = false;
 
                 if (newSize.width > desktopRect.width) {

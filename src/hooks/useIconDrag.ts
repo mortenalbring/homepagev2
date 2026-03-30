@@ -12,7 +12,7 @@ interface DragState {
 }
 
 export interface IconDragControls {
-    handleDragStart: (e: React.MouseEvent, item: FolderItem) => void;
+    handleDragStart: (e: React.MouseEvent | React.TouchEvent, item: FolderItem) => void;
     iconPositions: IconPositions;
 }
 
@@ -64,15 +64,23 @@ export function useIconDrag(
             return;
         }
 
-        const handleMove = (e: MouseEvent) => {
+        const handleMove = (e: MouseEvent | TouchEvent) => {
             if (!desktopRef.current) {
                 return;
             }
-
             const rect = desktopRef.current.getBoundingClientRect();
-            let x = e.clientX - rect.left - dragging.offsetX;
-            let y = e.clientY - rect.top - dragging.offsetY;
-
+            let clientX: number, clientY: number;
+            if (e instanceof MouseEvent) {
+                clientX = e.clientX;
+                clientY = e.clientY;
+            } else if (e instanceof TouchEvent) {
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
+            } else {
+                return;
+            }
+            let x = clientX - rect.left - dragging.offsetX;
+            let y = clientY - rect.top - dragging.offsetY;
             const constrained = constrainIconPosition(x, y, rect);
             setIconPositions(prev => ({...prev, [dragging.id]: constrained}));
         };
@@ -81,24 +89,37 @@ export function useIconDrag(
 
         window.addEventListener('mousemove', handleMove);
         window.addEventListener('mouseup', handleUp);
+        window.addEventListener('touchmove', handleMove, {passive: false});
+        window.addEventListener('touchend', handleUp);
 
         return () => {
             window.removeEventListener('mousemove', handleMove);
             window.removeEventListener('mouseup', handleUp);
+            window.removeEventListener('touchmove', handleMove);
+            window.removeEventListener('touchend', handleUp);
         };
     }, [dragging, desktopRef, constrainIconPosition]);
 
-    const handleDragStart = useCallback((e: React.MouseEvent, item: FolderItem) => {
+    const handleDragStart = useCallback((e: React.MouseEvent | React.TouchEvent, item: FolderItem) => {
         if (!desktopRef.current) {
             return;
         }
-
         const rect = desktopRef.current.getBoundingClientRect();
         const pos = iconPositions[item.id];
+        let clientX: number, clientY: number;
+        if ('touches' in e && e.touches.length > 0) {
+            clientX = e.touches[0].clientX;
+            clientY = e.touches[0].clientY;
+        } else if ('clientX' in e) {
+            clientX = e.clientX;
+            clientY = e.clientY;
+        } else {
+            return;
+        }
         setDragging({
             id: item.id,
-            offsetX: e.clientX - rect.left - pos.x,
-            offsetY: e.clientY - rect.top - pos.y
+            offsetX: clientX - rect.left - pos.x,
+            offsetY: clientY - rect.top - pos.y
         });
     }, [desktopRef, iconPositions]);
 

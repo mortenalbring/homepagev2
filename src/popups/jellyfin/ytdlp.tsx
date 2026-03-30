@@ -12,8 +12,8 @@ set CONFIG=yt-dlp-config.txt
 set URLS=urls.txt
 %YTDLP% --config-location "%~dp0%CONFIG%" -a "%~dp0%URLS%"
 pause`;
-    
-    
+
+
     return (
         <div className="popup-content-inner popup-content-sanserif">
             <h3>YT DLP</h3>
@@ -24,7 +24,7 @@ pause`;
 
             <p>In this post I'd mostly like to share a few snippets that I've found useful for using yt-dlp to format
                 for Jellyfin. </p>
-            
+
             <p>I typically run yt-dlp from a bat file with two inputs, a URL file and a config file.</p>
 
             <SyntaxHighlighter language="batch" showLineNumbers={true} style={oneDark}>

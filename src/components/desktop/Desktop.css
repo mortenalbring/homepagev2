@@ -45,7 +45,6 @@
     cursor: grabbing;
 }
 
-/* Selected icon - Win95 dotted selection pattern */
 .icon-wrapper.selected {
     border: 1px dotted #ffffff;
 }
@@ -55,7 +54,7 @@
     color: var(--win95-selection-text, #ffffff);
 }
 
-/* Inner icon layout */
+
 .icon {
     display: flex;
     flex-direction: column;
@@ -63,7 +62,7 @@
     margin: 0;
 }
 
-/* Icon image/emoji */
+
 .icon-image {
     font-size: 32px;
     line-height: 1;
@@ -75,7 +74,7 @@
     filter: drop-shadow(1px 1px 0 rgba(0, 0, 0, 0.3));
 }
 
-/* Icon label - white text on teal desktop */
+
 .icon-label {
     margin-top: 4px;
     font-size: 11px;
@@ -85,13 +84,12 @@
     background: transparent;
     padding: 1px 2px;
     pointer-events: none;
-    /* Text shadow for readability on teal */
+
     text-shadow: 1px 1px 1px #000000;
     max-width: 70px;
     word-wrap: break-word;
 }
 
-/* Taskbar - Windows 95 style */
 .taskbar {
     position: absolute;
     bottom: 0;
@@ -256,3 +254,51 @@
         opacity: 1;
     }
 }
+
+
+@media (max-width: 600px), (max-height: 600px) {
+    .monitor {
+        padding: 4px;
+    }
+
+    .desktop {
+        border-width: 1.5px;
+        font-size: 12px;
+        box-shadow: none;
+    }
+
+    .icon-image {
+        font-size: 20px;
+    }
+
+    .icon-label {
+        font-size: 9px;
+        max-width: 48px;
+        padding: 1px 1px;
+    }
+
+    .taskbar {
+        height: 22px;
+        font-size: 9px;
+        padding: 1px 1px;
+    }
+
+    .taskbar-window-btn {
+        height: 16px;
+        font-size: 9px;
+        padding: 1px 4px;
+        max-width: 90px;
+    }
+
+    .start-button {
+        height: 16px;
+        font-size: 9px;
+        padding: 1px 3px;
+    }
+
+    .taskbar-tray {
+        height: 14px;
+        padding: 0 2px;
+    }
+}
+
