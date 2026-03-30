@@ -20,9 +20,9 @@ export function ReadmeContent() {
                 This uses React 18 and Typescript 4.9.
             </p>
             <p>
-                Also using MathJax for rendering LaTeX 
+                Also using MathJax for rendering LaTeX
             </p>
-                
+
             <p>
                 To add new 'desktop icons', just add another entry to fileSystem.json and add the component reference to
                 the popupRegistry

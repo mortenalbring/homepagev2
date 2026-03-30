@@ -1,4 +1,4 @@
-import React, {CSSProperties, FC, MouseEvent} from 'react';
+import React, {CSSProperties, FC, MouseEvent, TouchEvent, useRef} from 'react';
 import {FolderItem, OpenAction} from '../../types';
 
 interface DesktopIconProps {
@@ -7,7 +7,7 @@ interface DesktopIconProps {
     style: CSSProperties;
     onSelect: (id: string) => void;
     onOpen: (action: OpenAction) => void;
-    onDragStart: (e: React.MouseEvent, item: FolderItem) => void;
+    onDragStart: (e: React.MouseEvent | React.TouchEvent, item: FolderItem) => void;
 }
 
 const DesktopIcon: FC<DesktopIconProps> = ({
@@ -18,9 +18,46 @@ const DesktopIcon: FC<DesktopIconProps> = ({
                                                onOpen,
                                                onDragStart
                                            }) => {
+    const touchTimeout = useRef<NodeJS.Timeout | null>(null);
+
     const handleDoubleClick = (e: MouseEvent) => {
         e.stopPropagation();
+        openItem();
+    };
 
+    const handleMouseDown = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        onSelect?.(item.id);
+        onDragStart?.(e, item);
+    };
+    
+    const handleTouchStart = (e: TouchEvent) => {
+        e.stopPropagation();
+        onSelect?.(item.id);
+        onDragStart?.(e, item);
+        // attempting to distinguis dragging from opening..
+        if (touchTimeout.current) clearTimeout(touchTimeout.current);
+        touchTimeout.current = setTimeout(() => {
+            openItem();
+        }, 200); 
+    };
+
+    const handleTouchMove = () => {
+        // this cancels the tap-to-open if it moves. this might be jank?
+        if (touchTimeout.current) {
+            clearTimeout(touchTimeout.current);
+            touchTimeout.current = null;
+        }
+    };
+
+    const handleTouchEnd = () => {
+        if (touchTimeout.current) {
+            clearTimeout(touchTimeout.current);
+            touchTimeout.current = null;
+        }
+    };
+
+    const openItem = () => {
         if (item.children) {
             onOpen({type: 'folder', item});
         } else if (item.popup) {
@@ -30,18 +67,15 @@ const DesktopIcon: FC<DesktopIconProps> = ({
         }
     };
 
-    const handleMouseDown = (e: React.MouseEvent) => {
-        e.stopPropagation();
-        onSelect?.(item.id);
-        onDragStart?.(e, item);
-    };
-
     return (
         <div
             className={`icon-wrapper ${selected ? 'selected' : ''}`}
             style={style}
             onMouseDown={handleMouseDown}
             onDoubleClick={handleDoubleClick}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
         >
             <div className="icon">
                 <div className="icon-image">{item.icon}</div>

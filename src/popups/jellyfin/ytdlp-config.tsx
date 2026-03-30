@@ -28,10 +28,10 @@ export function YtDlpConfig() {
 
     return (
         <div className="popup-content-inner popup-content-monospace-2">
-                <SyntaxHighlighter language="text" showLineNumbers={true} style={oneDark}>
-                    {code}
-                </SyntaxHighlighter>
-         
+            <SyntaxHighlighter language="text" showLineNumbers={true} style={oneDark}>
+                {code}
+            </SyntaxHighlighter>
+
         </div>
     );
 }
