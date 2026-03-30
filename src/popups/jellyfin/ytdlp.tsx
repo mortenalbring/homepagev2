@@ -18,7 +18,7 @@ pause`;
         <div className="popup-content-inner popup-content-sanserif">
             <h3>YT DLP</h3>
             <p>yt-dlp is a fantastic command-line tool for downloading offline copies of files from various sites.
-                More details about that project can be found on its <a target="_blank"
+                More details about that project can be found on its <a target="_blank" rel="noreferrer"
                                                                        href="https://github.com/yt-dlp/yt-dlp">GitHub
                     repo</a></p>
 
