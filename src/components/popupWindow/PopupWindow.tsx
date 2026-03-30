@@ -1,4 +1,4 @@
-﻿import React, {FC, ReactNode, RefObject} from "react";
+import React, {FC, ReactNode, RefObject} from "react";
 import {useDragResize, useMaximize, useResizeConstraint} from "../../hooks";
 import "./PopupWindow.css";
 
@@ -50,7 +50,7 @@ const PopupWindow: FC<PopupWindowProps> = ({
         setSize
     );
 
-    useResizeConstraint(desktopRef, position, size, setPosition, setSize);
+    useResizeConstraint(desktopRef, size, setPosition, setSize);
 
     const handleMinimize = (e: React.MouseEvent) => {
         e.stopPropagation();

@@ -1,4 +1,4 @@
-﻿import {FC} from 'react';
+import {FC} from 'react';
 import {PortfolioContent} from './PortfolioContent';
 import {ReadmeContent} from './ReadmeContent';
 import {SiteRedesignContent} from './SiteRedesignContent';
