@@ -260,35 +260,42 @@
     .monitor {
         padding: 4px;
     }
+
     .desktop {
         border-width: 1.5px;
         font-size: 12px;
         box-shadow: none;
     }
+
     .icon-image {
         font-size: 20px;
     }
+
     .icon-label {
         font-size: 9px;
         max-width: 48px;
         padding: 1px 1px;
     }
+
     .taskbar {
         height: 22px;
         font-size: 9px;
         padding: 1px 1px;
     }
+
     .taskbar-window-btn {
         height: 16px;
         font-size: 9px;
         padding: 1px 4px;
         max-width: 90px;
     }
+
     .start-button {
         height: 16px;
         font-size: 9px;
         padding: 1px 3px;
     }
+
     .taskbar-tray {
         height: 14px;
         padding: 0 2px;
