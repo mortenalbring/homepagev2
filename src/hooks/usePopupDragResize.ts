@@ -88,10 +88,10 @@ export function useDragResize(
         if (!dragging && !resizing) return;
 
         const getClient = (e: MouseEvent | TouchEvent) => {
-            if (e instanceof TouchEvent && e.touches.length > 0) {
+            if ('touches' in e && e.touches.length > 0) {
                 return {clientX: e.touches[0].clientX, clientY: e.touches[0].clientY};
             }
-            if (e instanceof MouseEvent) {
+            if ('clientX' in e) {
                 return {clientX: e.clientX, clientY: e.clientY};
             }
             return null;
