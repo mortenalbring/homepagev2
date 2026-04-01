@@ -36,7 +36,7 @@ jobs:
 
       # Step 5: List build contents after build (debug)
       - name: Verify build folder after build
-        run: ls -R build
+        run: ls -R dist
 
       # Step 6: Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
@@ -44,5 +44,5 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
-          publish_dir: ${{ github.workspace }}/build
+          publish_dir: ${{ github.workspace }}/dist
           force_orphan: true   # optional: ensures a clean branch every deploy
