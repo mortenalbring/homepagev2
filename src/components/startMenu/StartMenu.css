@@ -81,3 +81,21 @@
     border-top: 1px solid #808080;
     border-bottom: 1px solid #fff;
 }
+
+@media (max-width: 600px) {
+    .start-menu {
+        min-width: 160px;
+        bottom: 28px;
+    }
+
+    .start-menu-item {
+        padding: 8px 8px;
+        font-size: 13px;
+    }
+
+    .start-menu-icon {
+        font-size: 18px;
+        width: 24px;
+    }
+}
+

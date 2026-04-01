@@ -70,12 +70,12 @@ export function useIconDrag(
             }
             const rect = desktopRef.current.getBoundingClientRect();
             let clientX: number, clientY: number;
-            if (e instanceof MouseEvent) {
-                clientX = e.clientX;
-                clientY = e.clientY;
-            } else if (e instanceof TouchEvent) {
+            if ('touches' in e && e.touches.length > 0) {
                 clientX = e.touches[0].clientX;
                 clientY = e.touches[0].clientY;
+            } else if ('clientX' in e) {
+                clientX = e.clientX;
+                clientY = e.clientY;
             } else {
                 return;
             }

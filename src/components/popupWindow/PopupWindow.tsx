@@ -1,6 +1,6 @@
-import React, {FC, ReactNode, RefObject} from "react";
-import {useDragResize, useMaximize, useResizeConstraint} from "../../hooks";
-import "./PopupWindow.css";
+import type {MouseEvent, TouchEvent, ReactNode, RefObject} from 'react';
+import {useDragResize, useMaximize, useResizeConstraint} from '../../hooks';
+import './PopupWindow.css';
 
 interface PopupWindowProps {
     title: string;
@@ -17,20 +17,20 @@ interface PopupWindowProps {
     zIndex?: number;
 }
 
-const PopupWindow: FC<PopupWindowProps> = ({
-                                               title,
-                                               icon,
-                                               children,
-                                               onClose,
-                                               onMinimize,
-                                               onFocus,
-                                               desktopRef,
-                                               menuItems,
-                                               statusText,
-                                               initialSize = {width: 400, height: 300},
-                                               cascadeOffset = 0,
-                                               zIndex = 100
-                                           }) => {
+const PopupWindow = ({
+    title,
+    icon,
+    children,
+    onClose,
+    onMinimize,
+    onFocus,
+    desktopRef,
+    menuItems,
+    statusText,
+    initialSize = {width: 400, height: 300},
+    cascadeOffset = 0,
+    zIndex = 100
+}: PopupWindowProps) => {
     const initialPosition = {x: 100 + cascadeOffset, y: 50 + cascadeOffset};
 
     const {
@@ -40,7 +40,7 @@ const PopupWindow: FC<PopupWindowProps> = ({
         setSize,
         handleDragStart,
         handleResizeStart
-    } = useDragResize(initialPosition, initialSize);
+    } = useDragResize(desktopRef, initialPosition, initialSize);
 
     const {isMaximized, toggleMaximize} = useMaximize(
         desktopRef,
@@ -52,12 +52,12 @@ const PopupWindow: FC<PopupWindowProps> = ({
 
     useResizeConstraint(desktopRef, size, setPosition, setSize);
 
-    const handleMinimize = (e: React.MouseEvent) => {
+    const handleMinimize = (e: MouseEvent<HTMLButtonElement>) => {
         e.stopPropagation();
         onMinimize?.();
     };
 
-    const handleClose = (e: React.MouseEvent) => {
+    const handleClose = (e: MouseEvent<HTMLButtonElement>) => {
         e.stopPropagation();
         onClose?.();
     };
@@ -78,7 +78,9 @@ const PopupWindow: FC<PopupWindowProps> = ({
             }}
             onMouseDown={handleWindowMouseDown}
         >
-            <div className="popup-titlebar" onMouseDown={(e) => handleDragStart(e as React.MouseEvent, isMaximized)}>
+            <div className="popup-titlebar"
+                 onMouseDown={(e) => handleDragStart(e, isMaximized)}
+                 onTouchStart={(e) => handleDragStart(e, isMaximized)}>
                 <span className="popup-title">
                     {icon && <span className="popup-title-icon">{icon}</span>}
                     {title}
@@ -121,8 +123,13 @@ const PopupWindow: FC<PopupWindowProps> = ({
                 </div>
             )}
 
-            {!isMaximized && <div className="resize-handle"
-                                  onMouseDown={(e) => handleResizeStart(e as React.MouseEvent, isMaximized)}/>}
+            {!isMaximized && (
+                <div
+                    className="resize-handle"
+                    onMouseDown={(e) => handleResizeStart(e, isMaximized)}
+                    onTouchStart={(e) => handleResizeStart(e, isMaximized)}
+                />
+            )}
         </div>
     );
 };

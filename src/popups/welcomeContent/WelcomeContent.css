@@ -172,3 +172,25 @@
     min-width: 85px;
 }
 
+@media (max-width: 500px) {
+    .welcome-sidebar {
+        display: none;
+    }
+
+    .welcome-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .welcome-buttons {
+        width: 100%;
+        justify-content: flex-end;
+    }
+
+    .welcome-button {
+        min-width: 60px;
+        padding: 0 8px;
+    }
+}
+

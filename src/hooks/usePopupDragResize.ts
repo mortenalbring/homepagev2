@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import {MouseEvent as ReactMouseEvent, RefObject, TouchEvent as ReactTouchEvent, useEffect, useRef, useState} from 'react';
 
 const MIN_WIDTH = 200;
 const MIN_HEIGHT = 120;
@@ -13,54 +13,134 @@ interface Size {
     height: number;
 }
 
-export function useDragResize(initialPosition: Position, initialSize: Size) {
+function clamp(value: number, min: number, max: number) {
+    return Math.min(Math.max(value, min), max);
+}
+
+function constrainPosition(position: Position, size: Size, desktopRect: DOMRect): Position {
+    const maxX = Math.max(0, desktopRect.width - size.width);
+    const maxY = Math.max(0, desktopRect.height - size.height);
+    return {
+        x: clamp(position.x, 0, maxX),
+        y: clamp(position.y, 0, maxY)
+    };
+}
+
+export function useDragResize(
+    desktopRef: RefObject<HTMLDivElement>,
+    initialPosition: Position,
+    initialSize: Size
+) {
     const [position, setPosition] = useState(initialPosition);
     const [size, setSize] = useState(initialSize);
     const [dragging, setDragging] = useState(false);
     const [resizing, setResizing] = useState(false);
-    const [offset, setOffset] = useState({x: 0, y: 0});
 
-    const handleDragStart = (e: React.MouseEvent, isMaximized: boolean) => {
+    const dragOffsetRef = useRef({x: 0, y: 0});
+    const resizeStartRef = useRef({x: 0, y: 0, width: initialSize.width, height: initialSize.height});
+    const positionRef = useRef(position);
+    const sizeRef = useRef(size);
+
+    useEffect(() => {
+        positionRef.current = position;
+    }, [position]);
+
+    useEffect(() => {
+        sizeRef.current = size;
+    }, [size]);
+
+    useEffect(() => {
+        const desktopRect = desktopRef.current?.getBoundingClientRect();
+        if (!desktopRect) {
+            return;
+        }
+
+        setPosition(prev => constrainPosition(prev, size, desktopRect));
+    }, [desktopRef, size]);
+
+    const handleDragStart = (e: ReactMouseEvent | ReactTouchEvent, isMaximized: boolean) => {
         if (isMaximized) return;
         e.stopPropagation();
+        const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+        const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
+        dragOffsetRef.current = {
+            x: clientX - positionRef.current.x,
+            y: clientY - positionRef.current.y
+        };
         setDragging(true);
-        setOffset({x: e.clientX - position.x, y: e.clientY - position.y});
     };
 
-    const handleResizeStart = (e: React.MouseEvent, isMaximized: boolean) => {
+    const handleResizeStart = (e: ReactMouseEvent | ReactTouchEvent, isMaximized: boolean) => {
         if (isMaximized) return;
         e.stopPropagation();
+        const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+        const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
+        resizeStartRef.current = {
+            x: clientX,
+            y: clientY,
+            width: sizeRef.current.width,
+            height: sizeRef.current.height
+        };
         setResizing(true);
-        setOffset({x: e.clientX, y: e.clientY});
     };
 
     useEffect(() => {
         if (!dragging && !resizing) return;
 
-        const handleMouseMove = (e: MouseEvent) => {
+        const getClient = (e: MouseEvent | TouchEvent) => {
+            if ('touches' in e && e.touches.length > 0) {
+                return {clientX: e.touches[0].clientX, clientY: e.touches[0].clientY};
+            }
+            if ('clientX' in e) {
+                return {clientX: e.clientX, clientY: e.clientY};
+            }
+            return null;
+        };
+
+        const handleMove = (e: MouseEvent | TouchEvent) => {
+            const desktopRect = desktopRef.current?.getBoundingClientRect();
+            if (!desktopRect) return;
+
+            const client = getClient(e);
+            if (!client) return;
+
             if (dragging) {
-                setPosition({x: e.clientX - offset.x, y: e.clientY - offset.y});
+                const nextPosition = {
+                    x: client.clientX - dragOffsetRef.current.x,
+                    y: client.clientY - dragOffsetRef.current.y
+                };
+                setPosition(constrainPosition(nextPosition, sizeRef.current, desktopRect));
             } else if (resizing) {
-                const newWidth = Math.max(MIN_WIDTH, size.width + (e.clientX - offset.x));
-                const newHeight = Math.max(MIN_HEIGHT, size.height + (e.clientY - offset.y));
+                const deltaX = client.clientX - resizeStartRef.current.x;
+                const deltaY = client.clientY - resizeStartRef.current.y;
+
+                const maxWidth = Math.max(MIN_WIDTH, desktopRect.width - positionRef.current.x);
+                const maxHeight = Math.max(MIN_HEIGHT, desktopRect.height - positionRef.current.y);
+
+                const newWidth = clamp(resizeStartRef.current.width + deltaX, MIN_WIDTH, maxWidth);
+                const newHeight = clamp(resizeStartRef.current.height + deltaY, MIN_HEIGHT, maxHeight);
+
                 setSize({width: newWidth, height: newHeight});
-                setOffset({x: e.clientX, y: e.clientY});
             }
         };
 
-        const handleMouseUp = () => {
+        const handleEnd = () => {
             setDragging(false);
             setResizing(false);
         };
 
-        window.addEventListener('mousemove', handleMouseMove);
-        window.addEventListener('mouseup', handleMouseUp);
+        window.addEventListener('mousemove', handleMove);
+        window.addEventListener('mouseup', handleEnd);
+        window.addEventListener('touchmove', handleMove, {passive: false});
+        window.addEventListener('touchend', handleEnd);
 
         return () => {
-            window.removeEventListener('mousemove', handleMouseMove);
-            window.removeEventListener('mouseup', handleMouseUp);
+            window.removeEventListener('mousemove', handleMove);
+            window.removeEventListener('mouseup', handleEnd);
+            window.removeEventListener('touchmove', handleMove);
+            window.removeEventListener('touchend', handleEnd);
         };
-    }, [dragging, resizing, offset, size]);
+    }, [desktopRef, dragging, resizing]);
 
     return {
         position,
