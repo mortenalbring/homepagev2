@@ -1,0 +1,1 @@
+import{j as s}from"./popup-portfolio-CRtqsDS_.js";import"./vendor-react-B3XCSsYE.js";function t(){return s.jsxs("div",{className:"popup-content-inner",children:[s.jsx("h3",{children:"Home Assistant Dashboards"}),s.jsx("p",{children:"..."})]})}export{t as HomeAssistantDashboards};

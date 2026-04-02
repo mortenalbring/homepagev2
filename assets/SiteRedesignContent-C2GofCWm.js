@@ -1,0 +1,1 @@
+import{j as e}from"./popup-portfolio-CRtqsDS_.js";import"./vendor-react-B3XCSsYE.js";function t(){return e.jsxs("div",{className:"popup-content-inner",children:[e.jsx("h3",{children:"Site Redesign"}),e.jsx("p",{children:"Project details coming soon..."})]})}export{t as SiteRedesignContent};

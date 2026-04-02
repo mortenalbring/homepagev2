@@ -1,0 +1,1 @@
+import{j as n}from"./popup-portfolio-CRtqsDS_.js";function s({title:o,children:e,className:p="popup-content-monospace"}){return n.jsxs("div",{className:`popup-content-inner ${p}`,children:[n.jsx("h3",{children:o}),e]})}export{s as L};

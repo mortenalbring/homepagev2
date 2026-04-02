@@ -1,0 +1,1 @@
+import{j as t}from"./popup-portfolio-CRtqsDS_.js";import{L as r}from"./LocalizedPopupFrame-CSo5Rb6X.js";import{d as e}from"./vendor-react-B3XCSsYE.js";function s(){const{t:o}=e();return t.jsx(r,{title:o("computations.norwegianPlaceholderTitle"),children:t.jsx("p",{children:o("computations.norwegianPlaceholderBody")})})}export{s as ComputationsIrreversibilityContentNo};
