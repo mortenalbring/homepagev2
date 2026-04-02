@@ -1,4 +1,4 @@
-import type {MouseEvent, TouchEvent, ReactNode, RefObject} from 'react';
+import type {MouseEvent, ReactNode, RefObject} from 'react';
 import {useDragResize, useMaximize, useResizeConstraint} from '../../hooks';
 import {Size} from '../../types';
 import './PopupWindow.css';
@@ -16,6 +16,7 @@ interface PopupWindowProps {
     initialSize?: Size;
     cascadeOffset?: number;
     zIndex?: number;
+    resizable?: boolean;
 }
 
 const PopupWindow = ({
@@ -30,7 +31,8 @@ const PopupWindow = ({
     statusText,
     initialSize = {width: 400, height: 300},
     cascadeOffset = 0,
-    zIndex = 100
+    zIndex = 100,
+    resizable = true
 }: PopupWindowProps) => {
     const initialPosition = {x: 100 + cascadeOffset, y: 50 + cascadeOffset};
 
@@ -92,11 +94,13 @@ const PopupWindow = ({
                         onClick={handleMinimize}
                         title="Minimize"
                     ></button>
-                    <button
-                        className={`popup-maximize ${isMaximized ? 'restore' : ''}`}
-                        onClick={toggleMaximize}
-                        title={isMaximized ? "Restore" : "Maximize"}
-                    ></button>
+                    {resizable && (
+                        <button
+                            className={`popup-maximize ${isMaximized ? 'restore' : ''}`}
+                            onClick={toggleMaximize}
+                            title={isMaximized ? 'Restore' : 'Maximize'}
+                        ></button>
+                    )}
                     <button
                         className="popup-close"
                         onClick={handleClose}
@@ -124,7 +128,7 @@ const PopupWindow = ({
                 </div>
             )}
 
-            {!isMaximized && (
+            {resizable && !isMaximized && (
                 <div
                     className="resize-handle"
                     onMouseDown={(e) => handleResizeStart(e, isMaximized)}

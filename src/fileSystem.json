@@ -193,9 +193,10 @@
       ],
       "status": "",
       "initialSize": {
-        "width": 520,
-        "height": 380
-      }
+        "width": 460,
+        "height": 320
+      },
+      "resizable": false
     }
   }
 }

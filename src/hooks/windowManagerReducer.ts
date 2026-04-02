@@ -9,7 +9,7 @@ export interface WindowManagerState {
 
 // Action types
 export type WindowManagerAction =
-    | { type: 'OPEN_POPUP'; popupId: string; initialSize?: Size }
+    | { type: 'OPEN_POPUP'; popupId: string; initialSize?: Size; resizable?: boolean }
     | { type: 'CLOSE_POPUP'; popupId: string }
     | { type: 'MINIMIZE_POPUP'; popupId: string }
     | { type: 'OPEN_FOLDER'; folder: FolderItem }
@@ -17,7 +17,7 @@ export type WindowManagerAction =
     | { type: 'MINIMIZE_FOLDER'; folderId: string }
     | { type: 'BRING_TO_FRONT'; windowType: WindowType; id: string }
     | { type: 'TASKBAR_CLICK'; windowType: WindowType; id: string }
-    | { type: 'INIT_FROM_URL'; popupSpecs: Array<{ id: string; initialSize?: Size }> };
+    | { type: 'INIT_FROM_URL'; popupSpecs: Array<{ id: string; initialSize?: Size; resizable?: boolean }> };
 
 export const initialState: WindowManagerState = {
     openPopups: [],
@@ -105,7 +105,8 @@ export function windowManagerReducer(
                     id: popupId,
                     zIndex: newZ,
                     minimized: false,
-                    initialSize: action.initialSize
+                    initialSize: action.initialSize,
+                    resizable: action.resizable
                 }]
             };
         }
@@ -167,7 +168,8 @@ export function windowManagerReducer(
                 id: s.id,
                 zIndex: ++z,
                 minimized: false,
-                initialSize: s.initialSize
+                initialSize: s.initialSize,
+                resizable: s.resizable
             }));
 
             return {

@@ -92,13 +92,20 @@ export const WelcomeContent: FC<WelcomeContentProps> = ({onClose}) => {
                 <div className="welcome-sidebar-content">
                     <div className="welcome-logo">🪟</div>
                     <h1>Mortensoft 95</h1>
+                    <p className="welcome-sidebar-caption">Getting Started</p>
                 </div>
             </div>
 
             <div className="welcome-main">
                 <div className="welcome-body">
-                    <h2>{screen.title}</h2>
-                    <p className="welcome-tagline">{screen.tagline}</p>
+                    <div className="welcome-hero">
+                        <div className="welcome-hero-icon" aria-hidden="true">ℹ</div>
+                        <div>
+                            <h2>{screen.title}</h2>
+                            <p className="welcome-tagline">{screen.tagline}</p>
+                            <p className="welcome-helper">This short guide works like the classic Windows 95 first-run tips.</p>
+                        </div>
+                    </div>
 
                     <div className="welcome-section">
                         <h3>{screen.heading}</h3>
@@ -110,7 +117,7 @@ export const WelcomeContent: FC<WelcomeContentProps> = ({onClose}) => {
                     </div>
 
                     <div className="welcome-tip">
-                        <strong>💡 Screen {currentScreen + 1} of {WELCOME_SCREENS.length}</strong>
+                        <strong>Tip {currentScreen + 1} of {WELCOME_SCREENS.length}</strong>
                     </div>
                 </div>
 
@@ -142,7 +149,7 @@ export const WelcomeContent: FC<WelcomeContentProps> = ({onClose}) => {
                             className="win95-button welcome-button welcome-button-finish"
                             onClick={handleClose}
                         >
-                            {isLastScreen ? 'Finish' : 'OK'}
+                            Close
                         </button>
                     </div>
                 </div>

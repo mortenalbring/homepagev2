@@ -9,6 +9,7 @@ export interface WindowState {
     minimized: boolean;
     zIndex: number;
     initialSize?: Size;
+    resizable?: boolean;
 }
 
 /**
@@ -27,7 +28,7 @@ export interface FolderWindowState extends WindowState {
  */
 export type OpenAction =
     | { type: 'folder'; item: FolderItem }
-    | { type: 'popup'; id: string; initialSize?: Size };
+    | { type: 'popup'; id: string; initialSize?: Size; resizable?: boolean };
 
 /**
  * Window type identifier for taskbar and focus management.

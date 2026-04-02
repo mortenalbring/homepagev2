@@ -1,4 +1,4 @@
-import {FC, RefObject, useState} from 'react';
+import React from 'react';
 import PopupWindow from '../popupWindow/PopupWindow';
 import DesktopIcon from '../desktopIcon/DesktopIcon';
 import {FolderItem, OpenAction, Size} from '../../types';
@@ -9,16 +9,22 @@ interface FolderWindowProps {
     onClose: () => void;
     onMinimize: () => void;
     onFocus: () => void;
-    onOpenPopup: (id: string, initialSize?: Size) => void;
-    desktopRef: RefObject<HTMLDivElement>;
+    onOpenPopup: (id: string, initialSize?: Size, resizable?: boolean) => void;
+    desktopRef: React.RefObject<HTMLDivElement>;
     zIndex: number;
 }
 
-const FolderWindow: FC<FolderWindowProps> = ({
-    folder, onClose, onMinimize, onFocus, onOpenPopup, desktopRef, zIndex
-}) => {
-    const [history, setHistory] = useState<FolderItem[]>([folder]);
-    const [selectedId, setSelectedId] = useState<string | null>(null);
+const FolderWindow = ({
+    folder,
+    onClose,
+    onMinimize,
+    onFocus,
+    onOpenPopup,
+    desktopRef,
+    zIndex
+}: FolderWindowProps) => {
+    const [history, setHistory] = React.useState<FolderItem[]>([folder]);
+    const [selectedId, setSelectedId] = React.useState<string | null>(null);
 
     const currentFolder = history[history.length - 1];
     const canGoBack = history.length > 1;
@@ -39,12 +45,12 @@ const FolderWindow: FC<FolderWindowProps> = ({
         if (action.type === 'folder') {
             navigateTo(action.item);
         } else if (action.type === 'popup') {
-            onOpenPopup(action.id, action.initialSize);
+            onOpenPopup(action.id, action.initialSize, action.resizable);
         }
     };
 
     const clearSelection = () => setSelectedId(null);
-    const breadcrumbs = history.map(f => f.name);
+    const breadcrumbs = history.map((f) => f.name);
 
     return (
         <PopupWindow
@@ -79,7 +85,7 @@ const FolderWindow: FC<FolderWindowProps> = ({
                 </div>
 
                 <div className="folder-contents win95-panel-inset" onClick={clearSelection}>
-                    {currentFolder.children?.map((item) => (
+                    {currentFolder.children?.map((item: FolderItem) => (
                         <DesktopIcon
                             key={item.id}
                             item={item}

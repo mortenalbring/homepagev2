@@ -13,6 +13,7 @@ export interface FolderItem {
     popup?: string;
     position?: { x: number; y: number };
     initialSize?: Size;
+    resizable?: boolean;
 }
 
 /**
@@ -24,6 +25,7 @@ export interface PopupConfig {
     status?: string;
     title: string;
     initialSize?: Size;
+    resizable?: boolean;
 }
 
 /**

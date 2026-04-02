@@ -83,9 +83,11 @@ const Desktop: FC = () => {
                                 const config = (popupConfig as Record<string, any>)[popup.id] || {
                                     title: popup.id,
                                     icon: '📄',
-                                    menu: []
+                                    menu: [],
+                                    resizable: true
                                 };
                                 const initialSize = popup.initialSize ?? config.initialSize;
+                                const isResizable = popup.resizable ?? config.resizable ?? true;
                                 const cascadeOffset = index * 20;
                                 return (
                                     <PopupWindow
@@ -95,6 +97,7 @@ const Desktop: FC = () => {
                                         menuItems={config.menu}
                                         statusText={config.status}
                                         initialSize={initialSize}
+                                        resizable={isResizable}
                                         cascadeOffset={cascadeOffset}
                                         zIndex={popup.zIndex}
                                         onClose={() => closePopup(popup.id)}
