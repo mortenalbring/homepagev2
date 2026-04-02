@@ -1,17 +1,8 @@
 import {MouseEvent as ReactMouseEvent, RefObject, TouchEvent as ReactTouchEvent, useEffect, useRef, useState} from 'react';
+import {Position, Size} from '../types';
 
 const MIN_WIDTH = 200;
 const MIN_HEIGHT = 120;
-
-interface Position {
-    x: number;
-    y: number;
-}
-
-interface Size {
-    width: number;
-    height: number;
-}
 
 function clamp(value: number, min: number, max: number) {
     return Math.min(Math.max(value, min), max);
@@ -31,8 +22,8 @@ export function useDragResize(
     initialPosition: Position,
     initialSize: Size
 ) {
-    const [position, setPosition] = useState(initialPosition);
-    const [size, setSize] = useState(initialSize);
+    const [position, setPosition] = useState<Position>(initialPosition);
+    const [size, setSize] = useState<Size>(initialSize);
     const [dragging, setDragging] = useState(false);
     const [resizing, setResizing] = useState(false);
 

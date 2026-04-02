@@ -7,7 +7,7 @@ export {useResizeConstraint} from './useResizeConstraint';
 export {useMaximize} from './useMaximize';
 
 // Hook return types
-export type {WindowManagerControls} from './useWindowManager';
+export type {WindowManagerControls, TaskbarWindow} from './useWindowManager';
 export type {IconDragControls} from './useIconDrag';
 
 // Re-export common types for convenience
@@ -20,5 +20,6 @@ export type {
     OpenAction,
     WindowType,
     Position,
+    Size,
     IconPositions
 } from '../types';

@@ -1,5 +1,6 @@
 import type {MouseEvent, TouchEvent, ReactNode, RefObject} from 'react';
 import {useDragResize, useMaximize, useResizeConstraint} from '../../hooks';
+import {Size} from '../../types';
 import './PopupWindow.css';
 
 interface PopupWindowProps {
@@ -12,7 +13,7 @@ interface PopupWindowProps {
     desktopRef: RefObject<HTMLDivElement>;
     menuItems?: string[];
     statusText?: string;
-    initialSize?: { width: number; height: number };
+    initialSize?: Size;
     cascadeOffset?: number;
     zIndex?: number;
 }
@@ -68,7 +69,7 @@ const PopupWindow = ({
 
     return (
         <div
-            className="popup-window"
+            className="popup-window win95-text-ui"
             style={{
                 top: position.y,
                 left: position.x,
@@ -115,10 +116,10 @@ const PopupWindow = ({
                 </div>
             )}
 
-            <div className="popup-content">{children}</div>
+            <div className="popup-content win95-inset-border">{children}</div>
 
             {statusText !== undefined && (
-                <div className="popup-statusbar">
+                <div className="popup-statusbar win95-status-strip">
                     <div className="popup-status-section">{statusText}</div>
                 </div>
             )}

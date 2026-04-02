@@ -1,9 +1,12 @@
 import React, {FC, useEffect, useRef, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import StartMenu from '../startMenu/StartMenu';
 import {useClock} from '../../hooks';
 import {formatTime} from '../../utils';
 import startLogo from '../../images/winmort_logo_small.png';
 import {WindowType} from '../../types';
+import {toggleLanguage} from '../../i18n';
+import {formatLanguageLabel, toAppLanguage} from '../../i18n/language';
 
 interface Window {
     type: WindowType;
@@ -25,6 +28,8 @@ const Taskbar: FC<TaskbarProps> = ({windows, topZ, onWindowClick, popupConfig, o
     const startMenuRef = useRef<HTMLDivElement>(null);
     const [startMenuOpen, setStartMenuOpen] = useState(false);
     const currentTime = useClock();
+    const {i18n, t} = useTranslation();
+    const currentLanguage = formatLanguageLabel(toAppLanguage(i18n.language));
 
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
@@ -68,6 +73,14 @@ const Taskbar: FC<TaskbarProps> = ({windows, topZ, onWindowClick, popupConfig, o
             </div>
 
             <div className="taskbar-tray">
+                <button
+                    className="taskbar-lang-toggle"
+                    onClick={toggleLanguage}
+                    title={t('language.toggleLabel')}
+                    aria-label={t('language.toggleLabel')}
+                >
+                    {currentLanguage}
+                </button>
                 <span className="taskbar-time">{formatTime(currentTime)}</span>
             </div>
         </div>

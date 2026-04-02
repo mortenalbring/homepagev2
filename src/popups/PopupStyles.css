@@ -1,10 +1,6 @@
 .popup-content-inner {
     padding: 8px;
-
-
-    color: #222;
-
-
+    color: var(--win95-text);
 }
 
 .popup-content-inner img {
@@ -30,18 +26,18 @@
 }
 
 .popup-content-monospace {
-    font-family: "Fixedsys", "Courier New", monospace;
-    font-size: 11px;
+    font-family: var(--win95-font-family-mono), monospace;
+    font-size: var(--win95-font-size);
     line-height: 1.4;
 }
 
 .popup-content-sanserif {
-    font-family: "MS Sans Serif", "Tahoma", sans-serif;
-    font-size: 11px;
+    font-family: var(--win95-font-family), sans-serif;
+    font-size: var(--win95-font-size);
     line-height: 1.4;
 }
 
 
 .popup-content-monospace-2 {
-    font-family: "Fixedsys", monospace;
+    font-family: var(--win95-font-family-mono), monospace;
 }

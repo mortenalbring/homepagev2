@@ -3,7 +3,7 @@ import "./ContactComponent.css";
 
 export function ContactComponent() {
     return (
-        <div className="contact-content">
+        <div className="contact-content win95-text-ui">
             <div className="win95-groupbox">
                 <legend>Contact Information</legend>
                 <div className="contact-item">

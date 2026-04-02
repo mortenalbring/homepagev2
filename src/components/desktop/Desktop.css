@@ -1,31 +1,160 @@
+/* ─── Room behind the monitor ─────────────────────────────────────────────── */
 .monitor {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #1a1a1a;
+    background: radial-gradient(ellipse at 50% 40%, #1e1e1e 0%, #060606 100%);
     height: 100vh;
     width: 100vw;
     position: relative;
     user-select: none;
-    padding: 20px;
+    box-sizing: border-box;
+    /* soft ambient glow from the screen */
+    box-shadow: inset 0 0 120px rgba(0, 200, 100, 0.04);
+}
+
+/* ─── Outer plastic bezel ──────────────────────────────────────────────────── */
+.monitor-bezel {
+    /* Slightly rounded corners like a real CRT */
+    border-radius: 16px 16px 20px 20px;
+    padding: 28px 28px 48px 28px; /* extra bottom for the chin */
+    background:
+        /* top-left highlight stripe */
+        linear-gradient(135deg, #6a6a6a 0%, transparent 40%),
+        /* base plastic colour */
+        linear-gradient(180deg, #4a4a4a 0%, #2e2e2e 55%, #222 100%);
+    box-shadow:
+        /* outer cast shadow on the "desk" */
+        0 32px 80px rgba(0, 0, 0, 0.85),
+        0 8px 24px rgba(0, 0, 0, 0.6),
+        /* top/left raised edge highlight */
+        inset 0 2px 1px rgba(255, 255, 255, 0.18),
+        /* bottom/right deep shadow edge */
+        inset 0 -3px 4px rgba(0, 0, 0, 0.7),
+        inset 3px 0 4px rgba(0, 0, 0, 0.3),
+        inset -3px 0 4px rgba(0, 0, 0, 0.5);
+    position: relative;
+    /* Size: fill the monitor with minimal margins around the edges */
+    width: calc(100vw - 20px);
+    height: calc(100vh - 20px);
+    max-width: none;
+    max-height: none;
+    display: flex;
+    flex-direction: column;
     box-sizing: border-box;
 }
 
-.desktop {
-    height: 100%;
-    width: 100%;
-    background: var(--win95-desktop, #008080);
-    position: relative;
-    font-family: "MS Sans Serif", "Tahoma", "Verdana", sans-serif;
+/* manufacturer logo notch on the chin */
+.monitor-bezel::after {
+    content: 'MORTENSOFT™';
+    position: absolute;
+    bottom: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--win95-font-family), sans-serif;
+    font-size: 9px;
+    letter-spacing: 2.5px;
+    color: #555;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.06);
+    pointer-events: none;
     user-select: none;
-    border: 3px solid;
-    border-color: #404040 #808080 #808080 #404040;
-    box-shadow: inset 0 0 0 2px #000,
-    0 0 60px rgba(0, 0, 0, 0.8);
-    overflow: hidden;
-    touch-action: none;
+    white-space: nowrap;
 }
 
+/* ─── Recessed screen surround (inset "trough") ────────────────────────────── */
+.monitor-screen-surround {
+    border-radius: 6px;
+    padding: 0;
+    background: #111;
+    box-shadow:
+        /* deep inward bevel — makes the surround look like it's pressed in */
+        inset 0 4px 8px rgba(0, 0, 0, 0.9),
+        inset 4px 0 8px rgba(0, 0, 0, 0.7),
+        inset -4px 0 8px rgba(0, 0, 0, 0.7),
+        inset 0 -2px 6px rgba(0, 0, 0, 0.6),
+        /* faint rim light on the inner top edge */
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    position: relative;
+    /* Fill the bezel's content area */
+    flex: 1;
+    display: flex;
+    box-sizing: border-box;
+}
+
+/* ─── CRT screen curvature vignette (over the whole monitor) ───────────────── */
+.monitor::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: none;
+    pointer-events: none;
+    z-index: 10000;
+}
+
+.desktop {
+    flex: 1;
+    min-width: 0;
+    min-height: 0;
+    background: var(--win95-desktop, #008080);
+    position: relative;
+    font-family: var(--win95-font-family);
+    user-select: none;
+    /* Screen-edge bevel: bright top/left, dark bottom/right — like glass catching light */
+    box-shadow:
+        /* inner bright edge top-left (glass reflection) */
+        inset 2px 2px 0 rgba(255, 255, 255, 0.12),
+        /* inner dark edge bottom-right (depth) */
+        inset -2px -2px 0 rgba(0, 0, 0, 0.5),
+        /* phosphor green ambient glow */
+        inset 0 0 60px rgba(0, 255, 120, 0.04);
+    overflow: hidden;
+    touch-action: none;
+    border-radius: 2px;
+    /* Layout: icons fill the space above the taskbar */
+    display: flex;
+    flex-direction: column;
+}
+
+/* CRT scanlines overlay */
+.desktop::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+        to bottom,
+        transparent 0px,
+        transparent 3px,
+        rgba(0, 0, 0, 0.045) 3px,
+        rgba(0, 0, 0, 0.045) 4px
+    );
+    pointer-events: none;
+    z-index: 9998;
+}
+
+/* CRT phosphor vignette + subtle flicker */
+.desktop::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 50%, transparent 65%, rgba(0, 0, 0, 0.18) 100%);
+    pointer-events: none;
+    z-index: 9997;
+    animation: crt-flicker 8s infinite;
+}
+
+@keyframes crt-flicker {
+    0%,  96%, 100% { opacity: 1; }
+    97%            { opacity: 0.98; }
+    98%            { opacity: 1; }
+    99%            { opacity: 0.99; }
+}
+
+/* Icon area: fills available space so taskbar can sit at the bottom naturally */
+.desktop-icons-area {
+    flex: 1;
+    position: relative;
+    min-height: 0;
+}
 
 .icon-wrapper {
     display: flex;
@@ -47,7 +176,7 @@
 }
 
 .icon-wrapper.selected {
-    border: 1px dotted #ffffff;
+    border: 1px dotted var(--win95-highlight);
 }
 
 .icon-wrapper.selected .icon-label {
@@ -77,13 +206,13 @@
 
 
 .icon-label {
-    margin-top: 4px;
-    font-size: 11px;
-    font-family: "MS Sans Serif", "Tahoma", sans-serif;
+    margin-top: var(--win95-space-2);
+    font-size: var(--win95-font-size);
+    font-family: var(--win95-font-family);
     text-align: center;
-    color: #ffffff;
+    color: var(--win95-highlight);
     background: transparent;
-    padding: 1px 2px;
+    padding: 1px var(--win95-space-1);
     pointer-events: none;
 
     text-shadow: 1px 1px 1px #000000;
@@ -92,25 +221,28 @@
 }
 
 .taskbar {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    height: 28px;
+    /* No longer absolutely positioned — it's the last flex child */
+    position: relative;
+    bottom: auto;
+    left: auto;
     width: 100%;
+    height: 28px;
     background: var(--win95-bg, #c0c0c0);
-    color: #000000;
+    color: var(--win95-text);
     display: flex;
     align-items: center;
-    padding: 2px 2px;
+    padding: var(--win95-space-1);
     box-sizing: border-box;
-    /* Raised 3D effect */
-    border-top: 2px solid #dfdfdf;
-    border-left: 2px solid #dfdfdf;
-    border-right: 2px solid #404040;
-    border-bottom: 2px solid #404040;
-    font-size: 11px;
-    font-family: "MS Sans Serif", "Tahoma", sans-serif;
+    border-top: 2px solid var(--win95-light);
+    border-left: 2px solid var(--win95-light);
+    border-right: 2px solid var(--win95-dark-shadow);
+    border-bottom: 2px solid var(--win95-dark-shadow);
+    font-size: var(--win95-font-size);
+    font-family: var(--win95-font-family);
     z-index: 9999;
+    /* Lift above scanlines/vignette overlays */
+    isolation: isolate;
+    flex-shrink: 0;
 }
 
 .start-button-container {
@@ -119,41 +251,38 @@
 
 .start-button {
     background: var(--win95-button-face, #c0c0c0);
-    border-top: 2px solid #ffffff;
-    border-left: 2px solid #ffffff;
-    border-right: 2px solid #404040;
-    border-bottom: 2px solid #404040;
-    box-shadow: inset -1px -1px 0 #808080, inset 1px 1px 0 #dfdfdf;
+    border-top: 2px solid var(--win95-highlight);
+    border-left: 2px solid var(--win95-highlight);
+    border-right: 2px solid var(--win95-dark-shadow);
+    border-bottom: 2px solid var(--win95-dark-shadow);
+    box-shadow: var(--win95-shadow-raised);
     padding: 2px 6px;
-    margin-right: 4px;
-    margin-left: 2px;
+    margin-right: var(--win95-space-2);
+    margin-left: var(--win95-space-1);
     cursor: pointer;
-    font-size: 11px;
-    font-family: "MS Sans Serif", "Tahoma", sans-serif;
+    font-size: var(--win95-font-size);
+    font-family: var(--win95-font-family);
     font-weight: bold;
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: var(--win95-space-2);
     height: 22px;
     touch-action: manipulation;
 }
 
 .start-button:active,
 .start-button.active {
-    border-top: 2px solid #404040;
-    border-left: 2px solid #404040;
-    border-right: 2px solid #ffffff;
-    border-bottom: 2px solid #ffffff;
-    box-shadow: inset 1px 1px 0 #808080;
     padding: 3px 5px 1px 7px;
+    border-color: var(--win95-border-inset);
+    box-shadow: var(--win95-shadow-inset);
 }
 
 .taskbar-divider {
     width: 2px;
     height: 20px;
-    margin: 0 4px;
-    border-left: 1px solid #808080;
-    border-right: 1px solid #ffffff;
+    margin: 0 var(--win95-space-2);
+    border-left: 1px solid var(--win95-shadow);
+    border-right: 1px solid var(--win95-highlight);
 }
 
 .taskbar-tray {
@@ -162,47 +291,68 @@
     align-items: center;
     height: 20px;
     border: 1px solid;
-    border-color: #808080 #ffffff #ffffff #808080;
-    box-shadow: inset 1px 1px 0 #404040;
+    border-color: var(--win95-border-inset);
+    box-shadow: var(--win95-shadow-inset);
     padding: 0 6px;
     background: var(--win95-bg, #c0c0c0);
     margin-right: 2px;
+    gap: 6px;
+}
+
+.taskbar-lang-toggle {
+    min-width: 34px;
+    height: 16px;
+    padding: 0 4px;
+    font-size: 10px;
+    font-family: var(--win95-font-family);
+    font-weight: 700;
+    background: var(--win95-button-face);
+    border: 1px solid;
+    border-color: var(--win95-border-raised);
+    box-shadow: inset 1px 1px 0 var(--win95-highlight), inset -1px -1px 0 var(--win95-shadow);
+    cursor: pointer;
+    line-height: 1;
+}
+
+.taskbar-lang-toggle:active {
+    border-color: var(--win95-border-inset);
+    box-shadow: var(--win95-shadow-inset);
 }
 
 .taskbar-time {
-    font-size: 11px;
-    font-family: "MS Sans Serif", "Tahoma", sans-serif;
-    color: #000000;
+    font-size: var(--win95-font-size);
+    font-family: var(--win95-font-family);
+    color: var(--win95-text);
     letter-spacing: 0.5px;
 }
 
 .taskbar-quicklaunch {
     display: flex;
     align-items: center;
-    margin-left: 4px;
-    padding-left: 4px;
-    border-left: 1px solid #808080;
+    margin-left: var(--win95-space-2);
+    padding-left: var(--win95-space-2);
+    border-left: 1px solid var(--win95-shadow);
 }
 
 .taskbar-windows {
     display: flex;
     flex: 1;
     align-items: center;
-    gap: 2px;
-    padding: 0 4px;
+    gap: var(--win95-space-1);
+    padding: 0 var(--win95-space-2);
     overflow: hidden;
 }
 
 .taskbar-window-btn {
     background: var(--win95-button-face, #c0c0c0);
-    border-top: 2px solid #ffffff;
-    border-left: 2px solid #ffffff;
-    border-right: 2px solid #404040;
-    border-bottom: 2px solid #404040;
-    box-shadow: inset -1px -1px 0 #808080, inset 1px 1px 0 #dfdfdf;
+    border-top: 2px solid var(--win95-highlight);
+    border-left: 2px solid var(--win95-highlight);
+    border-right: 2px solid var(--win95-dark-shadow);
+    border-bottom: 2px solid var(--win95-dark-shadow);
+    box-shadow: var(--win95-shadow-raised);
     padding: 2px 8px;
-    font-size: 11px;
-    font-family: "MS Sans Serif", "Tahoma", sans-serif;
+    font-size: var(--win95-font-size);
+    font-family: var(--win95-font-family);
     cursor: pointer;
     height: 22px;
     max-width: 160px;
@@ -211,21 +361,18 @@
     white-space: nowrap;
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: var(--win95-space-2);
     touch-action: manipulation;
 }
 
 .taskbar-window-btn.active {
-    border-top: 2px solid #404040;
-    border-left: 2px solid #404040;
-    border-right: 2px solid #ffffff;
-    border-bottom: 2px solid #ffffff;
-    box-shadow: inset 1px 1px 0 #808080;
+    border-color: var(--win95-border-inset);
+    box-shadow: var(--win95-shadow-inset);
     background: #c8c8c8;
 }
 
 .taskbar-btn-text {
-    margin-left: 4px;
+    margin-left: var(--win95-space-2);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -234,7 +381,7 @@
 .start-logo {
     height: 16px;
     width: auto;
-    margin-right: 4px;
+    margin-right: var(--win95-space-2);
 }
 
 
@@ -261,14 +408,59 @@
 
 @media (max-width: 600px), (max-height: 600px) {
     .monitor {
+        background: #000;
+    }
+
+    .monitor::before {
+        display: none;
+    }
+
+    /* Flatten the bezel entirely on small screens */
+    .monitor-bezel {
+        border-radius: 0;
         padding: 0;
+        background: #000;
+        box-shadow: none;
+        width: 100vw;
+        height: 100vh;
+        max-width: none;
+        max-height: none;
+    }
+
+    .monitor-bezel::after {
+        display: none;
+    }
+
+    .monitor-screen-surround {
+        border-radius: 0;
+        padding: 0;
+        background: #000;
+        box-shadow: none;
+        flex: 1;
+        display: flex;
     }
 
     .desktop {
         border-width: 0;
+        border-radius: 0;
         font-size: 12px;
         box-shadow: none;
-        border-radius: 0;
+        flex: 1;
+    }
+
+    /* Reduce scanline intensity on mobile */
+    .desktop::before {
+        background: repeating-linear-gradient(
+            to bottom,
+            transparent 0px,
+            transparent 3px,
+            rgba(0, 0, 0, 0.05) 3px,
+            rgba(0, 0, 0, 0.05) 4px
+        );
+    }
+
+    .desktop::after {
+        display: none;
     }
 
     .icon-image {
@@ -310,3 +502,8 @@
     }
 }
 
+/* Popup windows sit inside the icon area, not over the taskbar */
+.popup-window,
+.folder-window {
+    position: absolute;
+}
