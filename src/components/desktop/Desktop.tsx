@@ -55,6 +55,7 @@ const Desktop: FC = () => {
         }
     }, [openPopup]);
 
+
     const clearSelection = () => setSelectedId(null);
 
     return (
@@ -62,7 +63,11 @@ const Desktop: FC = () => {
             {isShuttingDown && <div className="shutdown-overlay"/>}
             <div className="monitor-bezel">
                 <div className="monitor-screen-surround">
-                    <div className="desktop" ref={desktopRef} onClick={clearSelection}>
+                    <div
+                        className={`desktop ${isShuttingDown ? 'crt-off' : ''}`}
+                        ref={desktopRef}
+                        onClick={clearSelection}
+                    >
 
                         <div className="desktop-icons-area">
                             {desktopItems.map(item => (
