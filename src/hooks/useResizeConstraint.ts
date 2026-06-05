@@ -1,4 +1,4 @@
-import {RefObject, useEffect} from 'react';
+import {RefObject, useEffect, useRef} from 'react';
 import {Position, Size} from '../types';
 
 const MIN_WIDTH = 200;
@@ -12,23 +12,31 @@ export function useResizeConstraint(
     setPosition: (pos: Position | ((prev: Position) => Position)) => void,
     setSize: (size: Size | ((prev: Size) => Size)) => void
 ) {
+    // Track the latest size in a ref so the window resize listener doesn't get
+    // detached/reattached on every drag-resize tick.
+    const sizeRef = useRef(size);
+    useEffect(() => {
+        sizeRef.current = size;
+    }, [size]);
+
     useEffect(() => {
         const handleResize = () => {
             if (!desktopRef || !desktopRef.current) return;
 
             const desktopRect = desktopRef.current.getBoundingClientRect();
+            const currentSize = sizeRef.current;
 
             setPosition((currentPosition: Position) => {
                 let newPosition = {...currentPosition};
                 let changed = false;
 
-                if (newPosition.x + size.width > desktopRect.width) {
-                    newPosition.x = Math.max(0, desktopRect.width - size.width);
+                if (newPosition.x + currentSize.width > desktopRect.width) {
+                    newPosition.x = Math.max(0, desktopRect.width - currentSize.width);
                     changed = true;
                 }
 
-                if (newPosition.y + size.height > desktopRect.height) {
-                    newPosition.y = Math.max(TITLE_BAR_HEIGHT, desktopRect.height - size.height);
+                if (newPosition.y + currentSize.height > desktopRect.height) {
+                    newPosition.y = Math.max(TITLE_BAR_HEIGHT, desktopRect.height - currentSize.height);
                     changed = true;
                 }
 
@@ -45,8 +53,8 @@ export function useResizeConstraint(
                 return changed ? newPosition : currentPosition;
             });
 
-            setSize((currentSize: Size) => {
-                let newSize = {...currentSize};
+            setSize((currentSizeState: Size) => {
+                let newSize = {...currentSizeState};
                 let changed = false;
 
                 if (newSize.width > desktopRect.width) {
@@ -59,11 +67,11 @@ export function useResizeConstraint(
                     changed = true;
                 }
 
-                return changed ? newSize : currentSize;
+                return changed ? newSize : currentSizeState;
             });
         };
 
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
-    }, [desktopRef, size, setPosition, setSize]);
+    }, [desktopRef, setPosition, setSize]);
 }

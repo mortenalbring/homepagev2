@@ -18,7 +18,7 @@ const DesktopIcon: FC<DesktopIconProps> = ({
                                                onOpen,
                                                onDragStart
                                            }) => {
-    const touchTimeout = useRef<NodeJS.Timeout | null>(null);
+    const touchTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     const handleDoubleClick = (e: MouseEvent) => {
         e.stopPropagation();

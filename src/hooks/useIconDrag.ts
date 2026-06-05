@@ -71,6 +71,8 @@ export function useIconDrag(
             const rect = desktopRef.current.getBoundingClientRect();
             let clientX: number, clientY: number;
             if ('touches' in e && e.touches.length > 0) {
+                // Block page scroll while dragging an icon on touch devices.
+                if (e.cancelable) e.preventDefault();
                 clientX = e.touches[0].clientX;
                 clientY = e.touches[0].clientY;
             } else if ('clientX' in e) {
@@ -105,7 +107,7 @@ export function useIconDrag(
             return;
         }
         const rect = desktopRef.current.getBoundingClientRect();
-        const pos = iconPositions[item.id];
+        const pos = iconPositions[item.id] ?? {x: 10, y: 10};
         let clientX: number, clientY: number;
         if ('touches' in e && e.touches.length > 0) {
             clientX = e.touches[0].clientX;

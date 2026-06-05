@@ -145,8 +145,14 @@ export function windowManagerReducer(
 
         case 'BRING_TO_FRONT': {
             const {windowType, id} = action;
-            const newZ = state.topZ + 1;
             const list = getWindowList(state, windowType);
+            const win = findWindow(list, id);
+            // No-op if the window is already on top and visible — avoids
+            // a re-render and unbounded z-index growth on every mousedown.
+            if (win && !win.minimized && win.zIndex === state.topZ) {
+                return state;
+            }
+            const newZ = state.topZ + 1;
             return {
                 ...setWindowList(state, windowType, updateWindow(list, id, {zIndex: newZ, minimized: false} as any)),
                 topZ: newZ

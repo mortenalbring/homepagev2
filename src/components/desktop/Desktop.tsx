@@ -45,6 +45,11 @@ const Desktop: FC = () => {
         if (!welcomeShown) {
             const timer = setTimeout(() => {
                 openPopup('welcome');
+                // Persist immediately so the welcome popup only shows once,
+                // regardless of how the user dismisses it (× button, Esc, etc.).
+                // The "Show on startup" checkbox in WelcomeContent can clear this
+                // flag if the user wants it back.
+                localStorage.setItem('welcomeShown', 'true');
             }, 500);
             return () => clearTimeout(timer);
         }
@@ -67,8 +72,8 @@ const Desktop: FC = () => {
                                     selected={selectedId === item.id}
                                     style={{
                                         position: 'absolute',
-                                        left: iconPositions[item.id]?.x || 10,
-                                        top: iconPositions[item.id]?.y || 10,
+                                        left: iconPositions[item.id]?.x ?? 10,
+                                        top: iconPositions[item.id]?.y ?? 10,
                                         zIndex: 1
                                     }}
                                     onSelect={setSelectedId}

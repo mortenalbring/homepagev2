@@ -31,6 +31,11 @@ const Taskbar: FC<TaskbarProps> = ({windows, topZ, onWindowClick, popupConfig, o
     const {i18n, t} = useTranslation();
     const currentLanguage = formatLanguageLabel(toAppLanguage(i18n.language));
 
+    // Keep <html lang="..."> in sync with the active i18n language for a11y.
+    useEffect(() => {
+        document.documentElement.lang = toAppLanguage(i18n.language);
+    }, [i18n.language]);
+
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
             if (startMenuOpen &&

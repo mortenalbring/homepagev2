@@ -80,6 +80,8 @@ export function useDragResize(
 
         const getClient = (e: MouseEvent | TouchEvent) => {
             if ('touches' in e && e.touches.length > 0) {
+                // Prevent the page from scrolling while a window is being dragged/resized.
+                if (e.cancelable) e.preventDefault();
                 return {clientX: e.touches[0].clientX, clientY: e.touches[0].clientY};
             }
             if ('clientX' in e) {

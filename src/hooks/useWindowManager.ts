@@ -41,12 +41,17 @@ export function useWindowManager(): WindowManagerControls {
 
     const {desktopItems, popupConfig} = fileSystem as unknown as FileSystem;
 
-    // Parse popups from URL query params (ids only)
+    // Parse popups from URL query params (ids only). Filters out ids unknown to
+    // popupConfig so a hand-crafted ?open=foo URL doesn't add ghost windows.
     const parseOpenParam = useCallback((): string[] => {
         const params = new URLSearchParams(location.search);
         const open = params.get('open');
-        return open ? open.split(',').map(s => decodeURIComponent(s)) : [];
-    }, [location.search]);
+        if (!open) return [];
+        return open
+            .split(',')
+            .map(s => decodeURIComponent(s))
+            .filter(id => Boolean(popupConfig?.[id]));
+    }, [location.search, popupConfig]);
 
     // Helper: find initialSize for a popup id from popupConfig or desktopItems recursively
     const findInitialSizeForPopup = useCallback((popupId: string): Size | undefined => {

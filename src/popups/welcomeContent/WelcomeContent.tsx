@@ -59,7 +59,9 @@ interface WelcomeContentProps {
 
 export const WelcomeContent: FC<WelcomeContentProps> = ({onClose}) => {
     const [currentScreen, setCurrentScreen] = useState(0);
-    const [showAgain, setShowAgain] = useState(true);
+    // Default to "off" since the popup just appeared automatically on first visit.
+    // If the user re-checks it, we clear the persisted flag so the popup returns next time.
+    const [showAgain, setShowAgain] = useState(false);
 
     const screen = WELCOME_SCREENS[currentScreen];
     const isFirstScreen = currentScreen === 0;
@@ -78,7 +80,9 @@ export const WelcomeContent: FC<WelcomeContentProps> = ({onClose}) => {
     };
 
     const handleClose = () => {
-        if (!showAgain) {
+        if (showAgain) {
+            localStorage.removeItem('welcomeShown');
+        } else {
             localStorage.setItem('welcomeShown', 'true');
         }
         if (onClose) {
