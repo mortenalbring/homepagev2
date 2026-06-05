@@ -4,16 +4,17 @@ import StartMenu from '../startMenu/StartMenu';
 import {useClock} from '../../hooks';
 import {formatTime} from '../../utils';
 import startLogo from '../../images/winmort_logo_small.png';
-import {WindowType} from '../../types';
+import {LocalizedString, WindowType} from '../../types';
 import {toggleLanguage} from '../../i18n';
 import {formatLanguageLabel, toAppLanguage} from '../../i18n/language';
+import {pickLocalized, useAppLanguage} from '../../i18n/Localized';
 
 interface Window {
     type: WindowType;
     id: string;
     zIndex: number;
     minimized: boolean;
-    title: string;
+    title: LocalizedString;
 }
 
 interface TaskbarProps {
@@ -29,7 +30,8 @@ const Taskbar: FC<TaskbarProps> = ({windows, topZ, onWindowClick, popupConfig, o
     const [startMenuOpen, setStartMenuOpen] = useState(false);
     const currentTime = useClock();
     const {i18n, t} = useTranslation();
-    const currentLanguage = formatLanguageLabel(toAppLanguage(i18n.language));
+    const language = useAppLanguage();
+    const currentLanguage = formatLanguageLabel(language);
 
     // Keep <html lang="..."> in sync with the active i18n language for a11y.
     useEffect(() => {
@@ -57,7 +59,7 @@ const Taskbar: FC<TaskbarProps> = ({windows, topZ, onWindowClick, popupConfig, o
                     onClick={() => setStartMenuOpen(!startMenuOpen)}
                 >
                     <img src={startLogo} alt="Start" className="start-logo"/>
-                    <span>Start</span>
+                    <span>{t('taskbar.start')}</span>
                 </button>
                 {startMenuOpen && <StartMenu onClose={() => setStartMenuOpen(false)} onShutdown={onShutdown}/>}
             </div>
@@ -72,7 +74,7 @@ const Taskbar: FC<TaskbarProps> = ({windows, topZ, onWindowClick, popupConfig, o
                         onClick={() => onWindowClick(win.type, win.id)}
                     >
                         {win.type === 'folder' ? '📁' : (popupConfig[win.id]?.icon || '📄')}
-                        <span className="taskbar-btn-text">{win.title}</span>
+                        <span className="taskbar-btn-text">{pickLocalized(win.title, language) ?? win.id}</span>
                     </button>
                 ))}
             </div>

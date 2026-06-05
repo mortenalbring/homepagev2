@@ -6,7 +6,33 @@ export const resources = {
                 toggleLabel: 'Switch language'
             },
             popup: {
-                notFound: 'Content not found'
+                notFound: 'Content not found',
+                loading: 'Loading…'
+            },
+            taskbar: {
+                start: 'Start'
+            },
+            startMenu: {
+                programs: 'Programs',
+                documents: 'Documents',
+                settings: 'Settings',
+                find: 'Find',
+                help: 'Help',
+                run: 'Run...',
+                shutdown: 'Shut Down...'
+            },
+            folderWindow: {
+                menu: {
+                    file: 'File',
+                    edit: 'Edit',
+                    view: 'View',
+                    help: 'Help'
+                },
+                back: 'Back',
+                up: 'Up',
+                empty: 'This folder is empty',
+                objects_one: '{{count}} object',
+                objects_other: '{{count}} objects'
             },
             computations: {
                 norwegianPlaceholderTitle: 'Norwegian version is coming soon',
@@ -18,10 +44,36 @@ export const resources = {
         translation: {
             language: {
                 current: 'Norsk',
-                toggleLabel: 'Bytt sprak'
+                toggleLabel: 'Bytt språk'
             },
             popup: {
-                notFound: 'Innhold ble ikke funnet'
+                notFound: 'Fant ikke innhold',
+                loading: 'Laster…'
+            },
+            taskbar: {
+                start: 'Start'
+            },
+            startMenu: {
+                programs: 'Programmer',
+                documents: 'Dokumenter',
+                settings: 'Innstillinger',
+                find: 'Søk',
+                help: 'Hjelp',
+                run: 'Kjør...',
+                shutdown: 'Avslutt...'
+            },
+            folderWindow: {
+                menu: {
+                    file: 'Fil',
+                    edit: 'Rediger',
+                    view: 'Vis',
+                    help: 'Hjelp'
+                },
+                back: 'Tilbake',
+                up: 'Opp',
+                empty: 'Denne mappen er tom',
+                objects_one: '{{count}} objekt',
+                objects_other: '{{count}} objekter'
             },
             computations: {
                 norwegianPlaceholderTitle: 'Norsk versjon kommer snart',

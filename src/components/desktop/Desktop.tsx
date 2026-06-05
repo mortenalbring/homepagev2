@@ -7,6 +7,7 @@ import Taskbar from '../taskbar/Taskbar';
 import fileSystem from '../../fileSystem.json';
 import {useIconDrag, useWindowManager} from '../../hooks';
 import {buildInitialPositions} from '../../utils';
+import {pickLocalized, useAppLanguage} from '../../i18n/Localized';
 import './Desktop.css';
 
 const {desktopItems, popupConfig} = fileSystem;
@@ -15,6 +16,7 @@ const Desktop: FC = () => {
     const desktopRef = useRef<HTMLDivElement>(null);
     const [selectedId, setSelectedId] = useState<string | null>(null);
     const [isShuttingDown, setIsShuttingDown] = useState(false);
+    const language = useAppLanguage();
 
     const handleShutdown = () => {
         setIsShuttingDown(true);
@@ -98,14 +100,20 @@ const Desktop: FC = () => {
                                 };
                                 const initialSize = popup.initialSize ?? config.initialSize;
                                 const isResizable = popup.resizable ?? config.resizable ?? true;
-                                const cascadeOffset = index * 20;
+                                const cascadeOffset = Math.min(index, 10) * 20;
+                                // Resolve localizable strings against the active language.
+                                const resolvedTitle = pickLocalized(config.title, language) ?? popup.id;
+                                const resolvedMenu: string[] = (config.menu ?? [])
+                                    .map((m: any) => pickLocalized(m, language) ?? '')
+                                    .filter(Boolean);
+                                const resolvedStatus = pickLocalized(config.status, language);
                                 return (
                                     <PopupWindow
                                         key={popup.id}
-                                        title={config.title}
+                                        title={resolvedTitle}
                                         icon={config.icon}
-                                        menuItems={config.menu}
-                                        statusText={config.status}
+                                        menuItems={resolvedMenu}
+                                        statusText={resolvedStatus}
                                         initialSize={initialSize}
                                         resizable={isResizable}
                                         cascadeOffset={cascadeOffset}

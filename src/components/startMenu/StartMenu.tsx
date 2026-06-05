@@ -1,23 +1,25 @@
 import React, {FC} from 'react';
+import {useTranslation} from 'react-i18next';
 import './StartMenu.css';
 
 interface MenuItem {
     id: string;
-    label?: string;
+    /** i18n key under `startMenu.*`. Omitted for separators. */
+    labelKey?: string;
     icon?: string;
     hasSubmenu?: boolean;
     type?: string;
 }
 
 const menuItems: MenuItem[] = [
-    {id: 'programs', label: 'Programs', icon: '📁', hasSubmenu: true},
-    {id: 'documents', label: 'Documents', icon: '📄', hasSubmenu: true},
-    {id: 'settings', label: 'Settings', icon: '⚙️', hasSubmenu: true},
-    {id: 'find', label: 'Find', icon: '🔍', hasSubmenu: true},
-    {id: 'help', label: 'Help', icon: '❓', hasSubmenu: false},
-    {id: 'run', label: 'Run...', icon: '▶️', hasSubmenu: false},
+    {id: 'programs',  labelKey: 'startMenu.programs',  icon: '📁', hasSubmenu: true},
+    {id: 'documents', labelKey: 'startMenu.documents', icon: '📄', hasSubmenu: true},
+    {id: 'settings',  labelKey: 'startMenu.settings',  icon: '⚙️', hasSubmenu: true},
+    {id: 'find',      labelKey: 'startMenu.find',      icon: '🔍', hasSubmenu: true},
+    {id: 'help',      labelKey: 'startMenu.help',      icon: '❓', hasSubmenu: false},
+    {id: 'run',       labelKey: 'startMenu.run',       icon: '▶️', hasSubmenu: false},
     {id: 'separator', type: 'separator'},
-    {id: 'shutdown', label: 'Shut Down...', icon: '🔌', hasSubmenu: false},
+    {id: 'shutdown',  labelKey: 'startMenu.shutdown',  icon: '🔌', hasSubmenu: false},
 ];
 
 interface StartMenuProps {
@@ -26,6 +28,8 @@ interface StartMenuProps {
 }
 
 const StartMenu: FC<StartMenuProps> = ({onClose, onShutdown}) => {
+    const {t} = useTranslation();
+
     const handleItemClick = (item: MenuItem) => {
         if (item.id === 'shutdown') {
             onShutdown?.();
@@ -50,7 +54,7 @@ const StartMenu: FC<StartMenuProps> = ({onClose, onShutdown}) => {
                             onClick={() => handleItemClick(item)}
                         >
                             <span className="start-menu-icon">{item.icon}</span>
-                            <span className="start-menu-label">{item.label}</span>
+                            <span className="start-menu-label">{item.labelKey ? t(item.labelKey) : ''}</span>
                             {item.hasSubmenu && <span className="start-menu-arrow">▶</span>}
                         </button>
                     );

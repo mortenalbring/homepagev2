@@ -104,7 +104,7 @@
     },
     {
       "id": "projects",
-      "name": "Projects",
+      "name": {"en": "Projects", "no": "Prosjekter"},
       "icon": "\uD83D\uDCC1",
       "position": {
         "x": 10,
@@ -113,12 +113,12 @@
       "children": [
         {
           "id": "web-projects",
-          "name": "Web Projects",
+          "name": {"en": "Web Projects", "no": "Webprosjekter"},
           "icon": "\uD83D\uDCC1",
           "children": [
             {
               "id": "site-redesign",
-              "name": "Site Redesign",
+              "name": {"en": "Site Redesign", "no": "Sideredesign"},
               "icon": "📄",
               "popup": "site-redesign"
             }
@@ -131,13 +131,13 @@
           "children": [
             {
               "id": "ha-dashboards",
-              "name": "Dashboards",
+              "name": {"en": "Dashboards", "no": "Dashbord"},
               "icon": "📄",
               "popup": "dashboards"
             },
             {
               "id": "ha-automations",
-              "name": "Automations",
+              "name": {"en": "Automations", "no": "Automatiseringer"},
               "icon": "📄",
               "popup": "automations"
             }
@@ -145,12 +145,12 @@
         },
         {
           "id": "archive",
-          "name": "Archive",
+          "name": {"en": "Archive", "no": "Arkiv"},
           "icon": "📦",
           "children": [
             {
               "id": "computations",
-              "name": "Computations and Irreversibility",
+              "name": {"en": "Computations and Irreversibility", "no": "Beregninger og irreversibilitet"},
               "icon": "📄",
               "popup": "computations"
             }
@@ -185,11 +185,14 @@
   ],
   "popupConfig": {
     "welcome": {
-      "title": "Welcome to Mortensoft 95",
+      "title": {
+        "en": "Welcome to Mortensoft 95",
+        "no": "Velkommen til Mortensoft 95"
+      },
       "icon": "🪟",
       "menu": [
-        "File",
-        "Help"
+        {"en": "File", "no": "Fil"},
+        {"en": "Help", "no": "Hjelp"}
       ],
       "status": "",
       "initialSize": {

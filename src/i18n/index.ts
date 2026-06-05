@@ -38,4 +38,8 @@ i18n.on('languageChanged', (lang: string) => {
 });
 
 export default i18n;
+export {Localized, T, useAppLanguage, pickLocalized} from './Localized';
+export type {Localizable} from './Localized';
+export type {AppLanguage} from './resources';
+
 

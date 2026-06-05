@@ -1,4 +1,4 @@
-import {FolderItem} from './filesystem';
+import {FolderItem, LocalizedString} from './filesystem';
 import {Size} from './desktop';
 
 /**
@@ -19,7 +19,7 @@ export interface WindowState {
 export interface FolderWindowState extends WindowState {
     children?: FolderItem[];
     icon: string;
-    name: string;
+    name: LocalizedString;
 }
 
 /**

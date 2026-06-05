@@ -1,7 +1,9 @@
 import React from 'react';
+import {useTranslation} from 'react-i18next';
 import PopupWindow from '../popupWindow/PopupWindow';
 import DesktopIcon from '../desktopIcon/DesktopIcon';
 import {FolderItem, OpenAction, Size} from '../../types';
+import {pickLocalized, useAppLanguage} from '../../i18n/Localized';
 import './FolderWindow.css';
 
 interface FolderWindowProps {
@@ -23,6 +25,8 @@ const FolderWindow = ({
     desktopRef,
     zIndex
 }: FolderWindowProps) => {
+    const {t} = useTranslation();
+    const language = useAppLanguage();
     const [history, setHistory] = React.useState<FolderItem[]>([folder]);
     const [selectedId, setSelectedId] = React.useState<string | null>(null);
 
@@ -50,17 +54,25 @@ const FolderWindow = ({
     };
 
     const clearSelection = () => setSelectedId(null);
-    const breadcrumbs = history.map((f) => f.name);
+    const breadcrumbs = history.map((f) => pickLocalized(f.name, language) ?? f.id);
+    const folderTitle = pickLocalized(currentFolder.name, language) ?? currentFolder.id;
+    const childCount = currentFolder.children?.length ?? 0;
+    const menuItems = [
+        t('folderWindow.menu.file'),
+        t('folderWindow.menu.edit'),
+        t('folderWindow.menu.view'),
+        t('folderWindow.menu.help')
+    ];
 
     return (
         <PopupWindow
-            title={currentFolder.name}
+            title={folderTitle}
             icon="📁"
             onClose={onClose}
             onMinimize={onMinimize}
             onFocus={onFocus}
             desktopRef={desktopRef}
-            menuItems={['File', 'Edit', 'View', 'Help']}
+            menuItems={menuItems}
             initialSize={{width: 450, height: 350}}
             zIndex={zIndex}
         >
@@ -70,13 +82,13 @@ const FolderWindow = ({
                         className="folder-toolbar-btn"
                         onClick={goBack}
                         disabled={!canGoBack}
-                        title="Back"
+                        title={t('folderWindow.back')}
                     >←</button>
                     <button
                         className="folder-toolbar-btn"
                         onClick={goBack}
                         disabled={!canGoBack}
-                        title="Up"
+                        title={t('folderWindow.up')}
                     >↑</button>
                     <div className="folder-address win95-inset-border-thin">
                         <span className="address-icon">📁</span>
@@ -96,13 +108,13 @@ const FolderWindow = ({
                             style={{}}
                         />
                     ))}
-                    {(!currentFolder.children || currentFolder.children.length === 0) && (
-                        <div className="folder-empty">This folder is empty</div>
+                    {childCount === 0 && (
+                        <div className="folder-empty">{t('folderWindow.empty')}</div>
                     )}
                 </div>
 
                 <div className="folder-status win95-status-strip">
-                    {currentFolder.children?.length ?? 0} object(s)
+                    {t('folderWindow.objects', {count: childCount})}
                 </div>
             </div>
         </PopupWindow>

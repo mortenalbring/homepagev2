@@ -1,5 +1,5 @@
 // Filesystem types
-export type {FolderItem, PopupConfig, FileSystem} from './filesystem';
+export type {FolderItem, PopupConfig, FileSystem, LocalizedString} from './filesystem';
 
 // Window management types
 export type {WindowState, FolderWindowState, OpenAction, WindowType} from './windows';

@@ -1,6 +1,6 @@
 import {useCallback, useEffect, useReducer, useRef} from 'react';
 import {useLocation, useNavigate} from 'react-router-dom';
-import {FileSystem, FolderItem, FolderWindowState, OpenAction, Size, WindowState, WindowType} from '../types';
+import {FileSystem, FolderItem, FolderWindowState, LocalizedString, OpenAction, Size, WindowState, WindowType} from '../types';
 import {initialState, windowManagerReducer} from './windowManagerReducer';
 import fileSystem from '../fileSystem.json';
 
@@ -10,7 +10,8 @@ export interface TaskbarWindow {
     id: string;
     zIndex: number;
     minimized: boolean;
-    title: string;
+    /** Localizable title — resolve via `pickLocalized` in the renderer. */
+    title: LocalizedString;
 }
 
 export interface WindowManagerControls {

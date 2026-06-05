@@ -1,5 +1,6 @@
 import React, {CSSProperties, FC, MouseEvent, TouchEvent, useRef} from 'react';
 import {FolderItem, OpenAction} from '../../types';
+import {pickLocalized, useAppLanguage} from '../../i18n/Localized';
 
 interface DesktopIconProps {
     item: FolderItem;
@@ -19,6 +20,8 @@ const DesktopIcon: FC<DesktopIconProps> = ({
                                                onDragStart
                                            }) => {
     const touchTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const language = useAppLanguage();
+    const label = pickLocalized(item.name, language) ?? item.id;
 
     const handleDoubleClick = (e: MouseEvent) => {
         e.stopPropagation();
@@ -84,7 +87,7 @@ const DesktopIcon: FC<DesktopIconProps> = ({
         >
             <div className="icon">
                 <div className="icon-image">{item.icon}</div>
-                <div className="icon-label">{item.name}</div>
+                <div className="icon-label">{label}</div>
             </div>
         </div>
     );

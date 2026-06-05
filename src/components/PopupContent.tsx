@@ -8,11 +8,14 @@ interface PopupContentProps {
     onClose?: () => void;
 }
 
-const LoadingFallback: FC = () => (
-    <div style={{padding: 8}}>
-        <p>Loading...</p>
-    </div>
-);
+const LoadingFallback: FC = () => {
+    const {t} = useTranslation();
+    return (
+        <div style={{padding: 8}}>
+            <p>{t('popup.loading')}</p>
+        </div>
+    );
+};
 
 /**
  * Renders popup content for the active language.
