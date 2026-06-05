@@ -2,11 +2,11 @@ import React from 'react';
 import './PopupStyles.css';
 import {MathJax, MathJaxContext} from "better-react-mathjax";
 import slizardImage from "../images/computations/slizardbennet.jpg";
+import {LocalizedPopupFrame} from './LocalizedPopupFrame';
 
 export function ComputationsIrreversibilityContent() {
     return (
-        <div className="popup-content-inner popup-content-monospace">
-            <h3>Computations, Thermodynamics and Irreversibility</h3>
+        <LocalizedPopupFrame title="Computations, Thermodynamics and Irreversibility">
             <MathJaxContext>
                 <p>
                     This post is about the fundamental link between thermodynamics and computations. This is not on the
@@ -215,7 +215,7 @@ export function ComputationsIrreversibilityContent() {
                     </div>
                 </div>
             </MathJaxContext>
-        </div>
+        </LocalizedPopupFrame>
     );
 }
 

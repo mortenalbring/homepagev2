@@ -5,4 +5,4 @@ export type {FolderItem, PopupConfig, FileSystem} from './filesystem';
 export type {WindowState, FolderWindowState, OpenAction, WindowType} from './windows';
 
 // Desktop positioning types
-export type {Position, IconPositions} from './desktop';
+export type {Position, Size, IconPositions} from './desktop';

@@ -1,4 +1,5 @@
 import {FolderItem} from './filesystem';
+import {Size} from './desktop';
 
 /**
  * Base state for any open window (popup or folder).
@@ -7,7 +8,8 @@ export interface WindowState {
     id: string;
     minimized: boolean;
     zIndex: number;
-    initialSize?: { width: number; height: number };
+    initialSize?: Size;
+    resizable?: boolean;
 }
 
 /**
@@ -26,7 +28,7 @@ export interface FolderWindowState extends WindowState {
  */
 export type OpenAction =
     | { type: 'folder'; item: FolderItem }
-    | { type: 'popup'; id: string; initialSize?: { width: number; height: number } };
+    | { type: 'popup'; id: string; initialSize?: Size; resizable?: boolean };
 
 /**
  * Window type identifier for taskbar and focus management.

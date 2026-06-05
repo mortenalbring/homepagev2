@@ -1,3 +1,5 @@
+import {Size} from './desktop';
+
 /**
  * Represents a file or folder item in the desktop filesystem.
  * Can be nested recursively via the children property.
@@ -10,7 +12,8 @@ export interface FolderItem {
     name: string;
     popup?: string;
     position?: { x: number; y: number };
-    initialSize?: { width: number; height: number };
+    initialSize?: Size;
+    resizable?: boolean;
 }
 
 /**
@@ -21,7 +24,8 @@ export interface PopupConfig {
     menu: string[];
     status?: string;
     title: string;
-    initialSize?: { width: number; height: number };
+    initialSize?: Size;
+    resizable?: boolean;
 }
 
 /**

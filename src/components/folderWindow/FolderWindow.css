@@ -4,7 +4,6 @@
     height: 100%;
     background: var(--win95-bg, #c0c0c0);
     margin: -8px;
-    margin-top: -8px;
 }
 
 .folder-toolbar {
@@ -13,8 +12,8 @@
     gap: 4px;
     padding: 4px;
     background: var(--win95-bg, #c0c0c0);
-    border-bottom: 1px solid #808080;
-    box-shadow: 0 1px 0 #ffffff;
+    border-bottom: 1px solid var(--win95-shadow);
+    box-shadow: 0 1px 0 var(--win95-highlight);
 }
 
 .folder-toolbar-btn {
@@ -22,7 +21,7 @@
     height: 22px;
     background: var(--win95-button-face, #c0c0c0);
     border: 1px solid;
-    border-color: #ffffff #404040 #404040 #ffffff;
+    border-color: var(--win95-border-raised);
     font-size: 12px;
     cursor: pointer;
     display: flex;
@@ -31,12 +30,12 @@
 }
 
 .folder-toolbar-btn:active:not(:disabled) {
-    border-color: #404040 #ffffff #ffffff #404040;
     padding: 1px 0 0 1px;
+    border-color: var(--win95-border-inset);
 }
 
 .folder-toolbar-btn:disabled {
-    color: #808080;
+    color: var(--win95-shadow);
     cursor: default;
 }
 
@@ -44,12 +43,9 @@
     flex: 1;
     display: flex;
     align-items: center;
-    background: #ffffff;
-    border: 1px solid;
-    border-color: #808080 #ffffff #ffffff #808080;
-    box-shadow: inset 1px 1px 0 #404040;
+    background: var(--win95-highlight);
     padding: 2px 4px;
-    font-size: 11px;
+    font-size: var(--win95-font-size);
     margin-left: 8px;
 }
 
@@ -67,10 +63,7 @@
 
 .folder-contents {
     flex: 1;
-    background: #ffffff;
-    border: 2px solid;
-    border-color: #808080 #ffffff #ffffff #808080;
-    box-shadow: inset 1px 1px 0 #404040;
+    background: var(--win95-highlight);
     margin: 4px;
     padding: 8px;
     overflow: auto;
@@ -92,19 +85,17 @@
 }
 
 .folder-contents .icon-wrapper.selected .icon-label {
-    background: #000080;
-    color: #ffffff;
+    background: var(--win95-selection);
+    color: var(--win95-selection-text);
 }
 
 .folder-empty {
-    color: #808080;
-    font-size: 11px;
+    color: var(--win95-shadow);
+    font-size: var(--win95-font-size);
     padding: 20px;
 }
 
 .folder-status {
     padding: 2px 6px;
-    font-size: 11px;
-    border-top: 1px solid #ffffff;
     background: var(--win95-bg, #c0c0c0);
 }

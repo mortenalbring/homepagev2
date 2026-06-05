@@ -2,7 +2,19 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import {BrowserRouter} from 'react-router-dom';
 import Desktop from './components/desktop/Desktop';
+import './i18n';
 import './index.css';
+
+const syncViewportHeightVar = () => {
+    const viewportHeight = window.visualViewport?.height ?? window.innerHeight;
+    // Keep a real-pixel viewport height var to avoid 100vh issues on mobile browser chrome.
+    document.documentElement.style.setProperty('--app-vh', `${Math.round(viewportHeight)}px`);
+};
+
+syncViewportHeightVar();
+window.addEventListener('resize', syncViewportHeightVar, {passive: true});
+window.addEventListener('orientationchange', syncViewportHeightVar);
+window.visualViewport?.addEventListener('resize', syncViewportHeightVar);
 
 const rootElement = document.getElementById('root');
 

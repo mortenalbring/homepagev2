@@ -17,6 +17,7 @@ body {
 
 /* Windows 95 System Colors */
 :root {
+    --app-vh: 100vh;
     --win95-bg: #c0c0c0;
     --win95-desktop: #008080;
     --win95-highlight: #ffffff;
@@ -28,22 +29,47 @@ body {
     --win95-selection: #000080;
     --win95-selection-text: #ffffff;
     --win95-button-face: #c0c0c0;
+    --win95-text: #000000;
+
+    /* Base typography */
+    --win95-font-size: 11px;
+    --win95-font-family-mono: "Fixedsys", "Courier New", monospace;
 
     /* Border patterns */
     --win95-border-raised: #ffffff #404040 #404040 #ffffff;
     --win95-border-inset: #808080 #ffffff #ffffff #808080;
+    --win95-border-raised-thick: #dfdfdf #404040 #404040 #dfdfdf;
     --win95-shadow-raised: inset -1px -1px 0 #808080, inset 1px 1px 0 #dfdfdf;
     --win95-shadow-inset: inset 1px 1px 0 #404040;
+    --win95-shadow-titlebar: 2px 2px 8px rgba(0, 0, 0, 0.3);
+    --win95-shadow-menu: 2px 2px 0 #000000;
+    --win95-shadow-desktop: 0 0 60px rgba(0, 0, 0, 0.8);
+
+    /* Spacing scale */
+    --win95-space-1: 2px;
+    --win95-space-2: 4px;
+    --win95-space-3: 8px;
+    --win95-space-4: 12px;
+    --win95-space-5: 16px;
 
     /* Typography */
     --win95-font-family: "MS Sans Serif", "Tahoma", sans-serif;
 }
 
 code {
-    font-family: "Fixedsys", "Courier New", monospace;
+    font-family: var(--win95-font-family-mono), monospace;
 }
 
 /* Reset box-sizing globally */
 *, *::before, *::after {
     box-sizing: border-box;
 }
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible {
+    outline: 1px dotted var(--win95-text);
+    outline-offset: 1px;
+}
+

@@ -1,16 +1,7 @@
 import {RefObject, useState} from 'react';
+import {Position, Size} from '../types';
 
-interface Position {
-    x: number;
-    y: number;
-}
-
-interface Size {
-    width: number;
-    height: number;
-}
-
-interface WindowState {
+interface SavedWindowState {
     position: Position;
     size: Size;
 }
@@ -23,20 +14,21 @@ export function useMaximize(
     setSize: (size: Size) => void
 ) {
     const [isMaximized, setIsMaximized] = useState(false);
-    const [prevState, setPrevState] = useState<WindowState | null>(null);
+    const [prevState, setPrevState] = useState<SavedWindowState | null>(null);
 
     const toggleMaximize = () => {
         if (!desktopRef || !desktopRef.current) return;
 
         const desktopRect = desktopRef.current.getBoundingClientRect();
+        const TASKBAR_HEIGHT = 28;
 
         if (!isMaximized) {
             setPrevState({position: {...position}, size: {...size}});
-            const borderOffset = 40;
-            setPosition({x: borderOffset, y: borderOffset});
+            const margin = 4;
+            setPosition({x: margin, y: margin});
             setSize({
-                width: desktopRect.width - borderOffset * 3,
-                height: desktopRect.height - borderOffset * 3,
+                width: desktopRect.width - margin * 2,
+                height: desktopRect.height - TASKBAR_HEIGHT - margin * 2,
             });
             setIsMaximized(true);
         } else {

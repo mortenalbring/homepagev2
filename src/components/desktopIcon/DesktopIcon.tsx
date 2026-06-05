@@ -61,7 +61,12 @@ const DesktopIcon: FC<DesktopIconProps> = ({
         if (item.children) {
             onOpen({type: 'folder', item});
         } else if (item.popup) {
-            onOpen({type: 'popup', id: item.popup, initialSize: item.initialSize} as OpenAction);
+            onOpen({
+                type: 'popup',
+                id: item.popup,
+                initialSize: item.initialSize,
+                resizable: item.resizable
+            } as OpenAction);
         } else if (item.link) {
             window.open(item.link, '_blank');
         }

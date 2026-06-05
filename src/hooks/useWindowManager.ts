@@ -1,15 +1,24 @@
 import {useCallback, useEffect, useReducer, useRef} from 'react';
 import {useLocation, useNavigate} from 'react-router-dom';
-import {FolderItem, FolderWindowState, OpenAction, WindowState, WindowType} from '../types';
+import {FileSystem, FolderItem, FolderWindowState, OpenAction, Size, WindowState, WindowType} from '../types';
 import {initialState, windowManagerReducer} from './windowManagerReducer';
 import fileSystem from '../fileSystem.json';
+
+/** A window entry as shown in the taskbar. */
+export interface TaskbarWindow {
+    type: WindowType;
+    id: string;
+    zIndex: number;
+    minimized: boolean;
+    title: string;
+}
 
 export interface WindowManagerControls {
     openPopups: WindowState[];
     openFolders: FolderWindowState[];
     topZ: number;
-    allWindows: Array<{ type: WindowType; id: string; zIndex: number; minimized: boolean; title: string }>;
-    openPopup: (popupId: string, initialSize?: { width: number; height: number }) => void;
+    allWindows: TaskbarWindow[];
+    openPopup: (popupId: string, initialSize?: Size, resizable?: boolean) => void;
     closePopup: (popupId: string) => void;
     minimizePopup: (popupId: string) => void;
     openFolder: (folder: FolderItem) => void;
@@ -30,7 +39,7 @@ export function useWindowManager(): WindowManagerControls {
     const navigate = useNavigate();
     const isInitialized = useRef(false);
 
-    const {desktopItems, popupConfig} = (fileSystem as any) || {desktopItems: [], popupConfig: {}};
+    const {desktopItems, popupConfig} = fileSystem as unknown as FileSystem;
 
     // Parse popups from URL query params (ids only)
     const parseOpenParam = useCallback((): string[] => {
@@ -40,27 +49,45 @@ export function useWindowManager(): WindowManagerControls {
     }, [location.search]);
 
     // Helper: find initialSize for a popup id from popupConfig or desktopItems recursively
-    const findInitialSizeForPopup = useCallback((popupId: string) => {
-        // Check popupConfig first (priority)
+    const findInitialSizeForPopup = useCallback((popupId: string): Size | undefined => {
         const cfg = popupConfig?.[popupId];
-        if (cfg && cfg.initialSize && cfg.initialSize.width && cfg.initialSize.height) {
+        if (cfg?.initialSize?.width && cfg.initialSize.height) {
             return cfg.initialSize;
         }
 
-        // Search desktopItems recursively for a matching item with initialSize
-        const stack: any[] = [...desktopItems];
+        const stack: FolderItem[] = [...desktopItems];
         while (stack.length) {
             const item = stack.shift();
             if (!item) continue;
-            if (item.popup === popupId && item.initialSize && item.initialSize.width && item.initialSize.height) {
+            if (item.popup === popupId && item.initialSize?.width && item.initialSize.height) {
                 return item.initialSize;
             }
-            if (item.children && item.children.length) {
+            if (item.children?.length) {
                 stack.push(...item.children);
             }
         }
 
-        // Not found — return undefined
+        return undefined;
+    }, [desktopItems, popupConfig]);
+
+    const findResizableForPopup = useCallback((popupId: string): boolean | undefined => {
+        const cfg = popupConfig?.[popupId];
+        if (typeof cfg?.resizable === 'boolean') {
+            return cfg.resizable;
+        }
+
+        const stack: FolderItem[] = [...desktopItems];
+        while (stack.length) {
+            const item = stack.shift();
+            if (!item) continue;
+            if (item.popup === popupId && typeof item.resizable === 'boolean') {
+                return item.resizable;
+            }
+            if (item.children?.length) {
+                stack.push(...item.children);
+            }
+        }
+
         return undefined;
     }, [desktopItems, popupConfig]);
 
@@ -68,39 +95,42 @@ export function useWindowManager(): WindowManagerControls {
     const updateURL = useCallback((popupIds: string[]) => {
         const params = new URLSearchParams();
         if (popupIds.length) {
-            const encoded = popupIds.map(id => encodeURIComponent(id)).join(',');
-            params.set('open', encoded);
+            params.set('open', popupIds.map(id => encodeURIComponent(id)).join(','));
         }
         navigate({search: params.toString()}, {replace: true});
     }, [navigate]);
 
     // Initialize from URL on mount
     useEffect(() => {
-        if (isInitialized.current) {
-            return;
-        }
+        if (isInitialized.current) return;
         isInitialized.current = true;
 
         const urlIds = parseOpenParam();
         if (urlIds.length) {
-            // create popup specs with initialSize looked up from config / desktop items
-            const specs = urlIds.map(id => ({id, initialSize: findInitialSizeForPopup(id)}));
+            const specs = urlIds.map(id => ({
+                id,
+                initialSize: findInitialSizeForPopup(id),
+                resizable: findResizableForPopup(id)
+            }));
             dispatch({type: 'INIT_FROM_URL', popupSpecs: specs});
         }
-    }, [parseOpenParam, findInitialSizeForPopup]);
+    }, [parseOpenParam, findInitialSizeForPopup, findResizableForPopup]);
 
     // Sync URL when popups change (after initialization)
     useEffect(() => {
-        if (!isInitialized.current) {
-            return;
-        }
+        if (!isInitialized.current) return;
         updateURL(state.openPopups.map(p => p.id));
     }, [state.openPopups, updateURL]);
 
     // Action creators
-    const openPopup = useCallback((popupId: string, initialSize?: { width: number; height: number }) => {
-        dispatch({type: 'OPEN_POPUP', popupId, initialSize});
-    }, []);
+    const openPopup = useCallback((popupId: string, initialSize?: Size, resizable?: boolean) => {
+        dispatch({
+            type: 'OPEN_POPUP',
+            popupId,
+            initialSize,
+            resizable: typeof resizable === 'boolean' ? resizable : findResizableForPopup(popupId)
+        });
+    }, [findResizableForPopup]);
 
     const closePopup = useCallback((popupId: string) => {
         dispatch({type: 'CLOSE_POPUP', popupId});
@@ -134,17 +164,24 @@ export function useWindowManager(): WindowManagerControls {
         if (action.type === 'folder') {
             dispatch({type: 'OPEN_FOLDER', folder: action.item});
         } else {
-            dispatch({type: 'OPEN_POPUP', popupId: action.id, initialSize: (action as any).initialSize});
+            dispatch({
+                type: 'OPEN_POPUP',
+                popupId: action.id,
+                initialSize: action.initialSize,
+                resizable: typeof action.resizable === 'boolean'
+                    ? action.resizable
+                    : findResizableForPopup(action.id)
+            });
         }
-    }, []);
+    }, [findResizableForPopup]);
 
-    const allWindows = [
+    const allWindows: TaskbarWindow[] = [
         ...state.openPopups.map(p => ({
             type: 'popup' as const,
             id: p.id,
             zIndex: p.zIndex,
             minimized: p.minimized,
-            title: popupConfig[p.id]?.title || p.id
+            title: popupConfig[p.id]?.title ?? p.id
         })),
         ...state.openFolders.map(f => ({
             type: 'folder' as const,

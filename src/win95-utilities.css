@@ -4,6 +4,53 @@
     box-shadow: var(--win95-shadow-inset);
 }
 
+.win95-inset-border-thin {
+    border: 1px solid;
+    border-color: var(--win95-border-inset);
+    box-shadow: var(--win95-shadow-inset);
+}
+
+.win95-text-ui {
+    font-family: var(--win95-font-family), sans-serif;
+    font-size: var(--win95-font-size);
+    color: var(--win95-text);
+}
+
+.win95-panel-inset {
+    border: 2px solid;
+    border-color: var(--win95-border-inset);
+    box-shadow: var(--win95-shadow-inset);
+}
+
+.win95-panel-raised {
+    border: 2px solid;
+    border-color: var(--win95-border-raised);
+    box-shadow: var(--win95-shadow-raised);
+}
+
+.win95-status-strip {
+    border-top: 1px solid var(--win95-highlight);
+    background: var(--win95-bg);
+    font-size: var(--win95-font-size);
+}
+
+.win95-button-pressed {
+    border-color: var(--win95-border-inset) !important;
+    box-shadow: var(--win95-shadow-inset) !important;
+}
+
+.win95-button-raised-base {
+    border: 2px solid;
+    border-color: var(--win95-border-raised);
+    box-shadow: var(--win95-shadow-raised);
+
+    &:active,
+    &.active {
+        border-color: var(--win95-border-inset);
+        box-shadow: var(--win95-shadow-inset);
+    }
+}
+
 .win95-raised-border {
     border: 2px solid;
     border-color: var(--win95-border-raised);
@@ -34,8 +81,8 @@
     border-color: var(--win95-border-raised);
     box-shadow: var(--win95-shadow-raised);
     padding: 4px 16px;
-    font-size: 11px;
-    font-family: var(--win95-font-family);
+    font-size: var(--win95-font-size);
+    font-family: var(--win95-font-family), sans-serif;
     cursor: pointer;
     min-width: 75px;
 
@@ -57,13 +104,13 @@
 }
 
 .win95-input {
-    background: #ffffff;
+    background: var(--win95-highlight);
     border: 2px solid;
     border-color: var(--win95-border-inset);
     box-shadow: var(--win95-shadow-inset);
     padding: 3px 4px;
-    font-size: 11px;
-    font-family: var(--win95-font-family);
+    font-size: var(--win95-font-size);
+    font-family: var(--win95-font-family), sans-serif;
 
     &:focus {
         outline: none;
@@ -74,7 +121,7 @@
     appearance: none;
     width: 13px;
     height: 13px;
-    background: #ffffff;
+    background: var(--win95-highlight);
     border: 2px solid;
     border-color: var(--win95-border-inset);
     box-shadow: var(--win95-shadow-inset);
@@ -102,15 +149,15 @@
     & legend {
         background: var(--win95-bg);
         padding: 0 4px;
-        font-size: 11px;
+        font-size: var(--win95-font-size);
     }
 }
 
 .win95-tooltip {
     background: #ffffcc;
-    border: 1px solid #000000;
+    border: 1px solid var(--win95-text);
     padding: 2px 4px;
-    font-size: 11px;
-    font-family: var(--win95-font-family);
+    font-size: var(--win95-font-size);
+    font-family: var(--win95-font-family), sans-serif;
     box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
 }

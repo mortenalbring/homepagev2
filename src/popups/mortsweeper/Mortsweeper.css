@@ -1,6 +1,6 @@
 .mortsweeper {
     padding: 8px;
-    background: #c0c0c0;
+    background: var(--win95-bg);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -11,9 +11,9 @@
     display: flex;
     justify-content: center;
     padding: 4px;
-    background: #c0c0c0;
+    background: var(--win95-bg);
     border: 2px solid;
-    border-color: #808080 #ffffff #ffffff #808080;
+    border-color: var(--win95-border-inset);
 }
 
 .mort-face {
@@ -23,9 +23,9 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    background: #c0c0c0;
+    background: var(--win95-bg);
     border: 2px solid;
-    border-color: #ffffff #808080 #808080 #ffffff;
+    border-color: var(--win95-border-raised);
 }
 
 .mort-face img {
@@ -43,13 +43,13 @@
 }
 
 .mort-face:active {
-    border-color: #808080 #ffffff #ffffff #808080;
+    border-color: var(--win95-border-inset);
 }
 
 .mort-grid {
     border: 3px solid;
-    border-color: #808080 #ffffff #ffffff #808080;
-    background: #c0c0c0;
+    border-color: var(--win95-border-inset);
+    background: var(--win95-bg);
     padding: 2px;
 }
 
@@ -62,27 +62,26 @@
     height: 20px;
     padding: 0;
     margin: 0;
-    font-size: 11px;
+    font-size: var(--win95-font-size);
     font-weight: bold;
-    font-family: "MS Sans Serif", Arial, sans-serif;
+    font-family: var(--win95-font-family), sans-serif;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #c0c0c0;
+    background: var(--win95-bg);
     border: 2px solid;
-    border-color: #ffffff #808080 #808080 #ffffff;
+    border-color: var(--win95-border-raised);
 }
 
 .mort-cell:active:not(:disabled) {
-    border-color: #808080;
-    border-width: 1px;
-    padding: 1px;
+    border-color: var(--win95-border-inset);
+    box-shadow: var(--win95-shadow-inset);
 }
 
 .mort-cell.revealed {
-    background: #c0c0c0;
-    border: 1px solid #808080;
+    background: var(--win95-bg);
+    border: 1px solid var(--win95-shadow);
     cursor: default;
 }
 
@@ -120,14 +119,14 @@
 }
 
 .mort-cell.num-8 {
-    color: #808080;
+    color: var(--win95-shadow);
 }
 
 .mort-message {
     font-size: 12px;
     font-weight: bold;
-    font-family: "MS Sans Serif", Arial, sans-serif;
+    font-family: var(--win95-font-family), sans-serif;
     padding: 4px 8px;
     background: #ffffcc;
-    border: 1px solid #808080;
+    border: 1px solid var(--win95-shadow);
 }

@@ -1,18 +1,10 @@
 import {RefObject, useEffect} from 'react';
+import {Position, Size} from '../types';
 
 const MIN_WIDTH = 200;
 const MIN_HEIGHT = 120;
 const TITLE_BAR_HEIGHT = 22;
 
-interface Position {
-    x: number;
-    y: number;
-}
-
-interface Size {
-    width: number;
-    height: number;
-}
 
 export function useResizeConstraint(
     desktopRef: RefObject<HTMLDivElement>,

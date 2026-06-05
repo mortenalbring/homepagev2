@@ -2,15 +2,15 @@
 .popup-window {
     position: absolute;
     background: var(--win95-bg, #c0c0c0);
-    font-family: "MS Sans Serif", "Tahoma", sans-serif;
+    font-family: var(--win95-font-family);
     display: flex;
     flex-direction: column;
     user-select: none;
     border: 2px solid;
-    border-color: #dfdfdf #404040 #404040 #dfdfdf;
+    border-color: var(--win95-border-raised-thick);
     box-shadow: inset 1px 1px 0 #ffffff,
     inset -1px -1px 0 #808080,
-    2px 2px 8px rgba(0, 0, 0, 0.3);
+    var(--win95-shadow-titlebar);
 }
 
 .popup-window::before {
@@ -21,15 +21,15 @@
     right: 0;
     bottom: 0;
     border: 1px solid;
-    border-color: #ffffff #808080 #808080 #ffffff;
+    border-color: var(--win95-border-inset);
     pointer-events: none;
 }
 
 .popup-titlebar {
-    background: #000080;
-    color: white;
-    font-family: "MS Sans Serif", "Tahoma", sans-serif;
-    font-size: 11px;
+    background: var(--win95-titlebar-active);
+    color: var(--win95-selection-text);
+    font-family: var(--win95-font-family);
+    font-size: var(--win95-font-size);
     padding: 3px 4px;
     display: flex;
     align-items: center;
@@ -47,11 +47,11 @@
 }
 
 .popup-window.inactive .popup-titlebar {
-    background: #808080;
+    background: var(--win95-titlebar-inactive);
 }
 
 .popup-title {
-    font-size: 11px;
+    font-size: var(--win95-font-size);
     font-weight: 600;
     white-space: nowrap;
     overflow: hidden;
@@ -80,15 +80,15 @@
 .popup-minimize,
 .popup-maximize,
 .popup-close {
-    width: 16px;
-    height: 14px;
+    width: 18px;
+    height: 16px;
     background: var(--win95-button-face, #c0c0c0);
     border: 1px solid;
-    border-color: #ffffff #404040 #404040 #ffffff;
+    border-color: var(--win95-border-raised);
     box-shadow: inset 0px 1px 0px 0px #ffffff, inset -1px -1px 0px 0px #808080;
-    color: #000000;
-    font-size: 9px;
-    font-weight: 600;
+    color: var(--win95-text);
+    font-size: 10px;
+    font-weight: 700;
     cursor: pointer;
     padding: 0;
     display: flex;
@@ -98,71 +98,63 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     touch-action: manipulation;
+    position: relative;
 }
 
 .popup-minimize:active,
 .popup-maximize:active,
 .popup-close:active {
-    border-color: #404040 #ffffff #ffffff #404040;
-    box-shadow: inset 1px 1px 0 #808080;
     padding: 1px 0 0 1px;
+    border-color: var(--win95-border-inset);
+    box-shadow: var(--win95-shadow-inset);
 }
 
 .popup-minimize::after {
     content: '';
-    width: 6px;
+    width: 7px;
     height: 2px;
     background: #000000;
-    position: absolute;
-    bottom: 3px;
-    left: 50%;
-    transform: translateX(-50%);
-}
-
-.popup-minimize {
-    position: relative;
+    border-radius: 1px;
 }
 
 .popup-maximize::after {
     content: '';
-    width: 9px;
-    height: 9px;
-    border: 1px solid #000000;
-    border-top-width: 2px;
+    width: 10px;
+    height: 10px;
+    border: 1.5px solid #000000;
     box-sizing: border-box;
 }
 
 .popup-maximize.restore::after {
     content: '';
-    width: 8px;
+    width: 9px;
     height: 8px;
-    border: 1px solid #000000;
-    border-top-width: 2px;
-    position: relative;
-    box-shadow: 2px -2px 0 var(--win95-button-face, #c0c0c0), 3px -3px 0 #000000, 3px -1px 0 #000000;
+    border: 1.5px solid #000000;
+    box-shadow: 2px -2px 0 var(--win95-button-face, #c0c0c0), 2px -2px 0 #000000;
 }
 
 .popup-close::after {
     content: '×';
-    font-size: 12px;
+    font-size: 14px;
     font-weight: bold;
     line-height: 1;
-    margin-top: -1px;
+    letter-spacing: -1px;
 }
+
 
 .popup-menubar {
     background: var(--win95-bg, #c0c0c0);
     padding: 1px 0;
     display: flex;
     gap: 0;
-    font-size: 11px;
-    font-family: "MS Sans Serif", "Tahoma", sans-serif;
-    border-bottom: 1px solid #808080;
-    box-shadow: 0 1px 0 #ffffff;
+    font-size: var(--win95-font-size);
+    font-family: var(--win95-font-family);
+    border-bottom: 1px solid var(--win95-shadow);
+    box-shadow: 0 1px 0 var(--win95-highlight);
 }
 
 .popup-menu-item {
-    padding: 2px 6px;
+    padding: var(--win95-space-1) calc(var(--win95-space-2) + var(--win95-space-1));
     cursor: pointer;
     position: relative;
 }
@@ -185,13 +177,10 @@
     min-height: 0;
     background: var(--win95-bg, #c0c0c0);
     padding: 8px;
-    font-size: 11px;
+    font-size: var(--win95-font-size);
     overflow: auto;
     user-select: text;
     margin: 2px;
-    border: 2px solid;
-    border-color: #808080 #ffffff #ffffff #808080;
-    box-shadow: inset 1px 1px 0 #404040;
 }
 
 .popup-content::-webkit-scrollbar {
@@ -211,14 +200,14 @@
 .popup-content::-webkit-scrollbar-thumb {
     background: var(--win95-button-face, #c0c0c0);
     border: 2px solid;
-    border-color: #ffffff #404040 #404040 #ffffff;
-    box-shadow: inset -1px -1px 0 #808080, inset 1px 1px 0 #dfdfdf;
+    border-color: var(--win95-border-raised);
+    box-shadow: var(--win95-shadow-raised);
 }
 
 .popup-content::-webkit-scrollbar-button {
     background: var(--win95-button-face, #c0c0c0);
     border: 2px solid;
-    border-color: #ffffff #404040 #404040 #ffffff;
+    border-color: var(--win95-border-raised);
     box-shadow: inset -1px -1px 0 #808080;
     display: block;
     height: 16px;
@@ -228,15 +217,13 @@
 .popup-statusbar {
     background: var(--win95-bg, #c0c0c0);
     padding: 2px 4px;
-    font-size: 11px;
     display: flex;
-    border-top: 1px solid #ffffff;
 }
 
 .popup-status-section {
     padding: 1px 8px;
     border: 1px solid;
-    border-color: #808080 #ffffff #ffffff #808080;
+    border-color: var(--win95-border-inset);
     flex: 1;
 }
 
@@ -304,11 +291,11 @@
     appearance: none;
     width: 12px;
     height: 12px;
-    background: #ffffff;
+    background: var(--win95-highlight);
     border: 2px solid;
-    border-color: #808080 #ffffff #ffffff #808080;
+    border-color: var(--win95-border-inset);
     border-radius: 50%;
-    box-shadow: inset 1px 1px 0 #404040;
+    box-shadow: var(--win95-shadow-inset);
     cursor: pointer;
     vertical-align: middle;
     margin-right: 4px;
@@ -325,13 +312,13 @@
 }
 
 .win95-select {
-    background: #ffffff;
+    background: var(--win95-highlight);
     border: 2px solid;
-    border-color: #808080 #ffffff #ffffff #808080;
-    box-shadow: inset 1px 1px 0 #404040;
+    border-color: var(--win95-border-inset);
+    box-shadow: var(--win95-shadow-inset);
     padding: 2px 20px 2px 4px;
-    font-size: 11px;
-    font-family: "MS Sans Serif", "Tahoma", sans-serif;
+    font-size: var(--win95-font-size);
+    font-family: var(--win95-font-family);
     cursor: pointer;
     appearance: none;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12'%3E%3Cpath d='M2 4 L6 8 L10 4' fill='none' stroke='black' stroke-width='2'/%3E%3C/svg%3E");
@@ -348,9 +335,9 @@
 .win95-tab {
     background: var(--win95-bg, #c0c0c0);
     border: 2px solid;
-    border-color: #ffffff #404040 #c0c0c0 #ffffff;
+    border-color: var(--win95-highlight) var(--win95-dark-shadow) var(--win95-bg) var(--win95-highlight);
     padding: 4px 12px;
-    font-size: 11px;
+    font-size: var(--win95-font-size);
     cursor: pointer;
     margin-right: 2px;
     position: relative;
@@ -367,7 +354,7 @@
 .win95-tab-content {
     background: var(--win95-bg, #c0c0c0);
     border: 2px solid;
-    border-color: #ffffff #404040 #404040 #ffffff;
+    border-color: var(--win95-border-raised);
     padding: 12px;
 }
 
@@ -375,8 +362,8 @@
     height: 16px;
     background: var(--win95-bg, #c0c0c0);
     border: 2px solid;
-    border-color: #808080 #ffffff #ffffff #808080;
-    box-shadow: inset 1px 1px 0 #404040;
+    border-color: var(--win95-border-inset);
+    box-shadow: var(--win95-shadow-inset);
 }
 
 .win95-progress-bar {
@@ -385,12 +372,12 @@
 }
 
 .win95-listview {
-    background: #ffffff;
+    background: var(--win95-highlight);
     border: 2px solid;
-    border-color: #808080 #ffffff #ffffff #808080;
-    box-shadow: inset 1px 1px 0 #404040;
+    border-color: var(--win95-border-inset);
+    box-shadow: var(--win95-shadow-inset);
     padding: 2px;
-    font-size: 11px;
+    font-size: var(--win95-font-size);
 }
 
 .win95-listview-item {
@@ -412,12 +399,12 @@
 }
 
 .win95-treeview {
-    background: #ffffff;
+    background: var(--win95-highlight);
     border: 2px solid;
-    border-color: #808080 #ffffff #ffffff #808080;
-    box-shadow: inset 1px 1px 0 #404040;
+    border-color: var(--win95-border-inset);
+    box-shadow: var(--win95-shadow-inset);
     padding: 4px;
-    font-size: 11px;
+    font-size: var(--win95-font-size);
 }
 
 @media (max-width: 600px), (max-height: 600px) {

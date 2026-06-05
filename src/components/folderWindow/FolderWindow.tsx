@@ -1,7 +1,7 @@
-import React, {FC, RefObject, useState} from 'react';
+import React from 'react';
 import PopupWindow from '../popupWindow/PopupWindow';
 import DesktopIcon from '../desktopIcon/DesktopIcon';
-import {FolderItem, OpenAction} from '../../types';
+import {FolderItem, OpenAction, Size} from '../../types';
 import './FolderWindow.css';
 
 interface FolderWindowProps {
@@ -9,22 +9,22 @@ interface FolderWindowProps {
     onClose: () => void;
     onMinimize: () => void;
     onFocus: () => void;
-    onOpenPopup: (id: string, initialSize?: { width: number; height: number }) => void;
-    desktopRef: RefObject<HTMLDivElement>;
+    onOpenPopup: (id: string, initialSize?: Size, resizable?: boolean) => void;
+    desktopRef: React.RefObject<HTMLDivElement>;
     zIndex: number;
 }
 
-const FolderWindow: FC<FolderWindowProps> = ({
-                                                 folder,
-                                                 onClose,
-                                                 onMinimize,
-                                                 onFocus,
-                                                 onOpenPopup,
-                                                 desktopRef,
-                                                 zIndex
-                                             }) => {
-    const [history, setHistory] = useState<FolderItem[]>([folder]);
-    const [selectedId, setSelectedId] = useState<string | null>(null);
+const FolderWindow = ({
+    folder,
+    onClose,
+    onMinimize,
+    onFocus,
+    onOpenPopup,
+    desktopRef,
+    zIndex
+}: FolderWindowProps) => {
+    const [history, setHistory] = React.useState<FolderItem[]>([folder]);
+    const [selectedId, setSelectedId] = React.useState<string | null>(null);
 
     const currentFolder = history[history.length - 1];
     const canGoBack = history.length > 1;
@@ -41,21 +41,16 @@ const FolderWindow: FC<FolderWindowProps> = ({
         }
     };
 
-    const goUp = () => {
-        goBack();
-    };
-
     const handleItemOpen = (action: OpenAction) => {
         if (action.type === 'folder') {
             navigateTo(action.item);
         } else if (action.type === 'popup') {
-            onOpenPopup(action.id, (action as any).initialSize);
+            onOpenPopup(action.id, action.initialSize, action.resizable);
         }
     };
 
     const clearSelection = () => setSelectedId(null);
-
-    const breadcrumbs = history.map(f => f.name);
+    const breadcrumbs = history.map((f) => f.name);
 
     return (
         <PopupWindow
@@ -76,46 +71,38 @@ const FolderWindow: FC<FolderWindowProps> = ({
                         onClick={goBack}
                         disabled={!canGoBack}
                         title="Back"
-                    >
-                        ←
-                    </button>
+                    >←</button>
                     <button
                         className="folder-toolbar-btn"
-                        onClick={goUp}
+                        onClick={goBack}
                         disabled={!canGoBack}
                         title="Up"
-                    >
-                        ↑
-                    </button>
-                    <div className="folder-address">
+                    >↑</button>
+                    <div className="folder-address win95-inset-border-thin">
                         <span className="address-icon">📁</span>
-                        <span className="address-path">
-                            M:\{breadcrumbs.join('\\')}
-                        </span>
+                        <span className="address-path">M:\{breadcrumbs.join('\\')}</span>
                     </div>
                 </div>
 
-                <div className="folder-contents" onClick={clearSelection}>
-                    {currentFolder.children?.map((item) => (
+                <div className="folder-contents win95-panel-inset" onClick={clearSelection}>
+                    {currentFolder.children?.map((item: FolderItem) => (
                         <DesktopIcon
                             key={item.id}
                             item={item}
                             selected={selectedId === item.id}
                             onSelect={setSelectedId}
                             onOpen={handleItemOpen}
-                            onDragStart={() => {
-                            }}
+                            onDragStart={() => {}}
                             style={{}}
                         />
                     ))}
-
                     {(!currentFolder.children || currentFolder.children.length === 0) && (
                         <div className="folder-empty">This folder is empty</div>
                     )}
                 </div>
 
-                <div className="folder-status">
-                    {currentFolder.children?.length || 0} object(s)
+                <div className="folder-status win95-status-strip">
+                    {currentFolder.children?.length ?? 0} object(s)
                 </div>
             </div>
         </PopupWindow>

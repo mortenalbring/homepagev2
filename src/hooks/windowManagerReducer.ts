@@ -1,4 +1,4 @@
-import {FolderItem, FolderWindowState, WindowState, WindowType} from '../types';
+import {FolderItem, FolderWindowState, Size, WindowState, WindowType} from '../types';
 
 // State shape
 export interface WindowManagerState {
@@ -9,7 +9,7 @@ export interface WindowManagerState {
 
 // Action types
 export type WindowManagerAction =
-    | { type: 'OPEN_POPUP'; popupId: string; initialSize?: { width: number; height: number } }
+    | { type: 'OPEN_POPUP'; popupId: string; initialSize?: Size; resizable?: boolean }
     | { type: 'CLOSE_POPUP'; popupId: string }
     | { type: 'MINIMIZE_POPUP'; popupId: string }
     | { type: 'OPEN_FOLDER'; folder: FolderItem }
@@ -17,7 +17,7 @@ export type WindowManagerAction =
     | { type: 'MINIMIZE_FOLDER'; folderId: string }
     | { type: 'BRING_TO_FRONT'; windowType: WindowType; id: string }
     | { type: 'TASKBAR_CLICK'; windowType: WindowType; id: string }
-    | { type: 'INIT_FROM_URL'; popupSpecs: Array<{ id: string; initialSize?: { width: number; height: number } }> };
+    | { type: 'INIT_FROM_URL'; popupSpecs: Array<{ id: string; initialSize?: Size; resizable?: boolean }> };
 
 export const initialState: WindowManagerState = {
     openPopups: [],
@@ -26,28 +26,36 @@ export const initialState: WindowManagerState = {
 };
 
 // Helper: generic window operations for popups and folders
-function getWindowList(state: WindowManagerState, type: WindowType) {
+function getWindowList(state: WindowManagerState, type: WindowType): WindowState[] | FolderWindowState[] {
     return type === 'popup' ? state.openPopups : state.openFolders;
 }
 
-function setWindowList(state: WindowManagerState, type: WindowType, list: any[]) {
+function setWindowList(
+    state: WindowManagerState,
+    type: WindowType,
+    list: WindowState[] | FolderWindowState[]
+): WindowManagerState {
     return type === 'popup'
-        ? {...state, openPopups: list}
-        : {...state, openFolders: list};
+        ? {...state, openPopups: list as WindowState[]}
+        : {...state, openFolders: list as FolderWindowState[]};
 }
 
-function findWindow(list: any[], id: string) {
+function findWindow<T extends { id: string }>(list: T[], id: string): T | undefined {
     return list.find(w => w.id === id);
 }
 
-function updateWindow(list: any[], id: string, update: any) {
+function updateWindow<T extends { id: string }>(list: T[], id: string, update: Partial<T>): T[] {
     return list.map(w => (w.id === id ? {...w, ...update} : w));
 }
 
-function handleMinimizeOrFocus(state: WindowManagerState, windowType: WindowType, id: string) {
+function handleMinimizeOrFocus(
+    state: WindowManagerState,
+    windowType: WindowType,
+    id: string
+): WindowManagerState {
     const list = getWindowList(state, windowType);
-    const window = findWindow(list, id);
-    if (!window) return state;
+    const win = findWindow(list, id);
+    if (!win) return state;
 
     const maxZ = Math.max(
         ...state.openPopups.map(p => p.zIndex),
@@ -55,22 +63,20 @@ function handleMinimizeOrFocus(state: WindowManagerState, windowType: WindowType
         0
     );
 
-    if (window.minimized) {
+    if (win.minimized) {
         const newZ = maxZ + 1;
-        const newState = setWindowList(state, windowType, updateWindow(list, id, {
-            zIndex: newZ,
-            minimized: false
-        })) as any;
-        return {...newState, topZ: newZ};
-    } else if (window.zIndex === maxZ) {
-        return setWindowList(state, windowType, updateWindow(list, id, {minimized: true})) as any;
+        return {
+            ...setWindowList(state, windowType, updateWindow(list, id, {zIndex: newZ, minimized: false} as any)),
+            topZ: newZ
+        };
+    } else if (win.zIndex === maxZ) {
+        return setWindowList(state, windowType, updateWindow(list, id, {minimized: true} as any));
     } else {
         const newZ = maxZ + 1;
-        const newState = setWindowList(state, windowType, updateWindow(list, id, {
-            zIndex: newZ,
-            minimized: false
-        })) as any;
-        return {...newState, topZ: newZ};
+        return {
+            ...setWindowList(state, windowType, updateWindow(list, id, {zIndex: newZ, minimized: false} as any)),
+            topZ: newZ
+        };
     }
 }
 
@@ -99,24 +105,17 @@ export function windowManagerReducer(
                     id: popupId,
                     zIndex: newZ,
                     minimized: false,
-                    initialSize: action.initialSize
+                    initialSize: action.initialSize,
+                    resizable: action.resizable
                 }]
             };
         }
 
-        case 'CLOSE_POPUP': {
-            return {
-                ...state,
-                openPopups: state.openPopups.filter(p => p.id !== action.popupId)
-            };
-        }
+        case 'CLOSE_POPUP':
+            return {...state, openPopups: state.openPopups.filter(p => p.id !== action.popupId)};
 
-        case 'MINIMIZE_POPUP': {
-            return {
-                ...state,
-                openPopups: updateWindow(state.openPopups, action.popupId, {minimized: true})
-            };
-        }
+        case 'MINIMIZE_POPUP':
+            return {...state, openPopups: updateWindow(state.openPopups, action.popupId, {minimized: true})};
 
         case 'OPEN_FOLDER': {
             const {folder} = action;
@@ -138,47 +137,39 @@ export function windowManagerReducer(
             };
         }
 
-        case 'CLOSE_FOLDER': {
-            return {
-                ...state,
-                openFolders: state.openFolders.filter(f => f.id !== action.folderId)
-            };
-        }
+        case 'CLOSE_FOLDER':
+            return {...state, openFolders: state.openFolders.filter(f => f.id !== action.folderId)};
 
-        case 'MINIMIZE_FOLDER': {
-            return {
-                ...state,
-                openFolders: updateWindow(state.openFolders, action.folderId, {minimized: true})
-            };
-        }
+        case 'MINIMIZE_FOLDER':
+            return {...state, openFolders: updateWindow(state.openFolders, action.folderId, {minimized: true})};
 
         case 'BRING_TO_FRONT': {
             const {windowType, id} = action;
             const newZ = state.topZ + 1;
             const list = getWindowList(state, windowType);
-
-            const updatedList = updateWindow(list, id, {zIndex: newZ, minimized: false});
-            const newState = setWindowList(state, windowType, updatedList) as any;
-            return {...newState, topZ: newZ};
+            return {
+                ...setWindowList(state, windowType, updateWindow(list, id, {zIndex: newZ, minimized: false} as any)),
+                topZ: newZ
+            };
         }
 
-        case 'TASKBAR_CLICK': {
+        case 'TASKBAR_CLICK':
             return handleMinimizeOrFocus(state, action.windowType, action.id);
-        }
 
         case 'INIT_FROM_URL': {
-            const {popupSpecs} = action as any;
+            const {popupSpecs} = action;
             const currentIds = new Set(state.openPopups.map(p => p.id));
-            const newSpecs = popupSpecs.filter((s: any) => !currentIds.has(s.id));
+            const newSpecs = popupSpecs.filter(s => !currentIds.has(s.id));
 
             if (newSpecs.length === 0) return state;
 
             let z = state.topZ;
-            const popupsToAdd: WindowState[] = newSpecs.map((s: any) => ({
+            const popupsToAdd: WindowState[] = newSpecs.map(s => ({
                 id: s.id,
                 zIndex: ++z,
                 minimized: false,
-                initialSize: s.initialSize
+                initialSize: s.initialSize,
+                resizable: s.resizable
             }));
 
             return {
