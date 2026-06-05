@@ -1,18 +1,51 @@
 /* Windows 95 Utility Classes */
 @import './win95-utilities.css';
 
-/* Windows 95 Authentic Styling */
+/* Windows 95/98 Authentic Styling
+ *
+ * Strategy: keep the "chrome" (titlebars, taskbar, menus, buttons, icons)
+ * pixelated and authentic, but let body content (popup prose) render with
+ * normal antialiasing and a readable size. Each layer opts in via classes.
+ */
 body {
     margin: 0;
     padding: 0;
-    font-family: "MS Sans Serif", "Tahoma", "Verdana", system-ui, -apple-system, sans-serif;
-    font-size: 11px;
-    /* Disable font smoothing for authentic pixelated look */
-    -webkit-font-smoothing: none;
-    -moz-osx-font-smoothing: unset;
-    image-rendering: pixelated;
+    font-family: var(--win95-font-family), sans-serif;
+    font-size: var(--win95-font-size);
+    color: var(--win95-text);
     overflow: hidden;
     background: #008080;
+    /* Default to legible rendering. Chrome elements re-disable smoothing below. */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+/* Chrome (window decorations, taskbar, menus) keeps the pixelated MS Sans
+ * Serif look. Apply via class so we don't pixel-blast the body content. */
+.win95-text-ui,
+.popup-titlebar,
+.popup-menubar,
+.popup-statusbar,
+.popup-minimize,
+.popup-maximize,
+.popup-close,
+.taskbar,
+.start-menu,
+.start-button,
+.taskbar-window-btn,
+.taskbar-tray,
+.icon-label,
+.win95-button,
+.win95-input,
+.folder-toolbar {
+    -webkit-font-smoothing: none;
+    -moz-osx-font-smoothing: unset;
+    font-smooth: never;
+}
+
+.icon-image {
+    image-rendering: pixelated;
 }
 
 /* Windows 95 System Colors */
@@ -25,15 +58,21 @@ body {
     --win95-dark-shadow: #404040;
     --win95-light: #dfdfdf;
     --win95-titlebar-active: #000080;
+    /* Win98-style subtle gradient on the active titlebar */
+    --win95-titlebar-active-gradient: linear-gradient(to right, #000080 0%, #1084d0 100%);
     --win95-titlebar-inactive: #808080;
+    --win95-titlebar-inactive-gradient: linear-gradient(to right, #808080 0%, #b5b5b5 100%);
     --win95-selection: #000080;
     --win95-selection-text: #ffffff;
     --win95-button-face: #c0c0c0;
+    --win95-button-hover: #d4d0c8;
     --win95-text: #000000;
 
     /* Base typography */
-    --win95-font-size: 11px;
-    --win95-font-family-mono: "Fixedsys", "Courier New", monospace;
+    --win95-font-size: 11px;       /* chrome (titlebars, menus, taskbar) */
+    --win95-font-size-body: 13px;  /* popup content / prose */
+    --win95-line-height-body: 1.5;
+    --win95-font-family-mono: "Cascadia Mono", "Consolas", "Fixedsys", "Courier New", monospace;
 
     /* Border patterns */
     --win95-border-raised: #ffffff #404040 #404040 #ffffff;
@@ -53,10 +92,14 @@ body {
     --win95-space-5: 16px;
 
     /* Typography */
-    --win95-font-family: "MS Sans Serif", "Tahoma", sans-serif;
+    --win95-font-family: "MS Sans Serif", "Microsoft Sans Serif", "Tahoma", "Verdana", system-ui, -apple-system, sans-serif;
+
+    /* Native form controls (checkboxes, radios) get a Win95-blue accent */
+    accent-color: var(--win95-selection);
+    color-scheme: light;
 }
 
-code {
+code, pre, kbd, samp {
     font-family: var(--win95-font-family-mono), monospace;
 }
 
@@ -65,11 +108,33 @@ code {
     box-sizing: border-box;
 }
 
+/* Win95-flavoured selection highlight (used in popup content) */
+::selection {
+    background: var(--win95-selection);
+    color: var(--win95-selection-text);
+}
+
+/* Firefox scrollbar styling — webkit handled per-element below. */
+* {
+    scrollbar-width: auto;
+    scrollbar-color: var(--win95-button-face) var(--win95-bg);
+}
+
 button:focus-visible,
 a:focus-visible,
 input:focus-visible,
-select:focus-visible {
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
     outline: 1px dotted var(--win95-text);
-    outline-offset: 1px;
+    outline-offset: 2px;
 }
 
+/* Respect reduced motion: kill the CRT flicker and shutdown fade. */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+    }
+}

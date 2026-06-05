@@ -161,3 +161,72 @@
     font-family: var(--win95-font-family), sans-serif;
     box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
 }
+
+/* Readable prose: opt-in container for popup body content. Keeps the Win95
+ * palette but uses normal antialiasing and a larger, more legible size. */
+.win95-readable {
+    font-family: var(--win95-font-family), sans-serif;
+    font-size: var(--win95-font-size-body);
+    line-height: var(--win95-line-height-body);
+    color: var(--win95-text);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+.win95-readable h1,
+.win95-readable h2,
+.win95-readable h3,
+.win95-readable h4 {
+    font-weight: 700;
+    line-height: 1.25;
+    margin: 0 0 0.6em 0;
+}
+
+.win95-readable h1 { font-size: 1.8em; }
+.win95-readable h2 { font-size: 1.45em; }
+.win95-readable h3 { font-size: 1.2em; }
+.win95-readable h4 { font-size: 1.05em; }
+
+.win95-readable p,
+.win95-readable ul,
+.win95-readable ol {
+    margin: 0 0 0.9em 0;
+}
+
+.win95-readable a {
+    color: #0000cc;
+    text-decoration: underline;
+}
+
+.win95-readable a:visited { color: #551a8b; }
+.win95-readable a:hover   { color: #1084d0; }
+
+.win95-readable code,
+.win95-readable pre,
+.win95-readable kbd {
+    font-family: var(--win95-font-family-mono), monospace;
+    font-size: 0.95em;
+}
+
+.win95-readable code {
+    background: var(--win95-highlight);
+    border: 1px solid var(--win95-shadow);
+    padding: 0 3px;
+}
+
+.win95-readable pre {
+    background: var(--win95-highlight);
+    border: 2px solid;
+    border-color: var(--win95-border-inset);
+    padding: 8px 10px;
+    overflow: auto;
+    line-height: 1.4;
+}
+
+.win95-readable hr {
+    border: none;
+    border-top: 1px solid var(--win95-shadow);
+    border-bottom: 1px solid var(--win95-highlight);
+    margin: 1em 0;
+}

@@ -75,13 +75,15 @@
 
 .folder-contents .icon-wrapper {
     position: relative;
-    width: 70px;
+    width: 80px;
     padding: 4px;
 }
 
 .folder-contents .icon-label {
     color: #000000;
     text-shadow: none;
+    font-size: 12px;
+    max-width: 80px;
 }
 
 .folder-contents .icon-wrapper.selected .icon-label {

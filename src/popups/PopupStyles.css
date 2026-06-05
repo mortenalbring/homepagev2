@@ -1,28 +1,85 @@
 .popup-content-inner {
-    padding: 8px;
+    padding: 4px 6px 8px 6px;
     color: var(--win95-text);
+    font-size: var(--win95-font-size-body);
+    line-height: var(--win95-line-height-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
 }
 
 .popup-content-inner img {
     border: 2px inset #fff;
+    max-width: 100%;
+    height: auto;
 }
 
-.popup-content-inner h3 {
-    margin: 0 0 12px 0;
-    font-size: 18px;
-    line-height: 1.3;
-    font-weight: 600;
-
+.popup-content-inner h1,
+.popup-content-inner h2,
+.popup-content-inner h3,
+.popup-content-inner h4 {
+    margin: 0 0 0.5em 0;
+    line-height: 1.25;
+    font-weight: 700;
 }
+
+.popup-content-inner h1 { font-size: 1.7em; }
+.popup-content-inner h2 { font-size: 1.4em; }
+.popup-content-inner h3 { font-size: 1.2em; }
+.popup-content-inner h4 { font-size: 1.05em; }
 
 .popup-content-inner p {
     hyphens: auto;
     overflow-wrap: break-word;
-    margin: 0 0 14px 0;
+    margin: 0 0 0.9em 0;
 }
 
 .popup-content-inner p:last-child {
     margin-bottom: 0;
+}
+
+.popup-content-inner ul,
+.popup-content-inner ol {
+    margin: 0 0 0.9em 0;
+    padding-left: 1.5em;
+}
+
+.popup-content-inner li {
+    margin-bottom: 0.25em;
+}
+
+.popup-content-inner a {
+    color: #0000cc;
+    text-decoration: underline;
+}
+
+.popup-content-inner a:visited { color: #551a8b; }
+.popup-content-inner a:hover   { color: #1084d0; }
+
+.popup-content-inner code {
+    font-family: var(--win95-font-family-mono), monospace;
+    font-size: 0.95em;
+    background: var(--win95-highlight);
+    border: 1px solid var(--win95-shadow);
+    padding: 0 3px;
+}
+
+.popup-content-inner pre {
+    font-family: var(--win95-font-family-mono), monospace;
+    background: var(--win95-highlight);
+    border: 2px solid;
+    border-color: var(--win95-border-inset);
+    padding: 8px 10px;
+    overflow: auto;
+    line-height: 1.4;
+    margin: 0 0 1em 0;
+}
+
+.popup-content-inner blockquote {
+    margin: 0 0 1em 0;
+    padding: 6px 10px;
+    border-left: 3px solid var(--win95-shadow);
+    background: rgba(255, 255, 255, 0.4);
 }
 
 .popup-content-monospace {
@@ -33,8 +90,8 @@
 
 .popup-content-sanserif {
     font-family: var(--win95-font-family), sans-serif;
-    font-size: var(--win95-font-size);
-    line-height: 1.4;
+    font-size: var(--win95-font-size-body);
+    line-height: var(--win95-line-height-body);
 }
 
 

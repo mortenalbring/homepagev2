@@ -149,6 +149,12 @@
     99%            { opacity: 0.99; }
 }
 
+@media (prefers-reduced-motion: reduce) {
+    .desktop::after {
+        animation: none;
+    }
+}
+
 /* Icon area: fills available space so taskbar can sit at the bottom naturally */
 .desktop-icons-area {
     flex: 1;
@@ -215,7 +221,13 @@
     padding: 1px var(--win95-space-1);
     pointer-events: none;
 
-    text-shadow: 1px 1px 1px #000000;
+    /* Stronger 1px black shadow on all sides keeps the label legible against
+       any desktop wallpaper while preserving the pixel feel. */
+    text-shadow:
+        1px 1px 0 #000,
+       -1px 1px 0 #000,
+        1px -1px 0 #000,
+       -1px -1px 0 #000;
     max-width: 70px;
     word-wrap: break-word;
 }
@@ -365,10 +377,23 @@
     touch-action: manipulation;
 }
 
+@media (hover: hover) {
+    .taskbar-window-btn:not(.active):hover {
+        background: var(--win95-button-hover);
+    }
+}
+
 .taskbar-window-btn.active {
     border-color: var(--win95-border-inset);
     box-shadow: var(--win95-shadow-inset);
-    background: #c8c8c8;
+    background:
+        repeating-linear-gradient(
+            45deg,
+            #d4d0c8 0,
+            #d4d0c8 1px,
+            #b5b5b5 1px,
+            #b5b5b5 2px
+        );
 }
 
 .taskbar-btn-text {
@@ -448,6 +473,11 @@
         flex: 1;
     }
 
+    .icon-label {
+        font-size: 11px;
+        max-width: 64px;
+    }
+
     /* Reduce scanline intensity on mobile */
     .desktop::before {
         background: repeating-linear-gradient(
@@ -467,10 +497,6 @@
         font-size: 28px;
     }
 
-    .icon-label {
-        font-size: 10px;
-        max-width: 60px;
-    }
 
     /* Keep taskbar at 28px to match TASKBAR_HEIGHT constant in useIconDrag */
     .taskbar {

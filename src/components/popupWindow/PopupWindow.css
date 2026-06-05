@@ -27,6 +27,7 @@
 
 .popup-titlebar {
     background: var(--win95-titlebar-active);
+    background: var(--win95-titlebar-active-gradient);
     color: var(--win95-selection-text);
     font-family: var(--win95-font-family);
     font-size: var(--win95-font-size);
@@ -48,6 +49,7 @@
 
 .popup-window.inactive .popup-titlebar {
     background: var(--win95-titlebar-inactive);
+    background: var(--win95-titlebar-inactive-gradient);
 }
 
 .popup-title {
@@ -107,6 +109,21 @@
     padding: 1px 0 0 1px;
     border-color: var(--win95-border-inset);
     box-shadow: var(--win95-shadow-inset);
+}
+
+/* Modern affordance: hint at hover without breaking the pixel feel. */
+@media (hover: hover) {
+    .popup-minimize:hover,
+    .popup-maximize:hover {
+        background: var(--win95-button-hover);
+    }
+    .popup-close:hover {
+        background: #d36a6a;
+        color: #ffffff;
+    }
+    .popup-close:hover::after {
+        color: #ffffff;
+    }
 }
 
 .popup-minimize::after {
@@ -176,8 +193,15 @@
     flex: 1;
     min-height: 0;
     background: var(--win95-bg, #c0c0c0);
-    padding: 8px;
-    font-size: var(--win95-font-size);
+    padding: 10px 12px;
+    /* Readable body text inside the chrome. */
+    font-family: var(--win95-font-family);
+    font-size: var(--win95-font-size-body);
+    line-height: var(--win95-line-height-body);
+    color: var(--win95-text);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
     overflow: auto;
     user-select: text;
     margin: 2px;
@@ -424,8 +448,8 @@
     }
 
     .popup-content {
-        font-size: 13px;
-        padding: 10px;
+        font-size: 14px;
+        padding: 12px 14px;
     }
 
     .resize-handle {

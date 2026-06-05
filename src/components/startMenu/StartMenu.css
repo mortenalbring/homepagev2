@@ -7,13 +7,14 @@
     border: 2px solid;
     border-color: var(--win95-border-raised);
     box-shadow: var(--win95-shadow-menu);
-    min-width: 180px;
+    min-width: 200px;
     z-index: 10000;
 }
 
 .start-menu-sidebar {
     width: 24px;
     background: var(--win95-titlebar-active);
+    background: linear-gradient(to bottom, #1084d0 0%, #000080 100%);
     display: flex;
     align-items: flex-end;
     padding-bottom: 4px;
@@ -40,14 +41,15 @@
 .start-menu-item {
     display: flex;
     align-items: center;
-    padding: var(--win95-space-2) var(--win95-space-3);
+    padding: 6px 24px 6px 4px;
     background: transparent;
     border: none;
     cursor: pointer;
     font-family: inherit;
-    font-size: var(--win95-font-size);
+    font-size: 12px;
     text-align: left;
     width: 100%;
+    color: var(--win95-text);
 }
 
 .start-menu-item:hover {
@@ -56,9 +58,11 @@
 }
 
 .start-menu-icon {
-    width: 20px;
+    width: 24px;
     margin-right: var(--win95-space-3);
-    font-size: 14px;
+    font-size: 18px;
+    text-align: center;
+    flex-shrink: 0;
 }
 
 .start-menu-label {
